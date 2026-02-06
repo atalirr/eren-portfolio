@@ -1,0 +1,120 @@
+{
+  "name": "VibeBot Telegram AI Video Dublaj Otomasyonu",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -800,
+        -272
+      ],
+      "id": "44825d2d-4c6a-417b-984f-f4e116756a32",
+      "name": "Telegram Trigger",
+      "webhookId": "cd2621ec-b46d-4d79-bf89-8b4dd7ee75d6",
+      "credentials": {
+        "telegramApi": {
+          "id": "ZjrnCnC4yPSh1rQU",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const { exec } = require('child_process');\n\n// Dosya yolu\nconst scriptPath = \"C:\\\\VibeBot\\\\main.py\";\n\n// Telegram verileri\nconst message = $input.item.json.message?.text || \"\";\nconst chatId = $input.item.json.message?.chat?.id || \"\";\n\n// Komut\nconst command = `python \"${scriptPath}\" \"${message}\" \"${chatId}\"`;\n\nreturn new Promise((resolve, reject) => {\n  // maxBuffer: Hafıza limitini 10MB'a çıkarır (Büyük çıktılar için şart)\n  exec(command, { maxBuffer: 1024 * 1024 * 10 }, (error, stdout, stderr) => {\n    \n    // Çıktıyı temizle\n    const outputText = stdout.trim();\n    \n    // JSON'u cımbızla çek al\n    const jsonMatch = outputText.match(/\\{.*\"durum\":.*\"basarili\".*\\}/s);\n    const errorMatch = outputText.match(/\\{.*\"durum\":.*\"hata\".*\\}/s);\n\n    if (jsonMatch) {\n      try {\n        const cleanData = JSON.parse(jsonMatch[0]);\n        resolve([{ json: cleanData }]);\n      } catch (e) {\n        resolve([{ json: { error: \"JSON bozuk\", raw: outputText } }]);\n      }\n    } else if (errorMatch) {\n        // Python içinden gelen kontrollü hatayı yakala\n        try {\n            const errData = JSON.parse(errorMatch[0]);\n            resolve([{ json: { error: errData.mesaj, raw: outputText } }]);\n        } catch(e) {\n            resolve([{ json: { error: \"Bilinmeyen Hata\", raw: outputText } }]);\n        }\n    } else {\n      // Hiçbir şey bulamazsa ham veriyi göster (Hata ayıklamak için)\n      console.log(\"Python Çıktısı:\", outputText);\n      console.log(\"Python Hatası:\", stderr);\n      resolve([{ json: { error: \"JSON bulunamadı\", raw: outputText, stderr: stderr } }]);\n    }\n  });\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -432,
+        -64
+      ],
+      "id": "ec811625-8d71-4c74-a9a7-95da05532c2b",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "operation": "sendDocument",
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "binaryData": true,
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        0
+      ],
+      "id": "21524ab5-b7be-489f-b197-02b5577337dc",
+      "name": "Send a document",
+      "webhookId": "ca4c318c-7de0-4270-a12f-be4120d81355",
+      "credentials": {
+        "telegramApi": {
+          "id": "ZjrnCnC4yPSh1rQU",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fileSelector": "={{ $json.dosya_yolu }}",
+        "options": {
+          "dataPropertyName": "data"
+        }
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1.1,
+      "position": [
+        -128,
+        -272
+      ],
+      "id": "777b192b-925d-4d92-9221-a6e607025026",
+      "name": "Read/Write Files from Disk"
+    }
+  ],
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk": {
+      "main": [
+        [
+          {
+            "node": "Send a document",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  }
+}

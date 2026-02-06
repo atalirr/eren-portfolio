@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="tr" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VibeBot — AI Video İndirme & Türkçe Dublaj Stüdyosu</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #090d16;
+      color: #e2e8f0;
+    }
+    .mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .glass-card {
+      background: rgba(17, 24, 39, 0.78);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .stage-active {
+      border-color: #8b5cf6 !important;
+      box-shadow: 0 0 20px rgba(139, 92, 246, 0.25);
+    }
+    .stage-done {
+      border-color: rgba(16, 185, 129, 0.45) !important;
+      background: rgba(16, 185, 129, 0.07) !important;
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-violet-500 selection:text-white">
+
+  <!-- Top Studio Header -->
+  <header class="border-b border-slate-800/80 bg-slate-950/90 sticky top-0 z-30 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center gap-3.5">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-600 via-fuchsia-600 to-indigo-600 flex items-center justify-center shadow-lg shadow-violet-600/30">
+          <i class="fa-solid fa-wand-magic-sparkles text-white text-lg"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2.5">
+            <h1 class="text-lg font-bold tracking-tight text-white">VibeBot Studio</h1>
+            <span class="px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wider rounded-full bg-violet-500/15 text-violet-300 border border-violet-500/30">
+              AI Dublaj & Lokalizasyon
+            </span>
+          </div>
+          <p class="text-xs text-slate-400">yt-dlp • FFmpeg • OpenAI Whisper STT • GoogleTranslator • Edge-TTS Neural</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <div class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-xs text-slate-300">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>Motor: <code class="mono text-violet-300">dublaj_yap.py</code></span>
+        </div>
+        <button onclick="triggerTtsPreview()" id="btnTtsPreview" class="px-3.5 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-medium text-slate-200 flex items-center gap-2 transition">
+          <i class="fa-solid fa-volume-high text-violet-400"></i>
+          <span>Nöral Ses Testi</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 space-y-6">
+
+    <!-- Top Row: Control Form + 6-Stage Pipeline & Terminal -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+      <!-- Left: New Dubbing Job Configuration (5 cols) -->
+      <section class="lg:col-span-5 glass-card rounded-2xl p-5 flex flex-col justify-between space-y-4">
+        <div class="space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-800/80 pb-3">
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-sliders text-violet-400"></i>
+              <h2 class="font-semibold text-sm text-white">Yeni Video Dublaj & Lokalizasyon</h2>
+            </div>
+            <span class="text-[11px] text-slate-400 mono">Maks: 15 dk (720p)</span>
+          </div>
+
+          <!-- Video URL -->
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1.5">YouTube / Video Bağlantısı (URL)</label>
+            <div class="relative">
+              <i class="fa-brands fa-youtube absolute left-3.5 top-3 text-rose-500"></i>
+              <input id="inputUrl" type="url" value="https://www.youtube.com/watch?v=zjkBMFhNj_g"
+                placeholder="https://www.youtube.com/watch?v=..."
+                class="w-full pl-10 pr-3 py-2.5 text-sm rounded-xl bg-slate-950/90 border border-slate-800 focus:border-violet-500 focus:outline-none text-white mono" />
+            </div>
+            <div class="flex flex-wrap gap-1.5 mt-2">
+              <button type="button" onclick="fillPreset('https://www.youtube.com/watch?v=zjkBMFhNj_g', 'Karpathy — LLM Özeti')"
+                class="text-[11px] px-2 py-0.5 rounded bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-800 transition">
+                Örnek 1: LLM Özeti
+              </button>
+              <button type="button" onclick="fillPreset('https://www.youtube.com/watch?v=x7X9w_GIm1s', 'Fireship — Python 100s')"
+                class="text-[11px] px-2 py-0.5 rounded bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-800 transition">
+                Örnek 2: Python 100s
+              </button>
+              <button type="button" onclick="fillPreset('https://www.youtube.com/watch?v=aircAruvnKk', '3Blue1Brown — Neural Net')"
+                class="text-[11px] px-2 py-0.5 rounded bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-800 transition">
+                Örnek 3: Neural Networks
+              </button>
+            </div>
+          </div>
+
+          <!-- Project Title -->
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1.5">Proje Başlığı (İsteğe Bağlı)</label>
+            <input id="inputTitle" type="text" placeholder="Örn: OpenAI DevDay Keynote Türkçe Dublaj"
+              class="w-full px-3.5 py-2 text-sm rounded-xl bg-slate-950/90 border border-slate-800 focus:border-violet-500 focus:outline-none text-white" />
+          </div>
+
+          <!-- Source & Target Language -->
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-medium text-slate-300 mb-1.5">Kaynak Dil</label>
+              <select id="selectSourceLang" class="w-full px-3 py-2 text-xs rounded-xl bg-slate-950/90 border border-slate-800 text-slate-200 focus:border-violet-500 focus:outline-none">
+                <option value="auto">Otomatik Algıla (Whisper)</option>
+                <option value="en" selected>İngilizce (en)</option>
+                <option value="de">Almanca (de)</option>
+                <option value="fr">Fransızca (fr)</option>
+                <option value="es">İspanyolca (es)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-300 mb-1.5">Hedef Dil</label>
+              <select id="selectTargetLang" class="w-full px-3 py-2 text-xs rounded-xl bg-slate-950/90 border border-slate-800 text-slate-200 focus:border-violet-500 focus:outline-none">
+                <option value="tr" selected>Türkçe (tr-TR)</option>
+                <option value="en">İngilizce (en-US)</option>
+                <option value="de">Almanca (de-DE)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Edge-TTS Voice & Whisper Model -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-medium text-slate-300 mb-1.5">Edge-TTS Nöral Ses Modeli</label>
+              <select id="selectVoice" class="w-full px-3 py-2 text-xs rounded-xl bg-slate-950/90 border border-slate-800 text-slate-200 focus:border-violet-500 focus:outline-none mono">
+                <option value="tr-TR-AhmetNeural" selected>tr-TR-AhmetNeural (Erkek)</option>
+                <option value="tr-TR-EmelNeural">tr-TR-EmelNeural (Kadın)</option>
+                <option value="en-US-ChristopherNeural">en-US-ChristopherNeural</option>
+                <option value="de-DE-ConradNeural">de-DE-ConradNeural</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-300 mb-1.5">OpenAI Whisper STT Modeli</label>
+              <select id="selectWhisper" class="w-full px-3 py-2 text-xs rounded-xl bg-slate-950/90 border border-slate-800 text-slate-200 focus:border-violet-500 focus:outline-none mono">
+                <option value="base" selected>base (Hızlı • Varsayılan)</option>
+                <option value="small">small (Dengeli Doğruluk)</option>
+                <option value="medium">medium (Stüdyo Kalitesi)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Execution Mode -->
+          <div class="p-3 rounded-xl bg-slate-950/70 border border-slate-800/90 space-y-2">
+            <label class="block text-xs font-medium text-slate-300">Çalıştırma Modu</label>
+            <div class="grid grid-cols-2 gap-2">
+              <label class="flex items-center gap-2 p-2 rounded-lg border border-violet-500/40 bg-violet-500/10 cursor-pointer text-xs">
+                <input type="radio" name="execMode" value="demo" checked class="accent-violet-500" />
+                <div>
+                  <div class="font-semibold text-white">Stüdyo Simülasyonu</div>
+                  <div class="text-[10px] text-slate-400">6 aşamalı anlık interaktif test</div>
+                </div>
+              </label>
+              <label class="flex items-center gap-2 p-2 rounded-lg border border-slate-800 bg-slate-900/60 cursor-pointer text-xs">
+                <input type="radio" name="execMode" value="live" class="accent-violet-500" />
+                <div>
+                  <div class="font-semibold text-white">Gerçek <code class="mono">dublaj_yap.py</code></div>
+                  <div class="text-[10px] text-slate-400">Subprocess ile indir & dublajla</div>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Submit Button & Audio Player Bar -->
+        <div class="pt-2 space-y-2.5">
+          <button id="btnStartDub" onclick="startDubbingJob()"
+            class="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-500 hover:to-fuchsia-500 text-white font-semibold text-sm shadow-lg shadow-violet-600/25 flex items-center justify-center gap-2.5 transition">
+            <i class="fa-solid fa-play"></i>
+            <span>Dublaj Hattını Başlat</span>
+          </button>
+          <div id="ttsStatusBox" class="hidden p-2.5 rounded-xl bg-slate-900/90 border border-violet-500/30 flex items-center justify-between gap-2 text-xs">
+            <span id="ttsStatusText" class="text-violet-300 truncate">Ses önizlemesi hazır</span>
+            <audio id="ttsAudioPlayer" controls class="h-7 w-44 hidden"></audio>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right: 6-Stage Live Pipeline & Live Terminal Log (7 cols) -->
+      <section class="lg:col-span-7 glass-card rounded-2xl p-5 flex flex-col justify-between space-y-4">
+        <!-- Pipeline Header -->
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800/80 pb-3">
+          <div class="flex items-center gap-2.5">
+            <i class="fa-solid fa-diagram-project text-fuchsia-400"></i>
+            <div>
+              <h2 class="font-semibold text-sm text-white" id="activeJobTitle">6 Aşamalı Canlı Pipeline İlerleme Göstergesi</h2>
+              <p class="text-[11px] text-slate-400 mono" id="activeJobMeta">Aktif iş seçili... Aşamalar gerçek zamanlı güncellenir</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <span id="activeJobBadge" class="px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+              Tamamlandı (%100)
+            </span>
+          </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="w-full bg-slate-900 rounded-full h-2 overflow-hidden border border-slate-800">
+          <div id="pipelineProgressBar" class="bg-gradient-to-r from-violet-500 via-fuchsia-500 to-emerald-400 h-full transition-all duration-500" style="width: 100%"></div>
+        </div>
+
+        <!-- 6 Pipeline Stage Cards -->
+        <div id="pipelineGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+          <!-- Populated dynamically via JS -->
+        </div>
+
+        <!-- Live Terminal Log Output -->
+        <div class="flex-1 flex flex-col bg-slate-950 rounded-xl border border-slate-800/90 overflow-hidden">
+          <div class="px-3.5 py-2 bg-slate-900/90 border-b border-slate-800 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-rose-500/80"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-amber-500/80"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500/80"></span>
+              <span class="text-[11px] text-slate-400 mono ml-1">Canlı Terminal Log • stdout / dublaj_yap.py</span>
+            </div>
+            <span id="terminalLineCount" class="text-[11px] text-slate-500 mono">0 satır</span>
+          </div>
+          <div id="terminalOutput" class="p-3.5 h-44 overflow-y-auto mono text-xs space-y-1.5 text-slate-300">
+            <!-- Logs populated dynamically -->
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Middle Row: Side-by-Side Transcript & Turkish Translation Editor -->
+    <section class="glass-card rounded-2xl p-5 space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800/80 pb-3">
+        <div class="flex items-center gap-2.5">
+          <i class="fa-solid fa-language text-violet-400 text-lg"></i>
+          <div>
+            <h2 class="font-semibold text-sm text-white">Yan Yana Transkript & Türkçe Çeviri Karşılaştırma ve Düzenleme Paneli</h2>
+            <p class="text-xs text-slate-400">OpenAI Whisper STT çıktısını ve GoogleTranslator Türkçe çevirisini inceleyin, düzenleyin ve seslendirin</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="speakTurkishTranslation()" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs text-slate-200 flex items-center gap-1.5 transition">
+            <i class="fa-solid fa-headphones text-fuchsia-400"></i>
+            <span>Türkçe Metni Seslendir</span>
+          </button>
+          <button onclick="saveTranscriptEdits()" id="btnSaveTranscript" class="px-3.5 py-1.5 rounded-lg bg-violet-600 hover:bg-violet-500 text-xs font-semibold text-white flex items-center gap-1.5 transition">
+            <i class="fa-solid fa-floppy-disk"></i>
+            <span>Değişiklikleri Kaydet</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Source Transcript (Whisper STT) -->
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between text-xs">
+            <span class="font-medium text-slate-300 flex items-center gap-1.5">
+              <span class="px-1.5 py-0.5 rounded bg-sky-500/15 text-sky-300 border border-sky-500/30 mono text-[10px]">WHISPER STT</span>
+              <span>Orijinal Kaynak Transkript</span>
+            </span>
+            <span id="charCountEn" class="text-slate-500 mono text-[11px]">0 karakter</span>
+          </div>
+          <textarea id="editorTranscriptEn" rows="4" oninput="updateCharCounts()"
+            class="w-full p-3.5 rounded-xl bg-slate-950/90 border border-slate-800 focus:border-sky-500 focus:outline-none text-sm text-slate-200 leading-relaxed"></textarea>
+        </div>
+
+        <!-- Target Translation (Edge-TTS Script) -->
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between text-xs">
+            <span class="font-medium text-slate-300 flex items-center gap-1.5">
+              <span class="px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 mono text-[10px]">EDGE-TTS TR</span>
+              <span>Türkçe Nöral Dublaj Metni</span>
+            </span>
+            <span id="charCountTr" class="text-slate-500 mono text-[11px]">0 karakter</span>
+          </div>
+          <textarea id="editorTranslationTr" rows="4" oninput="updateCharCounts()"
+            class="w-full p-3.5 rounded-xl bg-slate-950/90 border border-slate-800 focus:border-emerald-500 focus:outline-none text-sm text-emerald-100 leading-relaxed"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bottom Row: Completed & Live Dubbing Jobs History -->
+    <section class="glass-card rounded-2xl p-5 space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-800/80 pb-3">
+        <div class="flex items-center gap-2.5">
+          <i class="fa-solid fa-clock-rotate-left text-emerald-400"></i>
+          <div>
+            <h2 class="font-semibold text-sm text-white">Tamamlanan Dublaj Projeleri Geçmişi</h2>
+            <p class="text-xs text-slate-400">Detaylarını, log kayıtlarını ve çeviri metnini yüklemek için bir projeye tıklayın</p>
+          </div>
+        </div>
+        <span id="jobsCountBadge" class="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-xs text-slate-300 mono">
+          3 Proje
+        </span>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="border-b border-slate-800 text-[11px] uppercase tracking-wider text-slate-400">
+              <th class="py-2.5 px-3">Proje & Kaynak URL</th>
+              <th class="py-2.5 px-3">Ses Modeli (Edge-TTS)</th>
+              <th class="py-2.5 px-3">Whisper</th>
+              <th class="py-2.5 px-3">Süre</th>
+              <th class="py-2.5 px-3">Çıktı Dosyası</th>
+              <th class="py-2.5 px-3">Durum</th>
+              <th class="py-2.5 px-3 text-right">İşlem</th>
+            </tr>
+          </thead>
+          <tbody id="jobsTableBody" class="divide-y divide-slate-800/60 text-xs">
+            <!-- Populated dynamically -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    let allJobs = [];
+    let stagesMeta = [];
+    let selectedJobId = null;
+    let pollTimer = null;
+
+    const stageIcons = {
+      1: 'fa-cloud-arrow-down',
+      2: 'fa-wave-square',
+      3: 'fa-microphone-lines',
+      4: 'fa-language',
+      5: 'fa-Comment-dots fa-volume-high',
+      6: 'fa-film'
+    };
+
+    function fillPreset(url, title) {
+      document.getElementById('inputUrl').value = url;
+      document.getElementById('inputTitle').value = title;
+    }
+
+    function updateCharCounts() {
+      const en = document.getElementById('editorTranscriptEn').value || '';
+      const tr = document.getElementById('editorTranslationTr').value || '';
+      document.getElementById('charCountEn').textContent = `${en.length} karakter`;
+      document.getElementById('charCountTr').textContent = `${tr.length} karakter`;
+    }
+
+    async function fetchJobs(preserveEditorIfEditing = true) {
+      try {
+        const res = await fetch('/api/jobs');
+        const data = await res.json();
+        stagesMeta = data.stages || [];
+        allJobs = data.jobs || [];
+
+        if (!selectedJobId && allJobs.length > 0) {
+          selectedJobId = allJobs[0].id;
+        }
+
+        const activeJob = allJobs.find(j => j.id === selectedJobId) || allJobs[0];
+        if (activeJob) {
+          renderPipelineAndLogs(activeJob, preserveEditorIfEditing);
+        }
+        renderJobsTable();
+      } catch (err) {
+        console.error('İş listesi alınamadı:', err);
+      }
+    }
+
+    function selectJob(jobId) {
+      selectedJobId = jobId;
+      const job = allJobs.find(j => j.id === jobId);
+      if (job) {
+        renderPipelineAndLogs(job, false);
+        renderJobsTable();
+      }
+    }
+
+    function renderPipelineAndLogs(job, preserveEditor) {
+      document.getElementById('activeJobTitle').textContent = job.title;
+      document.getElementById('activeJobMeta').textContent = `${job.url} • Ses: ${job.voice} • Whisper: ${job.whisperModel}`;
+
+      const badge = document.getElementById('activeJobBadge');
+      if (job.status === 'running') {
+        badge.className = 'px-2.5 py-1 rounded-full text-xs font-semibold bg-violet-500/20 text-violet-300 border border-violet-500/40 animate-pulse';
+        badge.textContent = `İşleniyor (%${job.progress})`;
+      } else if (job.status === 'completed') {
+        badge.className = 'px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30';
+        badge.textContent = 'Tamamlandı (%100)';
+      } else {
+        badge.className = 'px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-500/15 text-rose-300 border border-rose-500/30';
+        badge.textContent = 'Hata Oluştu';
+      }
+
+      document.getElementById('pipelineProgressBar').style.width = `${job.progress || 0}%`;
+
+      // Render 6 stages
+      const grid = document.getElementById('pipelineGrid');
+      grid.innerHTML = stagesMeta.map(s => {
+        const isDone = job.status === 'completed' || s.id < job.currentStage;
+        const isCurrent = job.status === 'running' && s.id === job.currentStage;
+        let cardClass = 'p-3 rounded-xl border border-slate-800 bg-slate-900/50 transition flex flex-col justify-between';
+        let statusIcon = '<i class="fa-regular fa-circle text-slate-600"></i>';
+
+        if (isDone) {
+          cardClass += ' stage-done';
+          statusIcon = '<i class="fa-solid fa-circle-check text-emerald-400"></i>';
+        } else if (isCurrent) {
+          cardClass += ' stage-active bg-violet-950/30';
+          statusIcon = '<i class="fa-solid fa-spinner fa-spin text-violet-400"></i>';
+        }
+
+        return `
+          <div class="${cardClass}">
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="text-[11px] font-bold mono text-slate-400">0${s.id} • ${s.tool}</span>
+              ${statusIcon}
+            </div>
+            <div class="font-semibold text-xs text-white">${s.name}</div>
+            <div class="text-[11px] text-slate-400 mt-0.5">${s.desc}</div>
+          </div>
+        `;
+      }).join('');
+
+      // Render Terminal Logs
+      const term = document.getElementById('terminalOutput');
+      const logs = job.logs || [];
+      document.getElementById('terminalLineCount').textContent = `${logs.length} satır`;
+      term.innerHTML = logs.map(line => {
+        let color = 'text-slate-300';
+        if (line.includes('DOSYA_YOLU:')) color = 'text-emerald-400 font-semibold';
+        else if (line.includes('DURUM:')) color = 'text-violet-300';
+        else if (line.includes('ISLEM_BASLIYOR:')) color = 'text-sky-300';
+        else if (line.includes('HATA')) color = 'text-rose-400 font-semibold';
+        return `<div class="${color}">${escapeHtml(line)}</div>`;
+      }).join('');
+      term.scrollTop = term.scrollHeight;
+
+      // Update Side-by-Side Editor unless user is actively typing inside it
+      const activeEl = document.activeElement;
+      const isTyping = preserveEditor && (activeEl?.id === 'editorTranscriptEn' || activeEl?.id === 'editorTranslationTr');
+      if (!isTyping) {
+        document.getElementById('editorTranscriptEn').value = job.transcriptEn || '';
+        document.getElementById('editorTranslationTr').value = job.translationTr || '';
+        updateCharCounts();
+      }
+    }
+
+    function renderJobsTable() {
+      document.getElementById('jobsCountBadge').textContent = `${allJobs.length} Proje`;
+      const tbody = document.getElementById('jobsTableBody');
+      tbody.innerHTML = allJobs.map(job => {
+        const isSelected = job.id === selectedJobId;
+        const rowClass = isSelected
+          ? 'bg-violet-500/10 border-l-2 border-l-violet-500 cursor-pointer transition'
+          : 'hover:bg-slate-900/70 cursor-pointer transition';
+
+        let statusBadge = '';
+        if (job.status === 'completed') {
+          statusBadge = '<span class="px-2 py-0.5 rounded-full text-[11px] bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">Tamamlandı</span>';
+        } else if (job.status === 'running') {
+          statusBadge = `<span class="px-2 py-0.5 rounded-full text-[11px] bg-violet-500/20 text-violet-300 border border-violet-500/40 animate-pulse">Aşama ${job.currentStage}/6</span>`;
+        } else {
+          statusBadge = '<span class="px-2 py-0.5 rounded-full text-[11px] bg-rose-500/15 text-rose-300 border border-rose-500/30">Hata</span>';
+        }
+
+        const fileName = (job.outputFile || 'hazir_video.mp4').split(/[\\/]/).pop();
+
+        return `
+          <tr onclick="selectJob('${job.id}')" class="${rowClass}">
+            <td class="py-3 px-3">
+              <div class="font-semibold text-white">${escapeHtml(job.title)}</div>
+              <div class="text-[11px] text-slate-400 mono truncate max-w-xs">${escapeHtml(job.url)}</div>
+            </td>
+            <td class="py-3 px-3 mono text-violet-300">${escapeHtml(job.voice)}</td>
+            <td class="py-3 px-3 mono text-slate-300">${escapeHtml(job.whisperModel)}</td>
+            <td class="py-3 px-3 mono text-slate-400">${escapeHtml(job.duration || '—')}</td>
+            <td class="py-3 px-3 mono text-emerald-300">${escapeHtml(fileName)}</td>
+            <td class="py-3 px-3">${statusBadge}</td>
+            <td class="py-3 px-3 text-right">
+              <button class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-[11px]">
+                İncele
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    async function startDubbingJob() {
+      const url = document.getElementById('inputUrl').value.trim();
+      const title = document.getElementById('inputTitle').value.trim();
+      const sourceLang = document.getElementById('selectSourceLang').value;
+      const targetLang = document.getElementById('selectTargetLang').value;
+      const voice = document.getElementById('selectVoice').value;
+      const whisperModel = document.getElementById('selectWhisper').value;
+      const mode = document.querySelector('input[name="execMode"]:checked')?.value || 'demo';
+
+      if (!url) {
+        alert('Lütfen bir YouTube veya video bağlantısı girin.');
+        return;
+      }
+
+      const btn = document.getElementById('btnStartDub');
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i><span>Pipeline Başlatılıyor...</span>';
+
+      try {
+        const res = await fetch('/api/dub', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url, title, sourceLang, targetLang, voice, whisperModel, mode })
+        });
+        const data = await res.json();
+        if (data.ok && data.job) {
+          selectedJobId = data.job.id;
+          await fetchJobs(false);
+        } else {
+          alert(data.error || 'İş başlatılamadı.');
+        }
+      } catch (err) {
+        alert('Sunucu hatası: ' + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-play"></i><span>Dublaj Hattını Başlat</span>';
+      }
+    }
+
+    async function saveTranscriptEdits() {
+      if (!selectedJobId) return;
+      const transcriptEn = document.getElementById('editorTranscriptEn').value;
+      const translationTr = document.getElementById('editorTranslationTr').value;
+      const btn = document.getElementById('btnSaveTranscript');
+
+      const origHtml = btn.innerHTML;
+      btn.innerHTML = '<i class="fa-solid fa-check"></i><span>Kaydedildi!</span>';
+
+      await fetch('/api/jobs/update', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: selectedJobId, transcriptEn, translationTr })
+      });
+      await fetchJobs(false);
+      setTimeout(() => { btn.innerHTML = origHtml; }, 1400);
+    }
+
+    async function triggerTtsPreview() {
+      const voice = document.getElementById('selectVoice').value;
+      const sampleText = document.getElementById('editorTranslationTr').value.trim() ||
+        'Merhaba! VibeBot yapay zeka stüdyosu ile videolarınız saniyeler içinde Türkçeye dublajlanır.';
+      await playTtsSample(voice, sampleText.slice(0, 220));
+    }
+
+    async function speakTurkishTranslation() {
+      const voice = document.getElementById('selectVoice').value;
+      const text = document.getElementById('editorTranslationTr').value.trim();
+      if (!text) return;
+      await playTtsSample(voice, text.slice(0, 260));
+    }
+
+    async function playTtsSample(voice, text) {
+      const box = document.getElementById('ttsStatusBox');
+      const statusText = document.getElementById('ttsStatusText');
+      const player = document.getElementById('ttsAudioPlayer');
+      box.classList.remove('hidden');
+      statusText.textContent = `${voice} sentezleniyor...`;
+
+      try {
+        const res = await fetch('/api/tts-preview', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ voice, text })
+        });
+        const data = await res.json();
+        statusText.textContent = data.message || `${voice} hazır`;
+
+        if (data.audioUrl) {
+          player.src = data.audioUrl;
+          player.classList.remove('hidden');
+          player.play().catch(() => {});
+        } else if ('speechSynthesis' in window) {
+          player.classList.add('hidden');
+          window.speechSynthesis.cancel();
+          const utter = new SpeechSynthesisUtterance(text);
+          utter.lang = voice.startsWith('tr') ? 'tr-TR' : 'en-US';
+          window.speechSynthesis.speak(utter);
+        }
+      } catch (err) {
+        statusText.textContent = 'Ses önizleme hatası: ' + err.message;
+      }
+    }
+
+    function escapeHtml(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    // Initial load & live polling every 1.2s
+    fetchJobs(false);
+    pollTimer = setInterval(() => fetchJobs(true), 1200);
+  </script>
+</body>
+</html>
