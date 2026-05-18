@@ -1,0 +1,8 @@
+customtkinter
+python-docx
+pandas
+openpyxl
+numpy
+opencv-python
+
+google-generativeai
