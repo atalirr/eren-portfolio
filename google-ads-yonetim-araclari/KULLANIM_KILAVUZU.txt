@@ -1,0 +1,56 @@
+==============================================================================
+   ATLI MEDIKAL - GOOGLE ADS SCRIPT PAKETI KULLANIM KILAVUZU
+==============================================================================
+
+Tebrikler! Google Ads hesabınız için geliştirilen 3 devasa kurumsal script hazır:
+
+1. account_inventory_diagnostics.js       (Hesabın 13 Sekmeli Röntgeni)
+2. performance_dashboard_ai_interpreter.js (Günlük Raporlama & AI Yorumlama)
+3. action_and_control_suite.js             (Emirle Yönetim & İcra Paketi)
+
+------------------------------------------------------------------------------
+ADIM 1: GOOGLE ADS'TE SCRIPT BOLUMUNE GITME
+------------------------------------------------------------------------------
+1. Google Ads hesabınıza tarayıcıdan girin (ads.google.com).
+2. Üst menüden "Araçlar ve Ayarlar" (İngilizce: Tools and Settings) simgesine tıklayın.
+3. Açılan menüde "Toplu İşlemler" (Bulk Actions) altındaki "Komut Dosyaları" (Scripts) seçeneğine tıklayın.
+4. Mavi renkli "+" (Artı) butonuna basarak yeni bir script oluşturun.
+
+------------------------------------------------------------------------------
+ADIM 2: HESAP RÖNTGENI SCRIPTINI CALISTIRMA (1. Script)
+------------------------------------------------------------------------------
+1. Masaüstündeki "Google_Ads_Scriptleri" klasöründe bulunan:
+   "account_inventory_diagnostics.js" dosyasını Not Defteri ile açın.
+2. İçindeki TÜM KODU seçip kopyalayın (Ctrl + A -> Ctrl + C).
+3. Google Ads'teki script editöründeki mevcut kodu silip yapıştırın (Ctrl + V).
+4. İsteğe bağlı: En üstteki CONFIG kısmında SPREADSHEET_URL boş bırakılırsa 
+   script otomatik olarak Google Drive'ınızda YEPYENI bir Google Sheets oluşturur!
+5. Sağ alttaki "Yetkilendir" (Authorize) butonuna basıp Google hesabınızla izin verin.
+6. "Çalıştır" (Run) butonuna basın.
+7. Çalışma bittiğinde en alttaki Günlükler (Logs) sekmesinde oluşturulan 
+   Google Sheets tablosunun linki görünecektir!
+8. Bu linki bana atın, hesabınızdaki tüm yapıyı inceleyelim!
+
+------------------------------------------------------------------------------
+ADIM 3: GÜNLÜK RAPORLAMA VE AI YORUMLAMA (2. Script)
+------------------------------------------------------------------------------
+1. Yine yeni bir script oluşturun.
+2. "performance_dashboard_ai_interpreter.js" kodunu yapıştırın.
+3. Bu scripti "GÜNLÜK" (Daily) olarak zamanlayın (Örn: Her sabah 08:00).
+4. Her sabah Google Sheets tablonuza dünün ve son 30 günün KPI'larını, 
+   anomali uyarılarını basar. 
+5. Ayrıca Logger ekranına tek tıkla kopyalayıp bana gönderebileceğiniz
+   özel "AI Yorumlama Bloğu" üretir. Bana yapıştırdığınızda anında stratejik
+   yorum ve öneriler sunarım.
+
+------------------------------------------------------------------------------
+ADIM 4: EMIRLE YÖNETIM VE ICRA (3. Script)
+------------------------------------------------------------------------------
+1. "action_and_control_suite.js" dosyasını kullanarak bana verdiğiniz emirleri
+   Google Ads'e uygulayacağız:
+   - "Kampanya bütçesini 750 TL yap"
+   - "Harcayıp dönüşüm getirmeyen zombi kelimeleri durdur"
+   - "Çöp arama terimlerini negatif listeye at"
+2. Bu scriptte DRY_RUN modu bulunur; önce test eder, onay verdikten sonra 
+   gerçek hesaba uygular.
+==============================================================================

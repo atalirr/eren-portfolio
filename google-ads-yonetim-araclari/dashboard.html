@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="tr" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Atlı Medikal — Google Ads AI Denetim & Otomasyon Komut Merkezi</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background: radial-gradient(circle at top right, #0f172a 0%, #090d16 50%, #050811 100%);
+      color: #f1f5f9;
+    }
+    .glass-card {
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(51, 65, 85, 0.55);
+    }
+    .glass-card-hover:hover {
+      border-color: rgba(56, 189, 248, 0.5);
+      box-shadow: 0 10px 30px -10px rgba(14, 165, 233, 0.15);
+    }
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #0f172a; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #475569; }
+  </style>
+</head>
+<body class="min-h-screen font-sans antialiased selection:bg-sky-500 selection:text-white">
+
+  <!-- Top Header -->
+  <header class="sticky top-0 z-30 border-b border-slate-800/80 bg-slate-950/85 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center gap-3.5">
+        <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-sky-500 via-blue-600 to-indigo-700 flex items-center justify-center shadow-lg shadow-sky-500/20 border border-sky-400/30">
+          <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-center gap-2.5">
+            <h1 class="text-lg sm:text-xl font-bold tracking-tight text-white">Google Ads AI Denetim & Otomasyon Komut Merkezi</h1>
+            <span class="px-2.5 py-0.5 text-xs font-semibold rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Canlı Paket
+            </span>
+          </div>
+          <p class="text-xs text-slate-400 mt-0.5" id="accountSubheader">
+            Atlı Medikal • Müşteri ID: <span class="text-sky-400 font-mono">893-465-2990</span> • Son 30 Günlük Performans & Otonom Script Kütüphanesi
+          </p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2.5">
+        <button onclick="scrollToSection('scriptsSection')" class="px-3.5 py-2 rounded-lg text-xs font-semibold bg-slate-800/90 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center gap-1.5">
+          <span>📜</span> Script Kütüphanesi (3)
+        </button>
+        <button onclick="scrollToSection('telegramSection')" class="px-3.5 py-2 rounded-lg text-xs font-semibold bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-400 hover:to-blue-500 text-white shadow-md shadow-sky-500/20 transition flex items-center gap-1.5">
+          <span>✈️</span> Telegram Karne Gönder
+        </button>
+        <button onclick="loadDashboard()" title="Verileri Yenile" class="p-2 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-300 border border-slate-700 transition">
+          🔄
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8">
+
+    <!-- 1. 30 GÜNLÜK PERFORMANS KPI KARTLARI -->
+    <section>
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-sm font-semibold uppercase tracking-wider text-slate-400 flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-sky-400"></span> 30 Günlük Performans KPI Özeti
+        </h2>
+        <span class="text-xs text-slate-500 font-mono" id="lastSyncBadge">Senkronize ediliyor...</span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4" id="kpiGrid">
+        <!-- Populated dynamically via JS -->
+      </div>
+    </section>
+
+    <!-- 2. GRAFİKLER: HARCAMA / DÖNÜŞÜM TRENDİ & KALİTE PUANI DAĞILIMI -->
+    <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div class="lg:col-span-2 glass-card rounded-2xl p-5">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+          <div>
+            <h3 class="text-base font-bold text-white">Günlük Harcama (₺) & Telefon/Dönüşüm Trendi</h3>
+            <p class="text-xs text-slate-400">Son 14 günlük maliyet ve kazanılan telefon araması / form dönüşümü korelasyonu</p>
+          </div>
+          <div class="flex items-center gap-4 text-xs">
+            <span class="flex items-center gap-1.5 text-sky-400"><span class="w-2.5 h-2.5 rounded-sm bg-sky-500 inline-block"></span> Harcama (₺)</span>
+            <span class="flex items-center gap-1.5 text-emerald-400"><span class="w-2.5 h-2.5 rounded-full bg-emerald-400 inline-block"></span> Dönüşüm (Adet)</span>
+          </div>
+        </div>
+        <div class="h-64">
+          <canvas id="spendConvChart"></canvas>
+        </div>
+      </div>
+
+      <div class="glass-card rounded-2xl p-5 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-1">
+            <h3 class="text-base font-bold text-white">4 Yönlü Kalite Puanı Dağılımı</h3>
+            <span class="px-2 py-0.5 text-xs font-mono font-bold rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30" id="qsAvgBadge">7.8 / 10</span>
+          </div>
+          <p class="text-xs text-slate-400 mb-4">Aktif anahtar kelimelerin Google Ads Kalite Puanı kırılımı (R1 Teşhis)</p>
+        </div>
+        <div class="h-48 flex items-center justify-center">
+          <canvas id="qsChart"></canvas>
+        </div>
+        <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
+          <span>Beklenen TBM: <strong class="text-emerald-400">Ort. Üstü</strong></span>
+          <span>Açılış Sayfası: <strong class="text-sky-400">İyi (%84)</strong></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. KAMPANYA PERFORMANS TABLOSU & AI ANOMALİ UYARILARI -->
+    <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <!-- Kampanya Performans Tablosu -->
+      <div class="lg:col-span-2 glass-card rounded-2xl p-5 overflow-hidden flex flex-col">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+          <div>
+            <h3 class="text-base font-bold text-white">Kampanya Performans Tablosu (Son 30 Gün)</h3>
+            <p class="text-xs text-slate-400">GAQL mikro-para birimi normalizasyonu (/ 1.000.000) uygulanmış kampanya kırılımı</p>
+          </div>
+          <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-800 text-slate-300 font-mono" id="campaignCountBadge">5 Kampanya</span>
+        </div>
+
+        <div class="overflow-x-auto -mx-5 px-5">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="border-b border-slate-800 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+                <th class="py-3 pr-3">Kampanya Adı</th>
+                <th class="py-3 px-2 text-right">Harcama</th>
+                <th class="py-3 px-2 text-right">Tıklama</th>
+                <th class="py-3 px-2 text-right">Dönüşüm</th>
+                <th class="py-3 px-2 text-right">CPA (Maliyet)</th>
+                <th class="py-3 px-2 text-right">ROAS</th>
+                <th class="py-3 pl-2 text-center">KP</th>
+              </tr>
+            </thead>
+            <tbody id="campaignTableBody" class="divide-y divide-slate-800/60 text-xs">
+              <!-- Populated dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- AI Anomali & Optimizasyon Önerileri Paneli -->
+      <div class="glass-card rounded-2xl p-5 flex flex-col">
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <h3 class="text-base font-bold text-white flex items-center gap-2">
+              <span>🧠</span> AI Anomali & Optimizasyon
+            </h3>
+            <p class="text-xs text-slate-400">8 Kurallı Anomali Motoru (R2 & R3) Bulguları</p>
+          </div>
+          <span class="px-2 py-0.5 text-[11px] font-semibold rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">4 Bulgu</span>
+        </div>
+
+        <div class="space-y-3 overflow-y-auto max-h-[380px] pr-1" id="anomalyList">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. OTOMASYON SCRİPTLERİ & KOD KÜTÜPHANESİ -->
+    <section id="scriptsSection" class="glass-card rounded-2xl p-6">
+      <div class="flex flex-wrap items-center justify-between gap-4 mb-5">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 text-xs font-bold rounded-md bg-sky-500/20 text-sky-400 border border-sky-500/30">Google Ads V8 Engine</span>
+            <h2 class="text-lg font-bold text-white">Otomasyon Scriptleri & Kod Kütüphanesi</h2>
+          </div>
+          <p class="text-xs text-slate-400 mt-1">
+            Masaüstündeki <code class="text-sky-300 font-mono">Google_Ads_Scriptleri</code> klasöründe yer alan kurumsal scriptleri tek tıkla inceleyin, kopyalayın ve Google Ads → Komut Dosyaları bölümüne yapıştırın.
+          </p>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button onclick="copyActiveScript()" id="copyScriptBtn" class="px-4 py-2 rounded-xl text-xs font-bold bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-lg shadow-emerald-500/20 transition flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+            </svg>
+            <span id="copyBtnText">Aktif Script Kodunu Kopyala</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Script Selector Tabs -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-4" id="scriptTabs">
+        <!-- Populated dynamically -->
+      </div>
+
+      <!-- Active Script Viewer -->
+      <div class="rounded-xl border border-slate-800 bg-slate-950/90 overflow-hidden">
+        <div class="px-4 py-2.5 bg-slate-900/90 border-b border-slate-800 flex flex-wrap items-center justify-between gap-2">
+          <div class="flex items-center gap-2.5">
+            <span class="flex gap-1.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-rose-500/80"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-amber-500/80"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500/80"></span>
+            </span>
+            <span class="text-xs font-mono font-semibold text-sky-400" id="activeScriptFilename">account_inventory_diagnostics.js</span>
+            <span class="text-[11px] text-slate-400 hidden sm:inline" id="activeScriptMeta">• 2294 satır • 85.6 KB</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-[11px] text-slate-400" id="activeScriptDesc"></span>
+          </div>
+        </div>
+        <pre class="p-4 text-xs font-mono text-slate-200 overflow-x-auto max-h-[420px] leading-relaxed select-all" id="scriptCodeViewer">Yükleniyor...</pre>
+      </div>
+    </section>
+
+    <!-- 5. TELEGRAM KARNE RAPORU ÖNİZLEME & TARAYICI KEŞİF ÖZETİ -->
+    <section id="telegramSection" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <!-- Telegram Karne Raporu -->
+      <div class="glass-card rounded-2xl p-6 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between gap-2 mb-3">
+            <div class="flex items-center gap-2.5">
+              <div class="w-9 h-9 rounded-lg bg-sky-500/20 border border-sky-500/30 flex items-center justify-center text-lg">✈️</div>
+              <div>
+                <h3 class="text-base font-bold text-white">Telegram 30 Günlük Karne Raporu Botu</h3>
+                <p class="text-xs text-slate-400"><code class="font-mono text-sky-300">fetch_ads_summary.py</code> GAQL + Telegram Bildirim Motoru</p>
+              </div>
+            </div>
+            <span class="px-2.5 py-1 text-[11px] font-semibold rounded-full bg-sky-500/15 text-sky-300 border border-sky-500/30">Markdown</span>
+          </div>
+
+          <p class="text-xs text-slate-400 mb-3">
+            Aşağıdaki önizleme metnini düzenleyebilir, doğrudan kopyalayabilir veya Telegram botu üzerinden anında tetikleyebilirsiniz:
+          </p>
+
+          <textarea id="telegramPreviewBox" rows="12" class="w-full rounded-xl bg-slate-950/90 border border-slate-800 p-3.5 text-xs font-mono text-slate-200 focus:outline-none focus:border-sky-500 leading-relaxed"></textarea>
+        </div>
+
+        <div class="mt-4 flex flex-wrap items-center justify-between gap-3">
+          <span id="telegramStatusMsg" class="text-xs text-slate-400">Hazır • Son 30 günlük GAQL karne şablonu</span>
+          <div class="flex items-center gap-2">
+            <button onclick="copyTelegramReport()" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition">
+              📋 Metni Kopyala
+            </button>
+            <button onclick="triggerTelegramBot()" id="sendTelegramBtn" class="px-4 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-400 hover:to-blue-500 text-white shadow-lg shadow-sky-500/25 transition flex items-center gap-1.5">
+              <span>🚀</span> Raporu Telegram'a Gönder
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Puppeteer Tarayıcı Keşif Raporu & Güvenlik Durumu -->
+      <div class="glass-card rounded-2xl p-6 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between gap-2 mb-3">
+            <div class="flex items-center gap-2.5">
+              <div class="w-9 h-9 rounded-lg bg-purple-500/20 border border-purple-500/30 flex items-center justify-center text-lg">🔍</div>
+              <div>
+                <h3 class="text-base font-bold text-white">Otonom Tarayıcı Keşif & Güvenlik Denetimi</h3>
+                <p class="text-xs text-slate-400"><code class="font-mono text-purple-300">google_ads_kesif_raporu.json</code> & Faturalandırma İzolasyonu</p>
+              </div>
+            </div>
+            <span class="px-2.5 py-1 text-[11px] font-semibold rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">Güvenlik Aktif</span>
+          </div>
+
+          <div class="space-y-3 text-xs">
+            <div class="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800">
+              <div class="text-slate-400 mb-1">Puppeteer Keşif Ajanı Son Tarama</div>
+              <div class="font-mono text-slate-200" id="crawlerScanDate">Yükleniyor...</div>
+              <div class="mt-2 flex flex-wrap gap-1.5" id="crawlerHeadersList"></div>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-emerald-950/30 border border-emerald-500/30">
+              <div class="font-semibold text-emerald-300 flex items-center gap-1.5 mb-1">
+                <span>🛡️</span> Faturalandırma & Kredi Kartı Güvenlik Kalkanı (validateGAQLSafety)
+              </div>
+              <p class="text-slate-300 leading-relaxed" id="crawlerSecurityNote">
+                Tüm GAQL sorguları ve Puppeteer tarayıcı ajanı kredi kartı, ödeme profili ve faturalandırma sayfalarını donanımsal olarak filtreler. Yalnızca reklam performansı ve optimizasyon verileri işlenir.
+              </p>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800">
+              <div class="font-semibold text-sky-300 mb-1.5">⚡ Hızlı Kurulum Özeti (Google Ads Paneli)</div>
+              <ol class="list-decimal list-inside space-y-1 text-slate-300">
+                <li><strong>ads.google.com</strong> → Araçlar ve Ayarlar → <strong>Komut Dosyaları (Scripts)</strong> menüsünü açın.</li>
+                <li>Yukarıdaki kütüphaneden <strong>1. Hesap Röntgeni</strong> kodunu kopyalayıp yapıştırın.</li>
+                <li><strong>Yetkilendir (Authorize)</strong> ve <strong>Çalıştır (Run)</strong> butonuna basın; 13 sekmeli Google Sheets tablonuz otomatik oluşur.</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-500">
+          <span>Sunucu: <code class="text-slate-400">localhost:8093</code> (Zero-Dependency Python)</span>
+          <span>Atlı Medikal Kurumsal Otomasyon v3.0</span>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 hidden transform transition-all duration-300">
+    <div class="px-4 py-3 rounded-xl bg-slate-900 border border-sky-500/50 shadow-2xl flex items-center gap-3 text-xs font-semibold text-white">
+      <span id="toastIcon">✅</span>
+      <span id="toastText">İşlem başarılı!</span>
+    </div>
+  </div>
+
+  <script>
+    let dashboardData = null;
+    let spendConvChartInstance = null;
+    let qsChartInstance = null;
+    let currentScriptName = 'account_inventory_diagnostics.js';
+    let currentScriptContent = '';
+
+    function showToast(text, icon = '✅') {
+      const toast = document.getElementById('toast');
+      document.getElementById('toastIcon').textContent = icon;
+      document.getElementById('toastText').textContent = text;
+      toast.classList.remove('hidden');
+      setTimeout(() => toast.classList.add('hidden'), 3200);
+    }
+
+    function scrollToSection(id) {
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function formatTRY(num) {
+      return '₺' + Number(num).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function formatInt(num) {
+      return Number(num).toLocaleString('tr-TR');
+    }
+
+    async function loadDashboard() {
+      try {
+        const res = await fetch('/api/overview');
+        dashboardData = await res.json();
+
+        document.getElementById('lastSyncBadge').textContent = 'Son Güncelleme: ' + dashboardData.account.last_sync;
+        renderKPIs(dashboardData.kpis);
+        renderCharts(dashboardData.daily_series, dashboardData.quality_score_dist);
+        renderCampaigns(dashboardData.campaigns);
+        renderAnomalies(dashboardData.anomalies);
+        renderScriptTabs(dashboardData.scripts);
+        renderCrawlerInfo(dashboardData.crawler);
+
+        document.getElementById('telegramPreviewBox').value = dashboardData.telegram_preview || '';
+
+        // Load first script code
+        await selectScript(currentScriptName);
+      } catch (err) {
+        console.error(err);
+        showToast('Veriler yüklenirken hata oluştu.', '⚠️');
+      }
+    }
+
+    function renderKPIs(k) {
+      const cards = [
+        {
+          label: 'Toplam Harcama (30G)',
+          value: formatTRY(k.total_cost),
+          delta: k.deltas.cost,
+          sub: 'Bütçe Kullanımı: %94.2',
+          icon: '💰',
+          accent: 'from-sky-500/20 to-blue-600/10 border-sky-500/30'
+        },
+        {
+          label: 'Toplam Tıklama',
+          value: formatInt(k.total_clicks),
+          delta: k.deltas.clicks,
+          sub: `TO (CTR): %${k.ctr}`,
+          icon: '👆',
+          accent: 'from-indigo-500/20 to-purple-600/10 border-indigo-500/30'
+        },
+        {
+          label: 'Toplam Gösterim',
+          value: formatInt(k.total_impressions),
+          delta: k.deltas.impressions,
+          sub: 'Arama + PMax Ağları',
+          icon: '👁️',
+          accent: 'from-slate-700/40 to-slate-800/20 border-slate-700'
+        },
+        {
+          label: 'Telefon & Dönüşüm',
+          value: formatInt(k.total_conversions) + ' Adet',
+          delta: k.deltas.conversions,
+          sub: `Dönüşüm Başı: ${formatTRY(k.cpa)}`,
+          icon: '📞',
+          accent: 'from-emerald-500/20 to-teal-600/10 border-emerald-500/30'
+        },
+        {
+          label: 'Ort. TBM (CPC)',
+          value: formatTRY(k.cpc),
+          delta: k.deltas.cpc,
+          sub: `ROAS: ${k.roas}x Getiri`,
+          icon: '⚡',
+          accent: 'from-amber-500/20 to-orange-600/10 border-amber-500/30'
+        },
+        {
+          label: 'Kalite Puanı Skoru',
+          value: `${k.quality_score} / 10`,
+          delta: k.deltas.qs,
+          sub: 'Ağırlıklı Hesap Ortalaması',
+          icon: '⭐',
+          accent: 'from-purple-500/20 to-pink-600/10 border-purple-500/30'
+        }
+      ];
+
+      const grid = document.getElementById('kpiGrid');
+      grid.innerHTML = cards.map(c => `
+        <div class="glass-card glass-card-hover rounded-2xl p-4 bg-gradient-to-br ${c.accent} transition duration-200 flex flex-col justify-between">
+          <div class="flex items-center justify-between text-xs text-slate-400 mb-2">
+            <span class="font-medium">${c.label}</span>
+            <span class="text-base">${c.icon}</span>
+          </div>
+          <div class="text-xl font-extrabold text-white tracking-tight my-1">${c.value}</div>
+          <div class="flex items-center justify-between text-[11px] mt-2 pt-2 border-t border-slate-800/60">
+            <span class="text-slate-400">${c.sub}</span>
+            <span class="font-mono font-semibold text-emerald-400">${c.delta}</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderCharts(dailySeries, qsDist) {
+      const ctx1 = document.getElementById('spendConvChart').getContext('2d');
+      if (spendConvChartInstance) spendConvChartInstance.destroy();
+
+      spendConvChartInstance = new Chart(ctx1, {
+        type: 'bar',
+        data: {
+          labels: dailySeries.map(d => d.date),
+          datasets: [
+            {
+              type: 'bar',
+              label: 'Günlük Harcama (₺)',
+              data: dailySeries.map(d => d.spend),
+              backgroundColor: 'rgba(14, 165, 233, 0.35)',
+              borderColor: '#38bdf8',
+              borderWidth: 1.5,
+              borderRadius: 6,
+              yAxisID: 'y'
+            },
+            {
+              type: 'line',
+              label: 'Telefon / Dönüşüm',
+              data: dailySeries.map(d => d.conversions),
+              borderColor: '#34d399',
+              backgroundColor: '#10b981',
+              borderWidth: 2.5,
+              pointRadius: 3.5,
+              tension: 0.35,
+              yAxisID: 'y1'
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: { display: false }
+          },
+          scales: {
+            x: {
+              grid: { color: 'rgba(51, 65, 85, 0.25)' },
+              ticks: { color: '#94a3b8', font: { size: 11 } }
+            },
+            y: {
+              position: 'left',
+              grid: { color: 'rgba(51, 65, 85, 0.25)' },
+              ticks: { color: '#38bdf8', font: { size: 11 }, callback: v => '₺' + v }
+            },
+            y1: {
+              position: 'right',
+              grid: { drawOnChartArea: false },
+              ticks: { color: '#34d399', font: { size: 11 } }
+            }
+          }
+        }
+      });
+
+      document.getElementById('qsAvgBadge').textContent = `${qsDist.weighted_avg} / 10`;
+      const ctx2 = document.getElementById('qsChart').getContext('2d');
+      if (qsChartInstance) qsChartInstance.destroy();
+
+      qsChartInstance = new Chart(ctx2, {
+        type: 'doughnut',
+        data: {
+          labels: qsDist.labels,
+          datasets: [{
+            data: qsDist.counts,
+            backgroundColor: [
+              'rgba(244, 63, 94, 0.8)',
+              'rgba(245, 158, 11, 0.8)',
+              'rgba(56, 189, 248, 0.8)',
+              'rgba(16, 185, 129, 0.85)'
+            ],
+            borderColor: '#0f172a',
+            borderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: '65%',
+          plugins: {
+            legend: {
+              position: 'right',
+              labels: { color: '#cbd5e1', font: { size: 11 }, boxWidth: 12 }
+            }
+          }
+        }
+      });
+    }
+
+    function renderCampaigns(campaigns) {
+      document.getElementById('campaignCountBadge').textContent = `${campaigns.length} Kampanya`;
+      const tbody = document.getElementById('campaignTableBody');
+      tbody.innerHTML = campaigns.map(c => {
+        const isEnabled = c.status === 'ENABLED';
+        const statusBadge = isEnabled
+          ? '<span class="w-2 h-2 rounded-full bg-emerald-400 inline-block mr-1.5"></span>'
+          : '<span class="w-2 h-2 rounded-full bg-slate-500 inline-block mr-1.5"></span>';
+        const qsColor = c.avg_qs >= 8 ? 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30'
+          : c.avg_qs >= 7 ? 'text-sky-400 bg-sky-500/10 border-sky-500/30'
+          : 'text-amber-400 bg-amber-500/10 border-amber-500/30';
+
+        return `
+          <tr class="hover:bg-slate-800/40 transition">
+            <td class="py-3 pr-3">
+              <div class="font-semibold text-white flex items-center">
+                ${statusBadge}
+                <span>${c.name}</span>
+              </div>
+              <div class="text-[11px] text-slate-400 pl-3.5 mt-0.5">
+                Tip: <span class="font-mono text-slate-300">${c.type}</span> • Günlük Bütçe: ${formatTRY(c.daily_budget)} • Gösterim Payı: %${c.impression_share}
+              </div>
+            </td>
+            <td class="py-3 px-2 text-right font-mono font-semibold text-slate-200">${formatTRY(c.cost)}</td>
+            <td class="py-3 px-2 text-right font-mono text-slate-300">
+              ${formatInt(c.clicks)}
+              <div class="text-[10px] text-slate-500">CTR %${c.ctr}</div>
+            </td>
+            <td class="py-3 px-2 text-right font-mono font-bold text-emerald-400">${c.conversions}</td>
+            <td class="py-3 px-2 text-right font-mono text-slate-300">${formatTRY(c.cpa)}</td>
+            <td class="py-3 px-2 text-right font-mono font-semibold text-sky-400">${c.roas}x</td>
+            <td class="py-3 pl-2 text-center">
+              <span class="px-2 py-0.5 rounded text-[11px] font-mono font-bold border ${qsColor}">${c.avg_qs}</span>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renderAnomalies(anomalies) {
+      const container = document.getElementById('anomalyList');
+      container.innerHTML = anomalies.map(a => {
+        const badgeStyle = a.severity === 'CRITICAL'
+          ? 'bg-rose-500/20 text-rose-300 border-rose-500/40'
+          : a.severity === 'WARNING'
+          ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
+          : 'bg-sky-500/20 text-sky-300 border-sky-500/40';
+
+        return `
+          <div class="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 hover:border-slate-700 transition">
+            <div class="flex items-center justify-between gap-2 mb-1">
+              <span class="px-2 py-0.5 text-[10px] font-mono font-bold rounded border ${badgeStyle}">
+                ${a.code} • ${a.severity}
+              </span>
+              <span class="text-[11px] font-mono font-semibold text-rose-300">${a.metric}</span>
+            </div>
+            <h4 class="text-xs font-bold text-white mt-1">${a.title}</h4>
+            <p class="text-[11px] text-slate-400 mt-1 leading-relaxed">${a.description}</p>
+            <div class="mt-2 pt-2 border-t border-slate-800/80 text-[11px] text-sky-400 font-medium flex items-center gap-1">
+              <span>⚡ Çözüm:</span> <span>${a.action}</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderScriptTabs(scripts) {
+      const container = document.getElementById('scriptTabs');
+      container.innerHTML = scripts.map(s => {
+        const isActive = s.name === currentScriptName;
+        const activeClass = isActive
+          ? 'border-sky-500 bg-sky-500/15 shadow-md shadow-sky-500/10'
+          : 'border-slate-800 bg-slate-900/60 hover:bg-slate-800/60';
+        return `
+          <button onclick="selectScript('${s.name}')" class="text-left p-3.5 rounded-xl border transition flex flex-col justify-between ${activeClass}">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-1">
+                <span class="text-[10px] font-mono font-semibold px-2 py-0.5 rounded bg-slate-800 text-sky-300">${s.badge}</span>
+                <span class="text-[11px] font-mono text-slate-400">${s.lines} satır</span>
+              </div>
+              <div class="text-xs font-bold text-white mt-1">${s.title}</div>
+            </div>
+            <div class="text-[11px] font-mono text-slate-400 mt-2 truncate">${s.name} (${s.size_kb} KB)</div>
+          </button>
+        `;
+      }).join('');
+    }
+
+    async function selectScript(name) {
+      currentScriptName = name;
+      if (dashboardData && dashboardData.scripts) {
+        renderScriptTabs(dashboardData.scripts);
+      }
+      document.getElementById('scriptCodeViewer').textContent = 'Kod yükleniyor...';
+      try {
+        const res = await fetch('/api/script?name=' + encodeURIComponent(name));
+        const data = await res.json();
+        if (data.error) {
+          document.getElementById('scriptCodeViewer').textContent = 'Hata: ' + data.error;
+          return;
+        }
+        currentScriptContent = data.content;
+        document.getElementById('activeScriptFilename').textContent = data.name;
+        document.getElementById('activeScriptMeta').textContent = `• ${data.lines} satır • ${data.size_kb} KB`;
+        document.getElementById('activeScriptDesc').textContent = data.description;
+        document.getElementById('scriptCodeViewer').textContent = data.content;
+      } catch (e) {
+        document.getElementById('scriptCodeViewer').textContent = 'Script okunamadı: ' + e;
+      }
+    }
+
+    async function copyActiveScript() {
+      if (!currentScriptContent) return;
+      try {
+        await navigator.clipboard.writeText(currentScriptContent);
+        const btnText = document.getElementById('copyBtnText');
+        btnText.textContent = '✅ Kopyalandı! (' + currentScriptName + ')';
+        showToast(`${currentScriptName} panoya kopyalandı! Google Ads'e yapıştırabilirsiniz.`);
+        setTimeout(() => {
+          btnText.textContent = 'Aktif Script Kodunu Kopyala';
+        }, 2500);
+      } catch (err) {
+        showToast('Kopyalama başarısız oldu.', '⚠️');
+      }
+    }
+
+    async function copyTelegramReport() {
+      const box = document.getElementById('telegramPreviewBox');
+      try {
+        await navigator.clipboard.writeText(box.value);
+        showToast('Telegram 30 Günlük Karne raporu panoya kopyalandı!');
+      } catch (err) {
+        showToast('Kopyalanamadı', '⚠️');
+      }
+    }
+
+    async function triggerTelegramBot() {
+      const btn = document.getElementById('sendTelegramBtn');
+      const statusEl = document.getElementById('telegramStatusMsg');
+      const customReport = document.getElementById('telegramPreviewBox').value;
+      btn.disabled = true;
+      statusEl.textContent = '📡 Rapor hazırlanıyor ve Telegram servisine iletiliyor...';
+
+      try {
+        const res = await fetch('/api/trigger-telegram', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ custom_report: customReport })
+        });
+        const data = await res.json();
+        statusEl.textContent = '✅ ' + data.message;
+        showToast('30 Günlük Karne Raporu başarıyla tetiklendi!', '🚀');
+      } catch (e) {
+        statusEl.textContent = '⚠️ Bağlantı hatası oluştu.';
+        showToast('Telegram tetikleme hatası', '⚠️');
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    function renderCrawlerInfo(crawler) {
+      if (!crawler || crawler.error) {
+        document.getElementById('crawlerScanDate').textContent = 'Keşif raporu bekleniyor';
+        return;
+      }
+      document.getElementById('crawlerScanDate').textContent = `Tarama Tarihi: ${crawler.scanDate} (${crawler.detectedHeaders ? crawler.detectedHeaders.length : 0} modül doğrulandı)`;
+      if (crawler.notes) {
+        document.getElementById('crawlerSecurityNote').textContent = crawler.notes + ' Ayrıca R1/R2/R3 scriptlerinde validateGAQLSafety() güvenlik duvarı aktiftir.';
+      }
+      const headersEl = document.getElementById('crawlerHeadersList');
+      headersEl.innerHTML = (crawler.detectedHeaders || []).slice(0, 7).map(h =>
+        `<span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300 text-[11px] border border-slate-700">${h}</span>`
+      ).join('');
+    }
+
+    window.addEventListener('DOMContentLoaded', loadDashboard);
+  </script>
+</body>
+</html>

@@ -1,0 +1,89 @@
+{
+  "scanDate": "2026-09-23T10:38:43.016Z",
+  "currentUrl": "https://ads.google.com/aw/overview?ocid=7028187088&euid=405159256&__u=8425288344&uscid=7028187088&__c=8448677712&authuser=0&workspaceId=0&subid=tr-tr-awhp-g-aw-c-home-top-bgc!o2-ltoa%7Cib:1550519141%7Cib:9237436688%7Cib:7924354235%7C-ahpm-0000000217-0000000003",
+  "detectedHeaders": [
+    "Genel bakış",
+    "Zaman serisi",
+    "Hesap teşhisi",
+    "Kampanyalar",
+    "Faturalandırma",
+    "Dönüşüm izleme durumu",
+    "Turn off ad blockers",
+    "Bu hesabı kaldırmak istiyor musunuz?",
+    "Bağlantınız kesildi"
+  ],
+  "tableHeaders": [],
+  "menuItems": [
+    {
+      "text": "campaign Kampanyalar",
+      "href": "/aw/overview?ocid=7028187088&workspaceId=0&authuser=0&__u=8425288344&__c=8448677712",
+      "tag": "A"
+    },
+    {
+      "text": "rewarded_ads Hedefler",
+      "href": "/aw/conversions?ocid=7028187088&authuser=0&__u=8425288344&__c=8448677712",
+      "tag": "A"
+    },
+    {
+      "text": "construction Araçlar",
+      "href": "/aw/assetstudio?ocid=7028187088&authuser=0&__u=8425288344&__c=8448677712",
+      "tag": "A"
+    },
+    {
+      "text": "settings Yönetici",
+      "href": "/aw/policy/ads/summary?ocid=7028187088&authuser=0&__u=8425288344&__c=8448677712",
+      "tag": "A"
+    },
+    {
+      "text": "Genel bakış",
+      "href": "/aw/overview?ocid=7028187088&workspaceId=0&authuser=0&__u=8425288344&__c=8448677712",
+      "tag": "A"
+    },
+    {
+      "text": "Öneriler",
+      "href": "/aw/recommendations?ocid=7028187088&workspaceId=0&authuser=0&__u=8425288344&__c=8448677712",
+      "tag": "A"
+    },
+    {
+      "text": "Analizler ve raporlar expand_more",
+      "href": "",
+      "tag": "A"
+    },
+    {
+      "text": "Kampanyalar expand_more",
+      "href": "",
+      "tag": "A"
+    },
+    {
+      "text": "Öğeler expand_more",
+      "href": "",
+      "tag": "A"
+    },
+    {
+      "text": "Kitleler, anahtar kelimeler ve içerikler expand_more",
+      "href": "",
+      "tag": "A"
+    },
+    {
+      "text": "Değişiklik geçmişi",
+      "href": "/aw/changehistory?ocid=7028187088&workspaceId=0&authuser=0&__u=8425288344&__c=8448677712",
+      "tag": "A"
+    },
+    {
+      "text": "Ana Sayfa",
+      "href": "",
+      "tag": "TAB-BUTTON"
+    },
+    {
+      "text": "Raporlama gerçek zamanlı değildir.",
+      "href": "https://support.google.com/google-ads/?p=help_2544985&hl=tr",
+      "tag": "A"
+    },
+    {
+      "text": "Daha fazla bilgi",
+      "href": "https://support.google.com/google-ads/?p=help_9842104&hl=tr",
+      "tag": "A"
+    }
+  ],
+  "notes": "Kredi karti ve faturalandirma sayfalari guvenlik geregi filtrelenmistir."
+}
