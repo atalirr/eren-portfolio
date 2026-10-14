@@ -1,4 +1,4 @@
-# Antigravity AI Autonomous Trading Bot: Master Technical Diagnostic & Root-Cause Audit Report
+﻿# Antigravity AI Autonomous Trading Bot: Master Technical Diagnostic & Root-Cause Audit Report
 
 **Target Workspace:** `c:\users\erena\OneDrive\Masaüstü\Projeler\TradeBot\TRADE BOT`  
 **Audit Author:** Teamwork Diagnostic Taskforce (Worker Synthesis of Surveys 1, 2, and 3)  

@@ -1,4 +1,4 @@
-# TRADE BOT - Düzeltme Promptu
+﻿# TRADE BOT - Düzeltme Promptu
 
 > Bu metni doğrudan bir AI ajana (Claude, Cursor, Copilot vb.) prompt olarak verebilirsin. Ajanın tüm projeye (`backend.py`, `scoring_engine.py`, `watcher.py`, `frontend/src/App.jsx`, `frontend/src/main.jsx`, `frontend/src/index.css`, `frontend/package.json`, `.env`) erişimi olduğunu varsayıyor.
 
@@ -22,7 +22,7 @@ Düzeltme bittiğinde:
 ### 1.1 Sızdırılmış API anahtarları
 - `.env` dosyası gerçek görünümlü `BINANCE_API_KEY` ve `BINANCE_SECRET_KEY` içeriyor ve OneDrive klasöründe plaintext.
 - Yapılacak:
-  - Repo köküne (`C:\Users\erena\OneDrive\Masaüstü\TRADE BOT\`) bir `.gitignore` oluştur ve içine en azından şunları ekle: `.env`, `bot_ledger.json`, `bot_state.json`, `__pycache__/`, `*.pyc`, `frontend/node_modules/`, `frontend/dist/`, `scratch/`.
+  - Repo köküne (`C:\Users\User\OneDrive\Masaüstü\TRADE BOT\`) bir `.gitignore` oluştur ve içine en azından şunları ekle: `.env`, `bot_ledger.json`, `bot_state.json`, `__pycache__/`, `*.pyc`, `frontend/node_modules/`, `frontend/dist/`, `scratch/`.
   - Repo köküne bir `.env.example` oluştur; içinde anahtarlar boş olsun:
     ```
     BINANCE_API_KEY=

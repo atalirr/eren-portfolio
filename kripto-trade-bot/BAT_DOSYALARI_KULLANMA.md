@@ -1,4 +1,4 @@
-# 🖱️ BAT DOSYALARI KULLANMA REHBERI
+﻿# 🖱️ BAT DOSYALARI KULLANMA REHBERI
 
 ## 📋 SENİN 3 BAT DOSYAN
 
@@ -49,7 +49,7 @@ set SERVER_IP=34.238.12.45
 
 Masaüstüne koy:
 ```
-C:\Users\erena\Desktop\tradebot-key.pem
+C:\Users\User\Desktop\tradebot-key.pem
 ```
 
 (Bat dosyasından ..\ ile üst klasöre bakıyor)
@@ -63,7 +63,7 @@ C:\Users\erena\Desktop\tradebot-key.pem
 ### Şey 1: guncelle_YENİ.bat'a Çift Tıkla
 
 ```
-C:\Users\erena\OneDrive\Masaüstü\TRADE BOT\guncelle_YENİ.bat
+C:\Users\User\OneDrive\Masaüstü\TRADE BOT\guncelle_YENİ.bat
                                                     ↓
                                             ÇİFT TIKLA
 ```
@@ -110,7 +110,7 @@ HATA: Dosyalar yüklenemedi!
 ### Şey 1: START_YENİ.bat'a Çift Tıkla
 
 ```
-C:\Users\erena\OneDrive\Masaüstü\TRADE BOT\START_YENİ.bat
+C:\Users\User\OneDrive\Masaüstü\TRADE BOT\START_YENİ.bat
                                                   ↓
                                           ÇİFT TIKLA
 ```
@@ -160,7 +160,7 @@ Port 8000 zaten kullanılıyor?
 ### Şey 1: veri_cek_YENİ.bat'a Çift Tıkla
 
 ```
-C:\Users\erena\OneDrive\Masaüstü\TRADE BOT\veri_cek_YENİ.bat
+C:\Users\User\OneDrive\Masaüstü\TRADE BOT\veri_cek_YENİ.bat
                                                     ↓
                                             ÇİFT TIKLA
 ```
@@ -186,7 +186,7 @@ C:\Users\erena\OneDrive\Masaüstü\TRADE BOT\veri_cek_YENİ.bat
 ### Nereye İndirilir?
 
 ```
-C:\Users\erena\OneDrive\Masaüstü\TRADE BOT\
+C:\Users\User\OneDrive\Masaüstü\TRADE BOT\
 ```
 
 ✅ **Başarılıysa, sunucudaki veriler local'de!**
@@ -270,7 +270,7 @@ Eğer bat'lar çalışmazsa, terminal'de manuel çalıştır:
 
 ### SSH ile Sunucuya Bağlan:
 ```bash
-ssh -i C:\Users\erena\Desktop\tradebot-key.pem ubuntu@34.238.12.45
+ssh -i C:\Users\User\Desktop\tradebot-key.pem ubuntu@34.238.12.45
 ```
 
 ### Bot Durumunu Kontrol Et:

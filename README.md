@@ -25,11 +25,13 @@ Masaüstü ortamında hızlı ve kesintisiz perakende satış, stok yönetimi ve
   * Dinamik dashboard, haftalık ciro grafikleri, kritik stok uyarıları.
   * Barkod okuyucu ve fiş/fatura entegrasyonu hazırlığı.
 * **Hızlı Başlatma:**
-  ```bash
-  cd pos-sistemi
-  npm install
-  npm start
-  ```
+  * **Kolay Yol (Windows):** Klasördeki `baslat.bat` dosyasına çift tıklayın (bağımlılıkları otomatik kurar ve başlatır).
+  * **Manuel Yol:**
+    ```bash
+    cd pos-sistemi
+    npm install
+    npm start
+    ```
 
 ---
 
@@ -40,13 +42,15 @@ Google Gemini AI gücüyle İngilizce makale okuma, tek tıkla kelime analizi, f
   * Gemini LLM API entegrasyonu ile bağlamsal kelime anlamı çıkarma.
   * Çevrimdışı hazır sözlük ve telaffuz motoru desteği.
 * **Hızlı Başlatma:**
-  ```bash
-  cd vocabflow-kelime
-  # .env.example dosyasını .env olarak kopyalayıp Gemini API anahtarınızı girin:
-  cp .env.example .env
-  # Doğrudan index.html'i tarayıcıda açabilir veya server ile çalıştırabilirsiniz:
-  node server.cjs
-  ```
+  * **Kolay Yol (Windows):** Klasördeki `baslat.bat` dosyasına çift tıklayın (tarayıcıyı ve sunucuyu otomatik açar).
+  * **Manuel Yol:**
+    ```bash
+    cd vocabflow-kelime
+    # .env.example dosyasını .env olarak kopyalayıp Gemini API anahtarınızı girin:
+    cp .env.example .env
+    # Doğrudan index.html'i tarayıcıda açabilir veya server ile çalıştırabilirsiniz:
+    node server.cjs
+    ```
 
 ---
 
@@ -58,13 +62,14 @@ Kripto para piyasalarında teknik analiz indikatörleri, makro filtreler ve risk
   * Paper trading (sanal bakiye simülasyonu) ve backtest motoru.
   * Dinamik risk ve sermaye yönetimi (Stop-loss / Take-profit optimizasyonu).
 * **Hızlı Başlatma:**
-  ```bash
-  cd kripto-trade-bot
-  pip install -r requirements.txt
-  # .env.example dosyasını .env olarak kopyalayıp parametrelerinizi ayarlayın:
-  cp .env.example .env
-  python radar_loop.py
-  ```
+  * **Kolay Yol (Windows):** Klasördeki `baslat.bat` dosyasına çift tıklayın (kütüphaneleri kontrol eder, frontend ve backend'i başlatır).
+  * **Manuel Yol:**
+    ```bash
+    cd kripto-trade-bot
+    pip install -r requirements.txt
+    cp .env.example .env
+    python backend.py
+    ```
 
 ---
 
@@ -75,11 +80,13 @@ Kullanıcıların günlük hedeflerini, odaklanma sürelerini ve alışkanlık z
   * Framer Motion ile akıcı mikro etkileşimler ve animasyonlar.
   * Odaklanma zamanlayıcısı (Pomodoro) ve ortam sesleri (ambient sound).
 * **Hızlı Başlatma:**
-  ```bash
-  cd aliskanlik-takip
-  npm install
-  npm run dev
-  ```
+  * **Kolay Yol (Windows):** Klasördeki `baslat.bat` dosyasına çift tıklayın (kurulumu yapar ve tarayıcıda açar).
+  * **Manuel Yol:**
+    ```bash
+    cd aliskanlik-takip
+    npm install
+    npm run dev
+    ```
 
 ---
 

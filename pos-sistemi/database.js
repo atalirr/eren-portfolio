@@ -7,6 +7,7 @@ class Database {
         this.db = null;
     }
 
+    // Veritabanını başlat
     async initialize() {
         return new Promise((resolve, reject) => {
             this.db = new sqlite3.Database(this.dbPath, (err) => {
@@ -21,9 +22,11 @@ class Database {
         });
     }
 
+    // Tabloları oluştur
     async createTables() {
         const queries = [
-            CREATE TABLE IF NOT EXISTS products (
+            // Ürünler tablosu - Beden sütunu eklendi, barkod unique yapıldı
+            `CREATE TABLE IF NOT EXISTS products (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 barcode TEXT UNIQUE NOT NULL,
                 name TEXT NOT NULL,
@@ -37,16 +40,20 @@ class Database {
                 description TEXT,
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                 updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
-            ),
-            CREATE TABLE IF NOT EXISTS sales (
+            )`,
+            
+            // Satışlar tablosu
+            `CREATE TABLE IF NOT EXISTS sales (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                sale_no TEXT UNIQUE,
+                sale_no TEXT UNIQUE NOT NULL,
                 customer_name TEXT,
                 total_amount REAL NOT NULL,
                 payment_method TEXT NOT NULL,
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-            ),
-            CREATE TABLE IF NOT EXISTS sale_items (
+            )`,
+            
+            // Satış detayları tablosu - Beden sütunu eklendi
+            `CREATE TABLE IF NOT EXISTS sale_items (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 sale_id INTEGER NOT NULL,
                 barcode TEXT NOT NULL,
@@ -61,46 +68,54 @@ class Database {
                 profit REAL NOT NULL,
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (sale_id) REFERENCES sales (id) ON DELETE CASCADE
-            ),
-            CREATE TABLE IF NOT EXISTS categories (
+            )`,
+            
+            // Kategoriler tablosu
+            `CREATE TABLE IF NOT EXISTS categories (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 name TEXT UNIQUE NOT NULL,
                 color TEXT DEFAULT '#3498db',
                 icon TEXT DEFAULT 'fas fa-box',
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-            )
+            )`
         ];
 
         for (const query of queries) {
             await this.run(query);
         }
 
+        // Varsayılan kategorileri ekle
         await this.insertDefaultCategories();
+        
         console.log('Database tables created successfully');
     }
 
+    // Varsayılan kategorileri ekle
     async insertDefaultCategories() {
         const defaultCategories = [
-            ['Genel', '#607d8b', 'fas fa-box'],
             ['Elektronik', '#e74c3c', 'fas fa-mobile-alt'],
             ['Giyim', '#3498db', 'fas fa-tshirt'],
-            ['Ev & Ya�am', '#2ecc71', 'fas fa-home'],
+            ['Ev & Yaşam', '#2ecc71', 'fas fa-home'],
             ['Spor', '#f39c12', 'fas fa-dumbbell'],
             ['Kitap', '#9b59b6', 'fas fa-book'],
             ['Kozmetik', '#e91e63', 'fas fa-spa'],
-            ['Sa�l�k', '#00bcd4', 'fas fa-heartbeat'],
+            ['Sağlık', '#00bcd4', 'fas fa-heartbeat'],
             ['Oyuncak', '#ff9800', 'fas fa-gamepad'],
-            ['Di�er', '#607d8b', 'fas fa-box']
+            ['Diğer', '#607d8b', 'fas fa-box']
         ];
 
         for (const category of defaultCategories) {
-            await this.run('INSERT OR IGNORE INTO categories (name, color, icon) VALUES (?, ?, ?)', category);
+            await this.run(
+                'INSERT OR IGNORE INTO categories (name, color, icon) VALUES (?, ?, ?)',
+                category
+            );
         }
     }
 
+    // Genel query çalıştır
     run(sql, params = []) {
         return new Promise((resolve, reject) => {
-            this.db.run(sql, params, function (err) {
+            this.db.run(sql, params, function(err) {
                 if (err) {
                     console.error('Database run error:', err);
                     reject(err);
@@ -111,6 +126,7 @@ class Database {
         });
     }
 
+    // Tek satır getir
     get(sql, params = []) {
         return new Promise((resolve, reject) => {
             this.db.get(sql, params, (err, row) => {
@@ -124,6 +140,7 @@ class Database {
         });
     }
 
+    // Çoklu satır getir
     all(sql, params = []) {
         return new Promise((resolve, reject) => {
             this.db.all(sql, params, (err, rows) => {
@@ -137,25 +154,9 @@ class Database {
         });
     }
 
+    // Ürün işlemleri
     async getProducts() {
-        const sql = 
-            SELECT
-                id,
-                barcode,
-                name,
-                brand,
-                category AS category_name,
-                size,
-                stock,
-                min_stock,
-                purchase_price AS cost,
-                sale_price AS price,
-                description,
-                created_at,
-                updated_at
-            FROM products
-            ORDER BY created_at DESC;
-        return await this.all(sql);
+        return await this.all('SELECT * FROM products ORDER BY created_at DESC');
     }
 
     async getProductByBarcode(barcode) {
@@ -164,104 +165,70 @@ class Database {
 
     async addProduct(product) {
         try {
-            const brand = product.brand || '';
-            const size = product.size || '';
-            const stock = Number(product.stock ?? 0) || 0;
-            const minStock = Number((product.min_stock ?? product.minStock) ?? 0) || 0;
-
-            const purchasePrice = Number(product.purchase_price ?? product.cost ?? product.purchasePrice ?? 0) || 0;
-            const salePrice = Number(product.sale_price ?? product.price ?? product.salePrice ?? 0) || 0;
-
-            let categoryName = product.category || '';
-            if (!categoryName && product.category_id) {
-                const cat = await this.get('SELECT name FROM categories WHERE id = ?', [product.category_id]);
-                categoryName = cat?.name || '';
-            }
-            if (!categoryName) {
-                const general = await this.get("SELECT name FROM categories WHERE name = 'Genel'");
-                if (!general) {
-                    await this.run('INSERT OR IGNORE INTO categories (name, color, icon) VALUES (?, ?, ?)', ['Genel', '#607d8b', 'fas fa-box']);
-                }
-                categoryName = 'Genel';
-            }
-
             const result = await this.run(
-                INSERT INTO products (barcode, name, brand, category, size, stock, min_stock, purchase_price, sale_price, description)
-                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?),
+                `INSERT INTO products (barcode, name, brand, category, size, stock, min_stock, purchase_price, sale_price, description)
+                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
                 [
-                    product.barcode || '',
+                    product.barcode,
                     product.name,
-                    brand,
-                    categoryName,
-                    size,
-                    stock,
-                    minStock,
-                    purchasePrice,
-                    salePrice,
+                    product.brand,
+                    product.category,
+                    product.size || '',
+                    product.stock || 0,
+                    product.minStock || 0,
+                    product.purchasePrice,
+                    product.salePrice,
                     product.description || ''
                 ]
             );
-            console.log('�r�n ba�ar�yla eklendi:', product.name);
+            console.log('Ürün başarıyla eklendi:', product.name);
             return result;
         } catch (error) {
-            console.error('�r�n ekleme hatas�:', error);
+            console.error('Ürün ekleme hatası:', error);
             throw error;
         }
     }
 
     async updateProduct(id, product) {
         try {
-            const brand = product.brand || '';
-            const size = product.size || '';
-            const stock = Number(product.stock ?? 0) || 0;
-            const minStock = Number((product.min_stock ?? product.minStock) ?? 0) || 0;
-            const purchasePrice = Number(product.purchase_price ?? product.cost ?? product.purchasePrice ?? 0) || 0;
-            const salePrice = Number(product.sale_price ?? product.price ?? product.salePrice ?? 0) || 0;
-
-            let categoryName = product.category || '';
-            if (!categoryName && product.category_id) {
-                const cat = await this.get('SELECT name FROM categories WHERE id = ?', [product.category_id]);
-                categoryName = cat?.name || '';
-            }
-            if (!categoryName) {
-                categoryName = 'Genel';
-            }
-
             const result = await this.run(
-                UPDATE products SET
-                 barcode = ?, name = ?, brand = ?, category = ?, size = ?, stock = ?,
-                 min_stock = ?, purchase_price = ?, sale_price = ?, description = ?,
+                `UPDATE products SET 
+                 barcode = ?, name = ?, brand = ?, category = ?, size = ?, stock = ?, 
+                 min_stock = ?, purchase_price = ?, sale_price = ?, description = ?, 
                  updated_at = CURRENT_TIMESTAMP
-                 WHERE id = ?,
+                 WHERE id = ?`,
                 [
-                    product.barcode || '',
+                    product.barcode,
                     product.name,
-                    brand,
-                    categoryName,
-                    size,
-                    stock,
-                    minStock,
-                    purchasePrice,
-                    salePrice,
+                    product.brand,
+                    product.category,
+                    product.size || '',
+                    product.stock || 0,
+                    product.minStock || 0,
+                    product.purchasePrice,
+                    product.salePrice,
                     product.description || '',
                     id
                 ]
             );
-            console.log('�r�n ba�ar�yla g�ncellendi:', product.name);
+            console.log('Ürün başarıyla güncellendi:', product.name);
             return result;
         } catch (error) {
-            console.error('�r�n g�ncelleme hatas�:', error);
+            console.error('Ürün güncelleme hatası:', error);
             throw error;
         }
     }
 
     async updateProductStock(barcode, newStock) {
         try {
-            const result = await this.run('UPDATE products SET stock = ?, updated_at = CURRENT_TIMESTAMP WHERE barcode = ?', [newStock, barcode]);
-            console.log(Stok g�ncellendi:  -> );
+            const result = await this.run(
+                'UPDATE products SET stock = ?, updated_at = CURRENT_TIMESTAMP WHERE barcode = ?',
+                [newStock, barcode]
+            );
+            console.log(`Stok güncellendi: ${barcode} -> ${newStock}`);
             return result;
         } catch (error) {
-            console.error('Stok g�ncelleme hatas�:', error);
+            console.error('Stok güncelleme hatası:', error);
             throw error;
         }
     }
@@ -269,142 +236,161 @@ class Database {
     async deleteProduct(id) {
         try {
             const result = await this.run('DELETE FROM products WHERE id = ?', [id]);
-            console.log('�r�n ba�ar�yla silindi, ID:', id);
+            console.log('Ürün başarıyla silindi, ID:', id);
             return result;
         } catch (error) {
-            console.error('�r�n silme hatas�:', error);
+            console.error('Ürün silme hatası:', error);
             throw error;
         }
     }
 
+    // Satış işlemleri
     async getSales() {
         try {
             const sales = await this.all('SELECT * FROM sales ORDER BY created_at DESC');
+            
+            // Her satış için detayları getir
             for (const sale of sales) {
-                const items = await this.all('SELECT * FROM sale_items WHERE sale_id = ? ORDER BY id', [sale.id]);
+                const items = await this.all(
+                    'SELECT * FROM sale_items WHERE sale_id = ? ORDER BY id',
+                    [sale.id]
+                );
                 sale.items = items;
             }
-            console.log(${sales.length} sat�� veritaban�ndan y�klendi);
+            
+            console.log(`${sales.length} satış veritabanından yüklendi`);
             return sales;
         } catch (error) {
-            console.error('Sat��lar� getirme hatas�:', error);
+            console.error('Satışları getirme hatası:', error);
             throw error;
         }
     }
 
     async addSale(sale) {
         try {
+            // Ana satış kaydını ekle
             const saleResult = await this.run(
-                INSERT INTO sales (sale_no, customer_name, total_amount, payment_method)
-                 VALUES (?, ?, ?, ?),
+                `INSERT INTO sales (sale_no, customer_name, total_amount, payment_method)
+                 VALUES (?, ?, ?, ?)`,
                 [
-                    sale.sale_no || null,
+                    sale.sale_no,
                     sale.customer_name || '',
-                    Number(sale.total_amount ?? sale.total ?? 0) || 0,
-                    sale.payment_method || 'cash'
+                    sale.total_amount,
+                    sale.payment_method
                 ]
             );
-
-            for (const item of (sale.items || [])) {
-                const qty = Number(item.quantity || 0) || 0;
-                const unitPrice = Number(item.unit_price ?? item.price ?? 0) || 0;
-                const purchase = Number(item.purchase_price ?? item.purchasePrice ?? 0) || 0;
-                const total = unitPrice * qty;
-                const profit = total - (purchase * qty);
-
+            
+            console.log('Ana satış kaydı eklendi, ID:', saleResult.id);
+            
+            // Satış detaylarını ekle
+            for (const item of sale.items) {
+                const profit = (item.price * item.quantity) - (item.purchasePrice * item.quantity);
                 await this.run(
-                    INSERT INTO sale_items (sale_id, barcode, name, brand, category, size, quantity, unit_price, purchase_price, total_price, profit)
-                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?),
+                    `INSERT INTO sale_items (sale_id, barcode, name, brand, category, size, quantity, unit_price, purchase_price, total_price, profit)
+                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
                     [
                         saleResult.id,
-                        item.barcode || '',
-                        item.name || '',
+                        item.barcode,
+                        item.name,
                         item.brand || '',
                         item.category || '',
                         item.size || '',
-                        qty,
-                        unitPrice,
-                        purchase,
-                        total,
+                        item.quantity,
+                        item.price,
+                        item.purchasePrice,
+                        item.price * item.quantity,
                         profit
                     ]
                 );
-
-                if (item.barcode && typeof item.newStock !== 'undefined') {
-                    await this.updateProductStock(item.barcode, item.newStock);
-                }
+                
+                // Ürün stoğunu güncelle
+                await this.updateProductStock(item.barcode, item.newStock || 0);
             }
-
-            console.log('Sat�� detaylar� eklendi');
+            
+            console.log('Satış detayları eklendi');
             return saleResult;
         } catch (error) {
-            console.error('Sat�� ekleme hatas�:', error);
+            console.error('Satış ekleme hatası:', error);
             throw error;
         }
     }
 
     async deleteSale(saleId) {
         try {
+            // Önce satış detaylarını sil
             await this.run('DELETE FROM sale_items WHERE sale_id = ?', [saleId]);
+            // Sonra ana satış kaydını sil
             const result = await this.run('DELETE FROM sales WHERE id = ?', [saleId]);
-            console.log('Sat�� ba�ar�yla silindi, ID:', saleId);
+            console.log('Satış başarıyla silindi, ID:', saleId);
             return result;
         } catch (error) {
-            console.error('Sat�� silme hatas�:', error);
+            console.error('Satış silme hatası:', error);
             throw error;
         }
     }
 
+    // Kategori işlemleri
     async getCategories() {
         return await this.all('SELECT * FROM categories ORDER BY name');
     }
 
     async addCategory(category) {
-        const result = await this.run('INSERT INTO categories (name, color, icon) VALUES (?, ?, ?)', [category.name, category.color || '#3498db', category.icon || 'fas fa-box']);
+        const result = await this.run(
+            'INSERT INTO categories (name, color, icon) VALUES (?, ?, ?)',
+            [category.name, category.color || '#3498db', category.icon || 'fas fa-box']
+        );
         return result;
     }
 
+    // Dashboard istatistikleri
     async getDashboardStats() {
         const stats = {};
+        
         try {
-            const weeklySales = await this.get(
+            // Haftalık satış
+            const weeklySales = await this.get(`
                 SELECT SUM(total_amount) as total
                 FROM sales
                 WHERE created_at >= datetime('now', '-7 days')
-            );
+            `);
             stats.weeklyRevenue = weeklySales?.total || 0;
-
-            const weeklyOrders = await this.get(
+            
+            // Haftalık satış sayısı
+            const weeklyOrders = await this.get(`
                 SELECT COUNT(*) as count
-                FROM sales
+                FROM sales 
                 WHERE created_at >= datetime('now', '-7 days')
-            );
+            `);
             stats.weeklyOrders = weeklyOrders?.count || 0;
-
+            
+            // Toplam ürün sayısı
             const totalProducts = await this.get('SELECT COUNT(*) as count FROM products');
             stats.totalProducts = totalProducts?.count || 0;
-
-            const stockValue = await this.get(
+            
+            // Toplam stok değeri
+            const stockValue = await this.get(`
                 SELECT SUM(stock * purchase_price) as value
                 FROM products
-            );
+            `);
             stats.stockValue = stockValue?.value || 0;
-
-            const outOfStock = await this.get(
+            
+            // Stoğu biten ürünler
+            const outOfStock = await this.get(`
                 SELECT COUNT(*) as count
                 FROM products
                 WHERE stock = 0
-            );
+            `);
             stats.outOfStock = outOfStock?.count || 0;
-
-            console.log('Dashboard istatistikleri y�klendi');
+            
+            console.log('Dashboard istatistikleri yüklendi');
             return stats;
         } catch (error) {
-            console.error('Dashboard istatistikleri y�kleme hatas�:', error);
+            console.error('Dashboard istatistikleri yükleme hatası:', error);
             return stats;
         }
     }
 
+    // Veritabanını kapat
     async close() {
         return new Promise((resolve, reject) => {
             if (this.db) {
