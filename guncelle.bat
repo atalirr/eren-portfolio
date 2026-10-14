@@ -4,7 +4,7 @@ echo ========================================================
 echo        Eren Atli - Proje Guncelleme Scripti
 echo ========================================================
 echo.
-echo [1/3] Degisiklikler taranıyor...
+echo [1/3] Degisiklikler kontrol ediliyor...
 git add .
 
 echo.
@@ -17,7 +17,7 @@ git commit -m "%commit_msg%"
 
 echo.
 echo [3/3] GitHub'a yukleniyor...
-git push
+git push -u origin main
 
 echo.
 echo ========================================================
