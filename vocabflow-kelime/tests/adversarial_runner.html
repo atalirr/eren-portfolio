@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Adversarial Security Test Runner</title>
+    <script src="purify.min.js"></script>
+</head>
+<body>
+    <div id="results" style="white-space: pre; font-family: monospace;"></div>
+    <div id="dom-test-container" style="display: none;"></div>
+
+    <script>
+    // 1. Exact configurations and functions from index.html
+    const ARTICLE_PURIFY_CONFIG = Object.freeze({
+        ALLOWED_TAGS: [
+            'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 
+            'strong', 'b', 'em', 'i', 'u', 'span', 
+            'blockquote', 'ul', 'ol', 'li', 'br', 'hr', 
+            'figure', 'figcaption', 'cite', 'mark'
+        ],
+        ALLOWED_ATTR: ['class', 'data-word', 'data-term'],
+        FORBID_TAGS: [
+            'script', 'iframe', 'object', 'embed', 'form', 
+            'input', 'button', 'svg', 'math', 'style', 
+            'base', 'link', 'meta', 'template', 'applet',
+            'frame', 'frameset', 'audio', 'video', 'source', 'track'
+        ],
+        FORBID_ATTR: [
+            'onerror', 'onload', 'onclick', 'onmouseover', 'onfocus', 
+            'onblur', 'style', 'action', 'href', 'src', 'id', 'name'
+        ],
+        ALLOW_DATA_ATTR: true,
+        SANITIZE_DOM: true,
+        KEEP_CONTENT: false,
+        RETURN_DOM_FRAGMENT: false,
+        RETURN_DOM: false,
+        WHOLE_DOCUMENT: false
+    });
+
+    function escapeRegExp(str) {
+        if (typeof str !== 'string') return '';
+        return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    function safeFallbackSanitizer(dirtyHtml) {
+        if (typeof dirtyHtml !== 'string') return '';
+        try {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(dirtyHtml, 'text/html');
+            if (!doc || !doc.body) return '';
+
+            const allowedTags = new Set([
+                'P', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 
+                'STRONG', 'B', 'EM', 'I', 'U', 'SPAN', 
+                'BLOCKQUOTE', 'UL', 'OL', 'LI', 'BR', 'HR', 
+                'FIGURE', 'FIGCAPTION', 'CITE', 'MARK'
+            ]);
+            const allowedAttrs = new Set(['class', 'data-word', 'data-term']);
+            const dangerousSelector = 'script, style, svg, iframe, object, embed, form, input, button, math, base, link, meta, template, applet, frame, frameset, audio, video, source, track';
+
+            // 1. Unconditionally strip all dangerous elements and subtrees first
+            doc.body.querySelectorAll(dangerousSelector).forEach(el => el.remove());
+
+            // 2. Iteratively unwrap any tag not in allowedTags until only allowed tags remain
+            let hasUnallowed = true;
+            let iterations = 0;
+            while (hasUnallowed && iterations < 1000) {
+                iterations++;
+                hasUnallowed = false;
+                const elements = doc.body.querySelectorAll('*');
+                for (const el of elements) {
+                    const tag = el.tagName.toUpperCase();
+                    if (!allowedTags.has(tag)) {
+                        if (typeof el.replaceWith === 'function') {
+                            el.replaceWith(...el.childNodes);
+                        } else if (el.parentNode) {
+                            if (!el.firstChild) {
+                                if (typeof el.remove === 'function') el.remove();
+                                else if (typeof el.parentNode.removeChild === 'function') el.parentNode.removeChild(el);
+                            } else if (typeof el.parentNode.insertBefore === 'function') {
+                                while (el.firstChild) {
+                                    el.parentNode.insertBefore(el.firstChild, el);
+                                }
+                                if (typeof el.remove === 'function') el.remove();
+                                else if (typeof el.parentNode.removeChild === 'function') el.parentNode.removeChild(el);
+                            } else if (typeof el.parentNode.replaceChild === 'function') {
+                                const frag = (doc && typeof doc.createDocumentFragment === 'function')
+                                    ? doc.createDocumentFragment()
+                                    : (typeof document !== 'undefined' && typeof document.createDocumentFragment === 'function' ? document.createDocumentFragment() : null);
+                                if (frag) {
+                                    while (el.firstChild) {
+                                        frag.appendChild(el.firstChild);
+                                    }
+                                    el.parentNode.replaceChild(frag, el);
+                                } else {
+                                    while (el.firstChild) {
+                                        el.parentNode.appendChild(el.firstChild);
+                                    }
+                                    if (typeof el.remove === 'function') el.remove();
+                                    else if (typeof el.parentNode.removeChild === 'function') el.parentNode.removeChild(el);
+                                }
+                            } else {
+                                if (typeof el.remove === 'function') el.remove();
+                                else if (typeof el.parentNode.removeChild === 'function') el.parentNode.removeChild(el);
+                            }
+                        } else {
+                            if (typeof el.remove === 'function') el.remove();
+                        }
+                        hasUnallowed = true;
+                        break;
+                    }
+                }
+            }
+
+            // 3. Strip disallowed attributes, inline event handlers, and dangerous protocols
+            doc.body.querySelectorAll('*').forEach(el => {
+                const attrs = Array.from(el.attributes);
+                for (const attr of attrs) {
+                    const name = attr.name.toLowerCase();
+                    const val = (attr.value || '').trim().toLowerCase();
+                    const cleanVal = val.replace(/[\x00-\x20\s]+/g, '');
+                    if (!allowedAttrs.has(name) || 
+                        cleanVal.includes('javascript:') || 
+                        cleanVal.includes('data:') || 
+                        cleanVal.includes('vbscript:') || 
+                        name.startsWith('on')) {
+                        el.removeAttribute(attr.name);
+                    }
+                }
+            });
+
+            return doc.body.innerHTML;
+        } catch (e) {
+            console.error('Fallback sanitizer error:', e);
+            return '';
+        }
+    }
+
+    function sanitizeHtml(dirtyHtml) {
+        if (typeof DOMPurify !== 'undefined' && typeof DOMPurify.sanitize === 'function') {
+            return DOMPurify.sanitize(dirtyHtml, ARTICLE_PURIFY_CONFIG);
+        }
+        return safeFallbackSanitizer(dirtyHtml);
+    }
+
+    function createHighlightedExampleElement(exampleText, targetWord, idx) {
+        const item = document.createElement('div');
+        const textSpan = document.createElement('span');
+        textSpan.appendChild(document.createTextNode((idx + 1) + '. "'));
+
+        if (targetWord && typeof targetWord === 'string' && targetWord.trim()) {
+            const escaped = escapeRegExp(targetWord.trim());
+            const parts = String(exampleText).split(new RegExp('(' + escaped + ')', 'gi'));
+            parts.forEach(part => {
+                if (part.toLowerCase() === targetWord.trim().toLowerCase()) {
+                    const highlight = document.createElement('span');
+                    highlight.textContent = part;
+                    textSpan.appendChild(highlight);
+                } else if (part) {
+                    textSpan.appendChild(document.createTextNode(part));
+                }
+            });
+        } else {
+            textSpan.appendChild(document.createTextNode(String(exampleText)));
+        }
+        textSpan.appendChild(document.createTextNode('"'));
+        item.appendChild(textSpan);
+        return item;
+    }
+
+    // 2. Comprehensive Adversarial Test Matrix
+    const adversarialTestCases = [
+        // Category 1: Nested & Malformed Tags
+        { id: 'ADV-01', category: 'Nested Tags', name: 'Script wrapped in unallowed div', payload: '<div><script>alert("XSS-01")<' + '/script></div>', target: 'fallback' },
+        { id: 'ADV-02', category: 'Nested Tags', name: 'Script wrapped in unallowed anchor', payload: '<a><script>alert("XSS-02")<' + '/script></a>', target: 'fallback' },
+        { id: 'ADV-03', category: 'Nested Tags', name: 'Img onerror inside unallowed div in p', payload: '<p><div><img src=x onerror=alert("XSS-03")></div></p>', target: 'fallback' },
+        { id: 'ADV-04', category: 'Nested Tags', name: 'Script in anchor inside allowed span', payload: '<span><a><script>alert("XSS-04")<' + '/script></a></span>', target: 'fallback' },
+        { id: 'ADV-05', category: 'Nested Tags', name: 'Svg onload inside unallowed div', payload: '<div><svg onload=alert("XSS-05")></svg></div>', target: 'fallback' },
+        { id: 'ADV-06', category: 'Nested Tags', name: 'Malformed <<SCRIPT> tag', payload: '<<SCRIPT>alert("XSS-06");//<<' + '/SCRIPT>', target: 'fallback' },
+        { id: 'ADV-07', category: 'Nested Tags', name: 'Nested script tags <scr<script>ipt>', payload: '<scr<script>ipt>alert("XSS-07")<' + '/script>', target: 'fallback' },
+        { id: 'ADV-08', category: 'Nested Tags', name: 'Triple nested unallowed divs with script', payload: '<div><section><article><script>alert("XSS-08")<' + '/script></article></section></div>', target: 'fallback' },
+        { id: 'ADV-09', category: 'Nested Tags', name: 'Iframe inside blockquote div', payload: '<blockquote><div><iframe src="javascript:alert(\'XSS-09\')"></iframe></div></blockquote>', target: 'fallback' },
+
+        // Category 2: Case Variations
+        { id: 'ADV-10', category: 'Case Variation', name: 'Mixed case script <sCrIpt>', payload: '<sCrIpt>alert("XSS-10")<' + '/sCrIpt>', target: 'fallback' },
+        { id: 'ADV-11', category: 'Case Variation', name: 'Upper case IMG with mixed ONERROR', payload: '<IMG SRC=x OnErRoR=alert("XSS-11")>', target: 'fallback' },
+        { id: 'ADV-12', category: 'Case Variation', name: 'Mixed case SVG with ONLOAD', payload: '<sVg OnLoAd=alert("XSS-12")></sVg>', target: 'fallback' },
+        { id: 'ADV-13', category: 'Case Variation', name: 'Case varied script inside unallowed tag', payload: '<DiV><ScRiPt>alert("XSS-13")<' + '/ScRiPt></dIv>', target: 'fallback' },
+
+        // Category 3: Attribute Injections
+        { id: 'ADV-14', category: 'Attribute Injection', name: 'Allowed span with onclick handler', payload: '<span class="test" onclick="alert(\'XSS-14\')">Click</span>', target: 'fallback' },
+        { id: 'ADV-15', category: 'Attribute Injection', name: 'Allowed p with dangerous style behavior', payload: '<p style="behavior:url(test.htc)">Text</p>', target: 'fallback' },
+        { id: 'ADV-16', category: 'Attribute Injection', name: 'Allowed mark with onmouseover', payload: '<mark onmouseover="alert(\'XSS-16\')">Marked</mark>', target: 'fallback' },
+        { id: 'ADV-17', category: 'Attribute Injection', name: 'Allowed strong with data-word containing script string', payload: '<strong data-word="&lt;script&gt;alert(1)&lt;/script&gt;">Word</strong>', target: 'fallback' },
+
+        // Category 4: Protocol Obfuscation & Entity Evasion
+        { id: 'ADV-18', category: 'Protocol Obfuscation', name: 'Anchor with javascript: URI', payload: '<a href="javascript:alert(\'XSS-18\')">Link</a>', target: 'fallback' },
+        { id: 'ADV-19', category: 'Protocol Obfuscation', name: 'Anchor with entity tab encoded java&#x09;script:', payload: '<a href="java&#x09;script:alert(\'XSS-19\')">Link</a>', target: 'fallback' },
+        { id: 'ADV-20', category: 'Protocol Obfuscation', name: 'Anchor with newline in protocol jav&#x0A;ascript:', payload: '<a href="jav&#x0A;ascript:alert(\'XSS-20\')">Link</a>', target: 'fallback' },
+        { id: 'ADV-21', category: 'Protocol Obfuscation', name: 'Anchor with data: HTML payload', payload: '<a href="data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==">Data</a>', target: 'fallback' },
+        { id: 'ADV-22', category: 'Protocol Obfuscation', name: 'Span with class set to javascript: URI', payload: '<span class="javascript:alert(1)">Span</span>', target: 'fallback' },
+
+        // Category 5: DOM Clobbering
+        { id: 'ADV-23', category: 'DOM Clobbering', name: 'Form and input clobbering words.length', payload: '<form id="words"><input name="length"></form>', target: 'fallback' },
+        { id: 'ADV-24', category: 'DOM Clobbering', name: 'Nested form clobbering appState in div', payload: '<div><form id="appState"><input name="words" value="clobbered"></form></div>', target: 'fallback' },
+        { id: 'ADV-25', category: 'DOM Clobbering', name: 'Allowed span with id="appState"', payload: '<span id="appState">Span</span>', target: 'fallback' },
+
+        // Category 6: DOMPurify Baseline Verification
+        { id: 'ADV-26', category: 'DOMPurify Check', name: 'DOMPurify on nested div script', payload: '<div><script>alert("XSS-26")<' + '/script></div>', target: 'dompurify' },
+        { id: 'ADV-27', category: 'DOMPurify Check', name: 'DOMPurify on svg onload', payload: '<svg onload=alert("XSS-27")></svg>', target: 'dompurify' },
+        { id: 'ADV-28', category: 'DOMPurify Check', name: 'DOMPurify on img onerror', payload: '<img src=x onerror=alert("XSS-28")>', target: 'dompurify' },
+        { id: 'ADV-29', category: 'DOMPurify Check', name: 'DOMPurify on javascript URI', payload: '<a href="javascript:alert(\'XSS-29\')">Link</a>', target: 'dompurify' },
+        { id: 'ADV-30', category: 'DOMPurify Check', name: 'DOMPurify on form/input clobbering', payload: '<form id="words"><input name="length"></form>', target: 'dompurify' },
+
+        // Category 7: Refactored DOM Functions & Quote Breakouts
+        { id: 'ADV-31', category: 'DOM Sink Immunity', name: 'createHighlightedExampleElement targetWord quote breakout', type: 'highlight_test', targetWord: '"><script>alert(1)<' + '/script>', example: 'This is a "><script>alert(1)<' + '/script> test.' },
+        { id: 'ADV-32', category: 'DOM Sink Immunity', name: 'createHighlightedExampleElement example quote breakout', type: 'highlight_test', targetWord: 'resilient', example: 'resilient\');alert(\'XSS-32\');//' },
+        { id: 'ADV-33', category: 'DOM Sink Immunity', name: 'createHighlightedExampleElement regex meta breakout', type: 'highlight_test', targetWord: 'test(.*?)++[[]]', example: 'Prefix test(.*?)++[[]] suffix' }
+    ];
+
+    function inspectOutputForVulnerabilities(outputHtml) {
+        if (!outputHtml) return { safe: true, reasons: [] };
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(outputHtml, 'text/html');
+        const reasons = [];
+
+        // Check for executable tags
+        const scripts = doc.querySelectorAll('script');
+        if (scripts.length > 0) reasons.push(`Found <script> tag (${scripts.length})`);
+
+        const svgs = doc.querySelectorAll('svg');
+        if (svgs.length > 0) reasons.push(`Found <svg> tag (${svgs.length})`);
+
+        const iframes = doc.querySelectorAll('iframe');
+        if (iframes.length > 0) reasons.push(`Found <iframe> tag (${iframes.length})`);
+
+        const forms = doc.querySelectorAll('form, input');
+        if (forms.length > 0) reasons.push(`Found form/input DOM-clobbering element (${forms.length})`);
+
+        // Check for inline event handlers and forbidden attributes
+        const allElems = doc.querySelectorAll('*');
+        for (const el of allElems) {
+            for (const attr of el.attributes) {
+                const aName = attr.name.toLowerCase();
+                const aVal = attr.value.toLowerCase();
+                if (aName.startsWith('on')) {
+                    reasons.push(`Found event handler attribute: ${aName}="${attr.value}" on <${el.tagName}>`);
+                }
+                if (aName === 'style') {
+                    reasons.push(`Found style attribute: style="${attr.value}" on <${el.tagName}>`);
+                }
+                if (aVal.includes('javascript:') || aVal.includes('data:text/html') || aVal.includes('vbscript:')) {
+                    reasons.push(`Found dangerous protocol in attribute ${aName}="${attr.value}" on <${el.tagName}>`);
+                }
+                if (aName === 'id' || aName === 'name') {
+                    reasons.push(`Found id/name attribute: ${aName}="${attr.value}" on <${el.tagName}>`);
+                }
+            }
+        }
+
+        return {
+            safe: reasons.length === 0,
+            reasons: reasons
+        };
+    }
+
+    const testResults = [];
+
+    for (const tc of adversarialTestCases) {
+        if (tc.type === 'highlight_test') {
+            try {
+                const el = createHighlightedExampleElement(tc.example, tc.targetWord, 0);
+                const container = document.getElementById('dom-test-container');
+                container.replaceChildren(el);
+                const scripts = el.querySelectorAll('script');
+                const hasScripts = scripts.length > 0;
+                testResults.push({
+                    id: tc.id,
+                    category: tc.category,
+                    name: tc.name,
+                    passed: !hasScripts,
+                    output: el.innerHTML,
+                    issues: hasScripts ? ['Script elements created in DOM'] : []
+                });
+            } catch (err) {
+                testResults.push({
+                    id: tc.id,
+                    category: tc.category,
+                    name: tc.name,
+                    passed: false,
+                    output: '',
+                    issues: ['Exception thrown: ' + err.message]
+                });
+            }
+        } else if (tc.target === 'dompurify') {
+            const out = DOMPurify.sanitize(tc.payload, ARTICLE_PURIFY_CONFIG);
+            const inspection = inspectOutputForVulnerabilities(out);
+            testResults.push({
+                id: tc.id,
+                category: tc.category,
+                name: tc.name,
+                payload: tc.payload,
+                target: 'DOMPurify',
+                output: out,
+                passed: inspection.safe,
+                issues: inspection.reasons
+            });
+        } else {
+            const out = safeFallbackSanitizer(tc.payload);
+            const inspection = inspectOutputForVulnerabilities(out);
+            testResults.push({
+                id: tc.id,
+                category: tc.category,
+                name: tc.name,
+                payload: tc.payload,
+                target: 'safeFallbackSanitizer',
+                output: out,
+                passed: inspection.safe,
+                issues: inspection.reasons
+            });
+        }
+    }
+
+    const outputElement = document.getElementById('results');
+    outputElement.textContent = JSON.stringify(testResults, null, 2);
+    </script>
+</body>
+</html>

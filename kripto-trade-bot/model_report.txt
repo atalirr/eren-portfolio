@@ -1,0 +1,55 @@
+ANTIGRAVITY AI — XGBoost Model Raporu
+Tarih: 2026-08-30 12:40
+============================================================
+
+ROC-AUC: 0.643
+CV AUC : 0.515 +/- 0.098
+
+Özellik İsim Sırası:
+  0: rsi
+  1: stoch_k
+  2: bb_pct
+  3: z_score
+  4: vol_ratio
+  5: adx
+  6: atr_pct
+  7: macd_pos
+  8: trend_4h
+  9: rsi_4h
+  10: bb_pct_4h
+  11: macd_pos_4h
+  12: z_score_4h
+  13: ob_imbalance
+  14: volatility
+  15: regime_code
+  16: raw_score
+
+Özellik Önemi:
+  z_score_4h: 0.0832
+  ob_imbalance: 0.0822
+  vol_ratio: 0.0778
+  trend_4h: 0.0732
+  rsi_4h: 0.0705
+  adx: 0.0690
+  macd_pos: 0.0685
+  rsi: 0.0665
+  raw_score: 0.0659
+  bb_pct: 0.0658
+  z_score: 0.0621
+  volatility: 0.0616
+  atr_pct: 0.0591
+  stoch_k: 0.0546
+  bb_pct_4h: 0.0399
+  macd_pos_4h: 0.0000
+  regime_code: 0.0000
+
+Sınıflandırma Raporu:
+              precision    recall  f1-score   support
+
+        LOSS       0.62      0.63      0.63        41
+         WIN       0.65      0.64      0.64        44
+
+    accuracy                           0.64        85
+   macro avg       0.64      0.64      0.64        85
+weighted avg       0.64      0.64      0.64        85
+

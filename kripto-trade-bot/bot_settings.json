@@ -1,0 +1,7 @@
+{
+    "active": true,
+    "personality": "SWING_TRADER",
+    "notify_mode": "BATCH",
+    "market_halt": false,
+    "use_ml_filter": true
+}

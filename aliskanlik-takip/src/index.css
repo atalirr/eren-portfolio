@@ -1,0 +1,63 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+/* =====================================================
+   index.css — HabitPulse Global Stiller
+   Tüm sayfalar için temel görsel ayarlar burada tanımlanır.
+   Tailwind CSS direktifleri ve özel animasyonlar içerir.
+   ===================================================== */
+
+@import "tailwindcss"; /* Tailwind CSS'in tüm sınıflarını projeye dahil eder */
+
+/* ---- Kök değişkenler: Renk paleti ve tema token'ları ---- */
+:root {
+  --renk-arkaplan: #F8FAFC;        /* Sayfa arka planı: çok açık gri-mavi */
+  --renk-kart: #FFFFFF;            /* Kart arka planı: saf beyaz */
+  --renk-birincil: #6C63FF;        /* Ana vurgu rengi: mor-mavi */
+  --renk-birincil-acik: #EDE9FE;   /* Açık mor: arka planlar için */
+  --renk-ikincil: #F472B6;         /* İkincil renk: pembe */
+  --renk-yazi: #1E293B;            /* Ana metin rengi: koyu lacivert */
+  --renk-yazi-soluk: #94A3B8;      /* Soluk metin: açıklamalar için */
+  --renk-sinir: #E2E8F0;           /* Kenarlık rengi: açık gri */
+  --golge-yumusak: 0 4px 24px rgba(108, 99, 255, 0.08); /* Soft shadow: kartlar için */
+  --golge-hover: 0 8px 32px rgba(108, 99, 255, 0.16);   /* Hover gölgesi: hover durumu */
+  --gecis-hiz: 0.25s;              /* Animasyon geçiş süresi */
+}
+
+/* ---- Sayfa genelinde kullanılacak temel stiller ---- */
+* {
+  box-sizing: border-box; /* Tüm elementlerde padding, genişliğe dahil olsun */
+  margin: 0;              /* Varsayılan margin'i sıfırla */
+  padding: 0;             /* Varsayılan padding'i sıfırla */
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif; /* Yazı tipi: Inter, yoksa sistem fontu */
+  background-color: var(--renk-arkaplan);      /* Sayfa arka planı mor-gri */
+  color: var(--renk-yazi);                     /* Metin rengi: koyu lacivert */
+  min-height: 100vh;                           /* Sayfa en az ekran yüksekliği kadar uzasın */
+  -webkit-font-smoothing: antialiased;         /* macOS'ta yazıları pürüzsüz göster */
+}
+
+/* ---- Kaydırma çubuğu özelleştirmesi ---- */
+::-webkit-scrollbar {
+  width: 6px; /* Kaydırma çubuğu genişliği */
+}
+::-webkit-scrollbar-track {
+  background: var(--renk-arkaplan); /* Çubuk arka planı */
+}
+::-webkit-scrollbar-thumb {
+  background: var(--renk-sinir);    /* Kaydırıcı rengi */
+  border-radius: 100px;             /* Kaydırıcıyı yuvarlak yap */
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--renk-yazi-soluk); /* Hover'da biraz koyulaş */
+}
+
+/* ---- Yardımcı sınıflar ---- */
+.kart-golge {
+  box-shadow: var(--golge-yumusak); /* Kartlara hafif gölge ekler */
+  transition: box-shadow var(--gecis-hiz) ease; /* Gölge geçişi yumuşat */
+}
+.kart-golge:hover {
+  box-shadow: var(--golge-hover); /* Hover'da gölgeyi derinleştir */
+}

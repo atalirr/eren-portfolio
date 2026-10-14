@@ -1,0 +1,5300 @@
+{
+  "1912": {
+    "tr": "1912 yılı",
+    "primary": "1912 yılı (Voynich el yazmasının bulunduğu tarih)",
+    "type": "Tarih",
+    "phonetic": "/ˌnaɪnˈtiːn ˈtwelv/"
+  },
+  "about": {
+    "tr": "hakkında, yaklaşık",
+    "primary": "hakkında, dair; yaklaşık",
+    "type": "Edat / Zarf",
+    "phonetic": "/əˈbaʊt/"
+  },
+  "accelerating": {
+    "tr": "hızlanan, ivme kazanan",
+    "primary": "hızlanma, ivmelenme",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/əkˈseləreɪtɪŋ/"
+  },
+  "acids": {
+    "tr": "asitler",
+    "primary": "asitler (kimyasal bileşikler)",
+    "type": "İsim",
+    "phonetic": "/ˈæsɪdz/"
+  },
+  "across": {
+    "tr": "boyunca, genelinde, karşısında",
+    "primary": "karşıdan karşıya, baştan başa",
+    "type": "Edat",
+    "phonetic": "/əˈkrɒs/"
+  },
+  "active": {
+    "tr": "aktif, etkin, faal",
+    "primary": "aktif, canlı, harekette olan",
+    "type": "Sıfat",
+    "phonetic": "/ˈæktɪv/"
+  },
+  "actively": {
+    "tr": "aktif olarak, etkin bir biçimde",
+    "primary": "faal biçimde",
+    "type": "Zarf",
+    "phonetic": "/ˈæktɪvli/"
+  },
+  "activity": {
+    "tr": "aktivite, faaliyet, etkinlik",
+    "primary": "etkinlik, faaliyet",
+    "type": "İsim",
+    "phonetic": "/ækˈtɪvəti/"
+  },
+  "adaptability": {
+    "tr": "uyum yeteneği, adaptasyon kabiliyeti",
+    "primary": "çevreye uyum sağlama gücü",
+    "type": "İsim",
+    "phonetic": "/əˌdæptəˈbɪləti/"
+  },
+  "adaptations": {
+    "tr": "uyarlamalar, evrimsel adaptasyonlar",
+    "primary": "uyum sağlama süreçleri",
+    "type": "İsim",
+    "phonetic": "/ˌædæpˈteɪʃənz/"
+  },
+  "adult": {
+    "tr": "yetişkin, ergin",
+    "primary": "yetişkin insan",
+    "type": "İsim / Sıfat",
+    "phonetic": "/ˈædʌlt/"
+  },
+  "after": {
+    "tr": "sonra, ardından",
+    "primary": "-den sonra",
+    "type": "Edat / Bağlaç",
+    "phonetic": "/ˈɑːftər/"
+  },
+  "against": {
+    "tr": "karşı, aleyhinde",
+    "primary": "karşısında, zıt olarak",
+    "type": "Edat",
+    "phonetic": "/əˈɡenst/"
+  },
+  "age": {
+    "tr": "çağ, dönem; yaş",
+    "primary": "çağ, devir; yaş",
+    "type": "İsim",
+    "phonetic": "/eɪdʒ/"
+  },
+  "ago": {
+    "tr": "önce, evvel",
+    "primary": "geçmişte önce",
+    "type": "Zarf",
+    "phonetic": "/əˈɡəʊ/"
+  },
+  "agriculture": {
+    "tr": "tarım, ziraat",
+    "primary": "tarım, çiftçilik",
+    "type": "İsim",
+    "phonetic": "/ˈæɡrɪkʌltʃər/"
+  },
+  "alchemy": {
+    "tr": "simya",
+    "primary": "simya (orta çağ kimyası ve felsefesi)",
+    "type": "İsim",
+    "phonetic": "/ˈælkəmi/"
+  },
+  "algorithms": {
+    "tr": "algoritmalar",
+    "primary": "algoritmalar (adım adım işlem kuralları)",
+    "type": "İsim",
+    "phonetic": "/ˈælɡərɪðəmz/"
+  },
+  "all": {
+    "tr": "bütün, tüm, hepsi",
+    "primary": "tümü, bütünü",
+    "type": "Belirteç / Zamir",
+    "phonetic": "/ɔːl/"
+  },
+  "altered": {
+    "tr": "değiştirilmiş, başkalaşmış",
+    "primary": "farklılaşmış, değişmiş",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/ˈɔːltəd/"
+  },
+  "amber": {
+    "tr": "kehribar rengi, kehribar sarısı",
+    "primary": "kehribar taşı",
+    "type": "İsim / Sıfat",
+    "phonetic": "/ˈæmbər/"
+  },
+  "amidst": {
+    "tr": "ortasında, arasında",
+    "primary": "-in tam ortasında",
+    "type": "Edat",
+    "phonetic": "/əˈmɪdst/"
+  },
+  "among": {
+    "tr": "arasında, içinde",
+    "primary": "aralarında (birden çok şeyin)",
+    "type": "Edat",
+    "phonetic": "/əˈmʌŋ/"
+  },
+  "analysis": {
+    "tr": "analiz, çözümleme, tahlil",
+    "primary": "ayrıntılı inceleme",
+    "type": "İsim",
+    "phonetic": "/əˈnæləsɪs/"
+  },
+  "anatolia": {
+    "tr": "Anadolu",
+    "primary": "Anadolu yarımadası",
+    "type": "Özel İsim",
+    "phonetic": "/ˌænəˈtəʊliə/"
+  },
+  "ancient": {
+    "tr": "antik, kadim, çok eski",
+    "primary": "antik çağlara ait, kadim",
+    "type": "Sıfat",
+    "phonetic": "/ˈeɪnʃənt/"
+  },
+  "antoni": {
+    "tr": "Antoni (Antoni Gaudí)",
+    "primary": "Ünlü Katalan mimarın adı",
+    "type": "Özel İsim",
+    "phonetic": "/ænˈtəʊni/"
+  },
+  "any": {
+    "tr": "herhangi bir, hiç",
+    "primary": "herhangi biri",
+    "type": "Belirteç / Zamir",
+    "phonetic": "/ˈeni/"
+  },
+  "apparatus": {
+    "tr": "aygıt, cihaz, düzenek",
+    "primary": "aygıt, aparat, donanım",
+    "type": "İsim",
+    "phonetic": "/ˌæpəˈreɪtəs/"
+  },
+  "applications": {
+    "tr": "uygulamalar, yazılımlar",
+    "primary": "uygulamalar, tatbikatlar",
+    "type": "İsim",
+    "phonetic": "/ˌæplɪˈkeɪʃənz/"
+  },
+  "apps": {
+    "tr": "uygulamalar, mobil programlar",
+    "primary": "yazılım uygulamaları",
+    "type": "İsim",
+    "phonetic": "/æps/"
+  },
+  "aptitude": {
+    "tr": "yetenek, yatkınlık, kabiliyet",
+    "primary": "öğrenme kabiliyeti, yetenek",
+    "type": "İsim",
+    "phonetic": "/ˈæptɪtjuːd/"
+  },
+  "archaeologists": {
+    "tr": "arkeologlar",
+    "primary": "arkeoloji uzmanları, kazıbilimciler",
+    "type": "İsim",
+    "phonetic": "/ˌɑːkiˈɒlədʒɪsts/"
+  },
+  "architect": {
+    "tr": "mimar",
+    "primary": "bina ve yapı tasarlayan kimse",
+    "type": "İsim",
+    "phonetic": "/ˈɑːkɪtekt/"
+  },
+  "architecture": {
+    "tr": "mimari, mimarlık",
+    "primary": "yapı sanatı ve stili",
+    "type": "İsim",
+    "phonetic": "/ˈɑːkɪtektʃər/"
+  },
+  "argue": {
+    "tr": "savunmak, iddia etmek, tartışmak",
+    "primary": "kanıtlarla ileri sürmek",
+    "type": "Fiil",
+    "phonetic": "/ˈɑːɡjuː/"
+  },
+  "around": {
+    "tr": "etrafında, civarında, yaklaşık",
+    "primary": "çevresinde, dolaylarında",
+    "type": "Edat / Zarf",
+    "phonetic": "/əˈraʊnd/"
+  },
+  "art": {
+    "tr": "sanat",
+    "primary": "sanat, yaratıcı ifade",
+    "type": "İsim",
+    "phonetic": "/ɑːt/"
+  },
+  "artificial": {
+    "tr": "yapay, suni",
+    "primary": "insan yapımı, sentetik",
+    "type": "Sıfat",
+    "phonetic": "/ˌɑːtɪˈfɪʃl/"
+  },
+  "asserting": {
+    "tr": "ileri sürme, iddia etme",
+    "primary": "kesinlikle ifade etme",
+    "type": "Fiil / Sıfat",
+    "phonetic": "/əˈsɜːtɪŋ/"
+  },
+  "assumed": {
+    "tr": "varsayılan, farz edilen",
+    "primary": "farz edilmiş, peşinen kabul edilmiş",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/əˈsjuːmd/"
+  },
+  "atmospheres": {
+    "tr": "atmosferler",
+    "primary": "gezegen atmosferleri, hava küreler",
+    "type": "İsim",
+    "phonetic": "/ˈætməsfɪəz/"
+  },
+  "atmospheric": {
+    "tr": "atmosferik, havaküreye ait",
+    "primary": "atmosfer ile ilgili",
+    "type": "Sıfat",
+    "phonetic": "/ˌætməsˈferɪk/"
+  },
+  "atop": {
+    "tr": "üzerinde, tepesinde",
+    "primary": "en üst noktasında",
+    "type": "Edat",
+    "phonetic": "/əˈtɒp/"
+  },
+  "attract": {
+    "tr": "çekmek, cezbetmek",
+    "primary": "kendine doğru çekmek",
+    "type": "Fiil",
+    "phonetic": "/əˈtrækt/"
+  },
+  "aurelius": {
+    "tr": "Aurelius (Marcus Aurelius)",
+    "primary": "Stoacı filozof ve Roma imparatoru",
+    "type": "Özel İsim",
+    "phonetic": "/ɔːˈriːliəs/"
+  },
+  "autumn": {
+    "tr": "sonbahar, güz",
+    "primary": "sonbahar mevsimi",
+    "type": "İsim",
+    "phonetic": "/ˈɔːtəm/"
+  },
+  "away": {
+    "tr": "uzakta, uzağa",
+    "primary": "uzakta, öteye doğru",
+    "type": "Zarf",
+    "phonetic": "/əˈweɪ/"
+  },
+  "back": {
+    "tr": "geri, geriye; sırt",
+    "primary": "arka kısım; geri dönmek",
+    "type": "Zarf / İsim / Fiil",
+    "phonetic": "/bæk/"
+  },
+  "bamboo": {
+    "tr": "bambu",
+    "primary": "bambu kamışı",
+    "type": "İsim",
+    "phonetic": "/bæmˈbuː/"
+  },
+  "bang": {
+    "tr": "büyük patlama (Big Bang)",
+    "primary": "ani gürültülü patlama",
+    "type": "İsim",
+    "phonetic": "/bæŋ/"
+  },
+  "barcelona": {
+    "tr": "Barselona",
+    "primary": "İspanya'da bir şehir",
+    "type": "Özel İsim",
+    "phonetic": "/ˌbɑːsɪˈləʊnə/"
+  },
+  "basilica": {
+    "tr": "bazilika, anıtsal kilise",
+    "primary": "büyük anıtsal mabet",
+    "type": "İsim",
+    "phonetic": "/bəˈzɪlɪkə/"
+  },
+  "bathing": {
+    "tr": "yıkanma, ışığa boğulma",
+    "primary": "banyo yapma, ışık banyosu",
+    "type": "İsim / Sıfat",
+    "phonetic": "/ˈbeɪðɪŋ/"
+  },
+  "battle": {
+    "tr": "muharebe, savaş, mücadele",
+    "primary": "savaş, mücadele",
+    "type": "İsim / Fiil",
+    "phonetic": "/ˈbætl/"
+  },
+  "beauty": {
+    "tr": "güzellik, zarafet",
+    "primary": "güzellik",
+    "type": "İsim",
+    "phonetic": "/ˈbjuːti/"
+  },
+  "before": {
+    "tr": "önce, önceden",
+    "primary": "-den önce",
+    "type": "Edat / Bağlaç",
+    "phonetic": "/bɪˈfɔːr/"
+  },
+  "beklitepe": {
+    "tr": "Göbeklitepe",
+    "primary": "Şanlıurfa'daki dünyanın en eski tapınağı",
+    "type": "Özel İsim",
+    "phonetic": "/ɡəʊbekliːˈtepe/"
+  },
+  "believed": {
+    "tr": "inanılan, inanılan şey",
+    "primary": "inanılmış",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/bɪˈliːvd/"
+  },
+  "belong": {
+    "tr": "ait olmak",
+    "primary": "bir yere veya birine ait olmak",
+    "type": "Fiil",
+    "phonetic": "/bɪˈlɒŋ/"
+  },
+  "beneath": {
+    "tr": "altında, aşağısında",
+    "primary": "bir şeyin tam altında",
+    "type": "Edat",
+    "phonetic": "/bɪˈniːθ/"
+  },
+  "better": {
+    "tr": "daha iyi, daha güzel",
+    "primary": "daha iyi (good'un üstünlük hali)",
+    "type": "Sıfat / Zarf",
+    "phonetic": "/ˈbetər/"
+  },
+  "between": {
+    "tr": "arasında",
+    "primary": "iki şeyin arasında",
+    "type": "Edat",
+    "phonetic": "/bɪˈtwiːn/"
+  },
+  "big": {
+    "tr": "büyük, devasa, önemli",
+    "primary": "büyük, iri",
+    "type": "Sıfat",
+    "phonetic": "/bɪɡ/"
+  },
+  "billions": {
+    "tr": "milyarlarca",
+    "primary": "milyarlar (sayı)",
+    "type": "İsim / Sıfat",
+    "phonetic": "/ˈbɪljənz/"
+  },
+  "biological": {
+    "tr": "biyolojik, yaşamsal",
+    "primary": "canlı bilimiyle ilgili",
+    "type": "Sıfat",
+    "phonetic": "/ˌbaɪəˈlɒdʒɪkl/"
+  },
+  "bioluminescent": {
+    "tr": "biyolüminesans (biyolojik ışık yayan)",
+    "primary": "kendi ışığını üreten canlı",
+    "type": "Sıfat",
+    "phonetic": "/ˌbaɪəʊˌluːmɪˈnesnt/"
+  },
+  "bizarre": {
+    "tr": "tuhaf, garip, alışılmadık",
+    "primary": "acayip, son derece tuhaf",
+    "type": "Sıfat",
+    "phonetic": "/bɪˈzɑːr/"
+  },
+  "black": {
+    "tr": "siyah, kara",
+    "primary": "siyah renk",
+    "type": "Sıfat / İsim",
+    "phonetic": "/blæk/"
+  },
+  "blueprint": {
+    "tr": "taslak, plan, mavi kopya",
+    "primary": "mimari plan, ayrıntılı tasarı",
+    "type": "İsim",
+    "phonetic": "/ˈbluːprɪnt/"
+  },
+  "bodies": {
+    "tr": "cisimler, gövdeler, bedenler",
+    "primary": "gök cisimleri veya bedenler",
+    "type": "İsim",
+    "phonetic": "/ˈbɒdiz/"
+  },
+  "body": {
+    "tr": "gövde, beden, cisim",
+    "primary": "vücut, cisim",
+    "type": "İsim",
+    "phonetic": "/ˈbɒdi/"
+  },
+  "bones": {
+    "tr": "kemikler",
+    "primary": "iskelet kemikleri",
+    "type": "İsim",
+    "phonetic": "/bəʊnz/"
+  },
+  "book": {
+    "tr": "kitap, eser",
+    "primary": "yazılı/basılı eser, kitap",
+    "type": "İsim",
+    "phonetic": "/bʊk/"
+  },
+  "borders": {
+    "tr": "sınırlar, hudutlar",
+    "primary": "ülke veya bölge sınırları",
+    "type": "İsim",
+    "phonetic": "/ˈbɔːdəz/"
+  },
+  "born": {
+    "tr": "doğmuş, meydana gelmiş",
+    "primary": "dünyaya gelmiş, oluşan",
+    "type": "Sıfat",
+    "phonetic": "/bɔːn/"
+  },
+  "botanical": {
+    "tr": "botanik, bitkibilimsel",
+    "primary": "bitkilerle ilgili",
+    "type": "Sıfat",
+    "phonetic": "/bəˈtænɪkl/"
+  },
+  "boundaries": {
+    "tr": "sınırlar, limitler",
+    "primary": "çizilmiş sınırlar",
+    "type": "İsim",
+    "phonetic": "/ˈbaʊndriz/"
+  },
+  "bowler": {
+    "tr": "melon şapka (bowler hat)",
+    "primary": "yuvarlak melon şapka",
+    "type": "İsim",
+    "phonetic": "/ˈbəʊlər/"
+  },
+  "brain": {
+    "tr": "beyin, zihin",
+    "primary": "merkezi sinir sistemi organı, zihin",
+    "type": "İsim",
+    "phonetic": "/breɪn/"
+  },
+  "branching": {
+    "tr": "dallanma, kollara ayrılma",
+    "primary": "dallara ayrılan",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/ˈbrɑːntʃɪŋ/"
+  },
+  "bravery": {
+    "tr": "cesaret, yiğitlik",
+    "primary": "korkusuzluk, cesaret",
+    "type": "İsim",
+    "phonetic": "/ˈbreɪvəri/"
+  },
+  "breathe": {
+    "tr": "nefes almak, solumak",
+    "primary": "soluk alıp vermek",
+    "type": "Fiil",
+    "phonetic": "/briːð/"
+  },
+  "broken": {
+    "tr": "kırık, parçalanmış, bozuk",
+    "primary": "kırılmış, hasarlı",
+    "type": "Sıfat",
+    "phonetic": "/ˈbrəʊkən/"
+  },
+  "build": {
+    "tr": "inşa etmek, kurmak",
+    "primary": "yapmak, inşa etmek",
+    "type": "Fiil",
+    "phonetic": "/bɪld/"
+  },
+  "building": {
+    "tr": "inşa etme; bina, yapı",
+    "primary": "bina, yapı kurma",
+    "type": "İsim",
+    "phonetic": "/ˈbɪldɪŋ/"
+  },
+  "burdens": {
+    "tr": "yükler, külfetler, ağırlıklar",
+    "primary": "omuzlanan yükler",
+    "type": "İsim",
+    "phonetic": "/ˈbɜːdnz/"
+  },
+  "calm": {
+    "tr": "sakin, dingin, sükunet",
+    "primary": "huzurlu, telaşsız",
+    "type": "Sıfat / İsim",
+    "phonetic": "/kɑːm/"
+  },
+  "cameras": {
+    "tr": "kameralar, çekim aygıtları",
+    "primary": "görüntü kayıt cihazları",
+    "type": "İsim",
+    "phonetic": "/ˈkæmrəz/"
+  },
+  "campfires": {
+    "tr": "kamp ateşleri",
+    "primary": "açık havada yakılan ateşler",
+    "type": "İsim",
+    "phonetic": "/ˈkæmpfaɪəz/"
+  },
+  "can": {
+    "tr": "-ebilmek, yapabilmek; konserve",
+    "primary": "muktedir olmak; teneke kutu",
+    "type": "Yardımcı Fiil / İsim",
+    "phonetic": "/kæn/"
+  },
+  "cane": {
+    "tr": "baston, kamış",
+    "primary": "yürüyüş bastonu",
+    "type": "İsim",
+    "phonetic": "/keɪn/"
+  },
+  "cannot": {
+    "tr": "yapamaz, edemez",
+    "primary": "-ememek (olumsuz yetenek)",
+    "type": "Yardımcı Fiil",
+    "phonetic": "/ˈkænɒt/"
+  },
+  "canopies": {
+    "tr": "gölgelikler, ağaç tepeleri örtüsü",
+    "primary": "orman tavanı, gölgelik örtü",
+    "type": "İsim",
+    "phonetic": "/ˈkænəpiz/"
+  },
+  "capacity": {
+    "tr": "kapasite, yetenek, hacim",
+    "primary": "alma veya yapma kapasitesi",
+    "type": "İsim",
+    "phonetic": "/kəˈpæsəti/"
+  },
+  "capture": {
+    "tr": "yakalamak, kaydetmek, çekmek",
+    "primary": "ele geçirmek, yakalamak",
+    "type": "Fiil",
+    "phonetic": "/ˈkæptʃər/"
+  },
+  "captures": {
+    "tr": "yakalar, kaydeder",
+    "primary": "ele geçirir, kayda alır",
+    "type": "Fiil",
+    "phonetic": "/ˈkæptʃəz/"
+  },
+  "carbon": {
+    "tr": "karbon",
+    "primary": "karbon elementi",
+    "type": "İsim",
+    "phonetic": "/ˈkɑːbən/"
+  },
+  "carved": {
+    "tr": "oyulmuş, yontulmuş, işlenmiş",
+    "primary": "taş/ahşap üzerine yontulmuş",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/kɑːvd/"
+  },
+  "catalan": {
+    "tr": "Katalan, Katalonya'ya ait",
+    "primary": "Katalonya halkı veya kültürü",
+    "type": "Sıfat / İsim",
+    "phonetic": "/ˈkætələn/"
+  },
+  "celebrates": {
+    "tr": "kutlar, övgüyle anar",
+    "primary": "kutlamak, yüceltmek",
+    "type": "Fiil",
+    "phonetic": "/ˈselɪbreɪts/"
+  },
+  "cellular": {
+    "tr": "hücresel, hücrelere ait",
+    "primary": "hücre yapısıyla ilgili",
+    "type": "Sıfat",
+    "phonetic": "/ˈseljələr/"
+  },
+  "centuries": {
+    "tr": "yüzyıllar, asırlar",
+    "primary": "yüzyıllar boyunca",
+    "type": "İsim",
+    "phonetic": "/ˈsentʃəriz/"
+  },
+  "century": {
+    "tr": "yüzyıl, asır",
+    "primary": "yüz yıllık zaman dilimi",
+    "type": "İsim",
+    "phonetic": "/ˈsentʃəri/"
+  },
+  "ceremonial": {
+    "tr": "törensel, merasimle ilgili",
+    "primary": "ayin veya törene ait",
+    "type": "Sıfat",
+    "phonetic": "/ˌserəˈməʊniəl/"
+  },
+  "challenges": {
+    "tr": "zorluklar, meydan okumalar",
+    "primary": "aşılması gereken engeller",
+    "type": "İsim",
+    "phonetic": "/ˈtʃælɪndʒɪz/"
+  },
+  "chaplin": {
+    "tr": "Chaplin (Charlie Chaplin)",
+    "primary": "Efsanevi sessiz sinema ikonu",
+    "type": "Özel İsim",
+    "phonetic": "/ˈtʃæplɪn/"
+  },
+  "characters": {
+    "tr": "karakterler, tipler, harfler",
+    "primary": "film/edebiyat karakterleri",
+    "type": "İsim",
+    "phonetic": "/ˈkærəktəz/"
+  },
+  "charlie": {
+    "tr": "Charlie (Charlie Chaplin)",
+    "primary": "Özel isim",
+    "type": "Özel İsim",
+    "phonetic": "/ˈtʃɑːli/"
+  },
+  "check": {
+    "tr": "kontrol etmek, bakmak",
+    "primary": "denetlemek, gözden geçirmek",
+    "type": "Fiil / İsim",
+    "phonetic": "/tʃek/"
+  },
+  "childhood": {
+    "tr": "çocukluk, çocukluk dönemi",
+    "primary": "çocukluk çağı",
+    "type": "İsim",
+    "phonetic": "/ˈtʃaɪldhʊd/"
+  },
+  "choices": {
+    "tr": "seçimler, tercihler",
+    "primary": "yapılan tercihler",
+    "type": "İsim",
+    "phonetic": "/ˈtʃɔɪsɪz/"
+  },
+  "cinema": {
+    "tr": "sinema, film sanatı",
+    "primary": "beyaz perde sanatı",
+    "type": "İsim",
+    "phonetic": "/ˈsɪnəmə/"
+  },
+  "cipher": {
+    "tr": "şifre, kripto, gizli kod",
+    "primary": "şifreli yazı sistemi",
+    "type": "İsim",
+    "phonetic": "/ˈsaɪfər/"
+  },
+  "circuits": {
+    "tr": "devreler, sinir ağları",
+    "primary": "bağlantılı devre yolları",
+    "type": "İsim",
+    "phonetic": "/ˈsɜːkɪts/"
+  },
+  "citadel": {
+    "tr": "kale, hisar, iç kale",
+    "primary": "korunaklı kale; sığınak",
+    "type": "İsim",
+    "phonetic": "/ˈsɪtədəl/"
+  },
+  "civilization": {
+    "tr": "medeniyet, uygarlık",
+    "primary": "gelişmiş insan toplumu",
+    "type": "İsim",
+    "phonetic": "/ˌsɪvəlaɪˈzeɪʃn/"
+  },
+  "classic": {
+    "tr": "klasik, eskimeyen, başyapıt",
+    "primary": "zamana meydan okuyan eser",
+    "type": "Sıfat / İsim",
+    "phonetic": "/ˈklæsɪk/"
+  },
+  "clouds": {
+    "tr": "bulutlar, toz bulutları",
+    "primary": "gökyüzü veya toz bulutları",
+    "type": "İsim",
+    "phonetic": "/klaʊdz/"
+  },
+  "codebreakers": {
+    "tr": "şifre kırıcılar, kriptanalistler",
+    "primary": "şifreli metinleri çözen uzmanlar",
+    "type": "İsim",
+    "phonetic": "/ˈkəʊdbreɪkəz/"
+  },
+  "codex": {
+    "tr": "kodeks, el yazması cilt",
+    "primary": "antik el yazması kitap",
+    "type": "İsim",
+    "phonetic": "/ˈkəʊdeks/"
+  },
+  "cognitive": {
+    "tr": "bilişsel, zihinsel kavrayışa ait",
+    "primary": "zihinsel faaliyetlerle ilgili",
+    "type": "Sıfat",
+    "phonetic": "/ˈkɒɡnətɪv/"
+  },
+  "collectors": {
+    "tr": "koleksiyoncular, toplayıcılar",
+    "primary": "nadir nesneleri toplayanlar",
+    "type": "İsim",
+    "phonetic": "/kəˈlektəz/"
+  },
+  "collide": {
+    "tr": "çarpışmak, çatışmak",
+    "primary": "birbirine şiddetle çarpmak",
+    "type": "Fiil",
+    "phonetic": "/kəˈlaɪd/"
+  },
+  "columns": {
+    "tr": "sütunlar, kolonlar",
+    "primary": "mimari taşıyıcı dikmeler",
+    "type": "İsim",
+    "phonetic": "/ˈkɒləmz/"
+  },
+  "comedy": {
+    "tr": "komedi, güldürü",
+    "primary": "güldürü türü film/tiyatro",
+    "type": "İsim",
+    "phonetic": "/ˈkɒmədi/"
+  },
+  "comes": {
+    "tr": "gelir, ortaya çıkar",
+    "primary": "gelmek fiilinin 3. tekil hali",
+    "type": "Fiil",
+    "phonetic": "/kʌmz/"
+  },
+  "communal": {
+    "tr": "ortaklaşa, toplumsal, imece",
+    "primary": "toplulukça paylaşılan",
+    "type": "Sıfat",
+    "phonetic": "/kəˈmjuːnl/"
+  },
+  "comparable": {
+    "tr": "kıyaslanabilir, benzer, denk",
+    "primary": "karşılaştırılabilir nitelikte",
+    "type": "Sıfat",
+    "phonetic": "/ˈkɒmpərəbl/"
+  },
+  "compelling": {
+    "tr": "büyüleyici, ikna edici, sürükleyici",
+    "primary": "etkileyici ve güçlü",
+    "type": "Sıfat",
+    "phonetic": "/kəmˈpelɪŋ/"
+  },
+  "complex": {
+    "tr": "karmaşık, kompleks; tesis",
+    "primary": "girift, çok parçalı yapı",
+    "type": "Sıfat / İsim",
+    "phonetic": "/ˈkɒmpleks/"
+  },
+  "composure": {
+    "tr": "soğukkanlılık, sükunet, itidal",
+    "primary": "iç huzuru ve dinginlik",
+    "type": "İsim",
+    "phonetic": "/kəmˈpəʊʒər/"
+  },
+  "computer": {
+    "tr": "bilgisayar",
+    "primary": "elektronik işlem cihazı",
+    "type": "İsim",
+    "phonetic": "/kəmˈpjuːtər/"
+  },
+  "conducted": {
+    "tr": "yürütülen, icra edilen",
+    "primary": "yönetilmiş, gerçekleştirilmiş",
+    "type": "Fiil / Sıfat",
+    "phonetic": "/kənˈdʌktɪd/"
+  },
+  "confirmed": {
+    "tr": "doğrulanmış, onaylanmış",
+    "primary": "teyit edilmiş kesin bilgi",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/kənˈfɜːmd/"
+  },
+  "conflicts": {
+    "tr": "çatışmalar, uyuşmazlıklar",
+    "primary": "anlaşmazlık ve sürtüşmeler",
+    "type": "İsim",
+    "phonetic": "/ˈkɒnflɪkts/"
+  },
+  "connect": {
+    "tr": "bağlanmak, birleştirmek",
+    "primary": "bağlantı kurmak",
+    "type": "Fiil",
+    "phonetic": "/kəˈnekt/"
+  },
+  "connection": {
+    "tr": "bağlantı, ilişki, bağ",
+    "primary": "ilişki, temas",
+    "type": "İsim",
+    "phonetic": "/kəˈnekʃn/"
+  },
+  "connections": {
+    "tr": "bağlantılar, temaslar",
+    "primary": "ilişkiler, sinir ağları",
+    "type": "İsim",
+    "phonetic": "/kəˈnekʃnz/"
+  },
+  "considered": {
+    "tr": "kabul edilen, düşünülen",
+    "primary": "göz önünde bulundurulan",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/kənˈsɪdəd/"
+  },
+  "constantly": {
+    "tr": "sürekli olarak, durmaksızın",
+    "primary": "kesintisiz, daimi olarak",
+    "type": "Zarf",
+    "phonetic": "/ˈkɒnstəntli/"
+  },
+  "constructed": {
+    "tr": "inşa edilmiş, kurulmuş",
+    "primary": "yapılmış, oluşturulmuş",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/kənˈstrʌktɪd/"
+  },
+  "contains": {
+    "tr": "içerir, barındırır",
+    "primary": "içinde bulundurmak",
+    "type": "Fiil",
+    "phonetic": "/kənˈteɪnz/"
+  },
+  "content": {
+    "tr": "içerik, muhteva; hoşnut",
+    "primary": "içerik; memnuniyet",
+    "type": "İsim / Sıfat",
+    "phonetic": "/ˈkɒntent/"
+  },
+  "continues": {
+    "tr": "devam eder, sürer",
+    "primary": "kesintisiz sürmek",
+    "type": "Fiil",
+    "phonetic": "/kənˈtɪnjuːz/"
+  },
+  "control": {
+    "tr": "kontrol, denetim; kontrol etmek",
+    "primary": "hakimiyet sağlamak, denetlemek",
+    "type": "İsim / Fiil",
+    "phonetic": "/kənˈtrəʊl/"
+  },
+  "convened": {
+    "tr": "toplanan, bir araya gelen",
+    "primary": "toplantı düzenlenmiş",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/kənˈviːnd/"
+  },
+  "conventional": {
+    "tr": "geleneksel, alışılagelmiş",
+    "primary": "klasik, alışılmış tarzda",
+    "type": "Sıfat",
+    "phonetic": "/kənˈvenʃənl/"
+  },
+  "coordinate": {
+    "tr": "koordine etmek, uyumlamak",
+    "primary": "eşgüdüm sağlamak",
+    "type": "Fiil",
+    "phonetic": "/kəʊˈɔːdɪneɪt/"
+  },
+  "core": {
+    "tr": "öz, çekirdek, temel",
+    "primary": "en temel iç merkez",
+    "type": "İsim / Sıfat",
+    "phonetic": "/kɔːr/"
+  },
+  "cosmic": {
+    "tr": "kozmik, evrensel, uzaya ait",
+    "primary": "evrene ilişkin",
+    "type": "Sıfat",
+    "phonetic": "/ˈkɒzmɪk/"
+  },
+  "could": {
+    "tr": "-ebilirdi, yapabilirdi",
+    "primary": "yapabilme ihtimali/geçmiş zamanı",
+    "type": "Yardımcı Fiil",
+    "phonetic": "/kəd, kʊd/"
+  },
+  "courage": {
+    "tr": "cesaret, yüreklilik",
+    "primary": "korku karşısında durabilme gücü",
+    "type": "İsim",
+    "phonetic": "/ˈkʌrɪdʒ/"
+  },
+  "craft": {
+    "tr": "zanaat, ustalık, beceri",
+    "primary": "el işi ustalığı, sanat",
+    "type": "İsim / Fiil",
+    "phonetic": "/krɑːft/"
+  },
+  "creative": {
+    "tr": "yaratıcı, özgün",
+    "primary": "üretken zekaya sahip",
+    "type": "Sıfat",
+    "phonetic": "/kriˈeɪtɪv/"
+  },
+  "crises": {
+    "tr": "krizler, bunalımlar",
+    "primary": "kriz kelimesinin çoğulu",
+    "type": "İsim",
+    "phonetic": "/ˈkraɪsiːz/"
+  },
+  "crisp": {
+    "tr": "net, berrak, çıtır",
+    "primary": "gevrek; keskin ve net görüntü",
+    "type": "Sıfat",
+    "phonetic": "/krɪsp/"
+  },
+  "critics": {
+    "tr": "eleştirmenler",
+    "primary": "sanat veya edebiyat eleştirmenleri",
+    "type": "İsim",
+    "phonetic": "/ˈkrɪtɪks/"
+  },
+  "crushing": {
+    "tr": "ezici, yıkıcı, çok şiddetli",
+    "primary": "baskı altında ezilme durumu",
+    "type": "Sıfat",
+    "phonetic": "/ˈkrʌʃɪŋ/"
+  },
+  "crust": {
+    "tr": "kabuk, yer kabuğu",
+    "primary": "dış katman sert kabuk",
+    "type": "İsim",
+    "phonetic": "/krʌst/"
+  },
+  "cultivate": {
+    "tr": "geliştirmek, işlemek, beslemek",
+    "primary": "toprak işlemek; erdem geliştirmek",
+    "type": "Fiil",
+    "phonetic": "/ˈkʌltɪveɪt/"
+  },
+  "cultivating": {
+    "tr": "geliştirme, işleme, yetiştirme",
+    "primary": "emek vererek büyütme süreci",
+    "type": "İsim / Sıfat",
+    "phonetic": "/ˈkʌltɪveɪtɪŋ/"
+  },
+  "cultural": {
+    "tr": "kültürel, ekinsel",
+    "primary": "toplum kültürüne ait",
+    "type": "Sıfat",
+    "phonetic": "/ˈkʌltʃərəl/"
+  },
+  "curves": {
+    "tr": "kavisler, eğriler",
+    "primary": "kıvrımlı hatlar",
+    "type": "İsim",
+    "phonetic": "/kɜːvz/"
+  },
+  "cutting": {
+    "tr": "kesici, çığır açan (cutting-edge)",
+    "primary": "kesme; en son teknoloji",
+    "type": "Sıfat / İsim",
+    "phonetic": "/ˈkʌtɪŋ/"
+  },
+  "daily": {
+    "tr": "günlük, her günkü",
+    "primary": "gündelik, her gün yapılan",
+    "type": "Sıfat / Zarf",
+    "phonetic": "/ˈdeɪli/"
+  },
+  "darkness": {
+    "tr": "karanlık, zifiri karanlık",
+    "primary": "ışığın olmaması hali",
+    "type": "İsim",
+    "phonetic": "/ˈdɑːknəs/"
+  },
+  "dating": {
+    "tr": "tarihlendirme, geçmişe uzanma",
+    "primary": "tarih saptama",
+    "type": "İsim / Fiil",
+    "phonetic": "/ˈdeɪtɪŋ/"
+  },
+  "dawn": {
+    "tr": "şafak, doğuş, başlangıç",
+    "primary": "günün ilk ışıkları, başlangıç",
+    "type": "İsim",
+    "phonetic": "/dɔːn/"
+  },
+  "decades": {
+    "tr": "on yıllar",
+    "primary": "on yıllık dönemler",
+    "type": "İsim",
+    "phonetic": "/ˈdekeɪdz/"
+  },
+  "deceive": {
+    "tr": "aldatmak, yanıltmak",
+    "primary": "kandırmak, yanıltmak",
+    "type": "Fiil",
+    "phonetic": "/dɪˈsiːv/"
+  },
+  "decisions": {
+    "tr": "kararlar",
+    "primary": "verilen kararlar",
+    "type": "İsim",
+    "phonetic": "/dɪˈsɪʒnz/"
+  },
+  "decline": {
+    "tr": "düşüş, gerileme; azalmak",
+    "primary": "gerileme, azalma",
+    "type": "İsim / Fiil",
+    "phonetic": "/dɪˈklaɪn/"
+  },
+  "deep": {
+    "tr": "derin, engin",
+    "primary": "derinlik taşıyan, dipte olan",
+    "type": "Sıfat / Zarf",
+    "phonetic": "/diːp/"
+  },
+  "deepest": {
+    "tr": "en derin, en engin",
+    "primary": "en derin noktadaki",
+    "type": "Sıfat",
+    "phonetic": "/ˈdiːpɪst/"
+  },
+  "deeply": {
+    "tr": "derinden, son derece",
+    "primary": "büyük bir derinlikle, derinden",
+    "type": "Zarf",
+    "phonetic": "/ˈdiːpli/"
+  },
+  "deliberate": {
+    "tr": "kasıtlı, planlı, ölçülü",
+    "primary": "bilerek ve isteyerek yapılan",
+    "type": "Sıfat",
+    "phonetic": "/dɪˈlɪbərət/"
+  },
+  "delicate": {
+    "tr": "narin, hassas, kırılgan",
+    "primary": "kolay incinen veya zarar görebilen",
+    "type": "Sıfat",
+    "phonetic": "/ˈdelɪkət/"
+  },
+  "demonstrated": {
+    "tr": "kanıtlanan, gösterilen",
+    "primary": "ispat edilmiş",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/ˈdemənstreɪtɪd/"
+  },
+  "demonstrates": {
+    "tr": "gösterir, kanıtlar",
+    "primary": "ispatlamak, sergilemek",
+    "type": "Fiil",
+    "phonetic": "/ˈdemənstreɪts/"
+  },
+  "denaturing": {
+    "tr": "doğal yapısını bozma (denatürasyon)",
+    "primary": "protein yapısının bozulması",
+    "type": "İsim / Fiil",
+    "phonetic": "/diːˈneɪtʃərɪŋ/"
+  },
+  "depicting": {
+    "tr": "resmetme, betimleme",
+    "primary": "tasvir etme",
+    "type": "Fiil / Sıfat",
+    "phonetic": "/dɪˈpɪktɪŋ/"
+  },
+  "depression": {
+    "tr": "çöküntü, depresyon, buhran",
+    "primary": "büyük ekonomik kriz veya çöküntü",
+    "type": "İsim",
+    "phonetic": "/dɪˈpreʃn/"
+  },
+  "depths": {
+    "tr": "derinlikler, dip noktalar",
+    "primary": "derin katmanlar",
+    "type": "İsim",
+    "phonetic": "/depθs/"
+  },
+  "describes": {
+    "tr": "tarif eder, açıklar",
+    "primary": "betimlemek, anlatmak",
+    "type": "Fiil",
+    "phonetic": "/dɪˈskraɪbz/"
+  },
+  "design": {
+    "tr": "tasarım, dizayn; tasarlamak",
+    "primary": "tasarım, planlamak",
+    "type": "İsim / Fiil",
+    "phonetic": "/dɪˈzaɪn/"
+  },
+  "designed": {
+    "tr": "tasarlanmış, dizayn edilmiş",
+    "primary": "amaca uygun çizilmiş",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/dɪˈzaɪnd/"
+  },
+  "despite": {
+    "tr": "-e rağmen, karşın",
+    "primary": "karşıtlığa karşın",
+    "type": "Edat",
+    "phonetic": "/dɪˈspaɪt/"
+  },
+  "detect": {
+    "tr": "tespit etmek, saptamak, fark etmek",
+    "primary": "ortaya çıkarmak, algılamak",
+    "type": "Fiil",
+    "phonetic": "/dɪˈtekt/"
+  },
+  "develop": {
+    "tr": "gelişmek, geliştirmek",
+    "primary": "ilerletmek, olgunlaşmak",
+    "type": "Fiil",
+    "phonetic": "/dɪˈveləp/"
+  },
+  "developing": {
+    "tr": "gelişen, gelişim gösteren",
+    "primary": "gelişmekte olan",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/dɪˈveləpɪŋ/"
+  },
+  "devotion": {
+    "tr": "bağlılık, adanmışlık",
+    "primary": "sadakat ve özveri",
+    "type": "İsim",
+    "phonetic": "/dɪˈvəʊʃn/"
+  },
+  "diagrams": {
+    "tr": "şemalar, çizelgeler",
+    "primary": "açıklayıcı grafikler",
+    "type": "İsim",
+    "phonetic": "/ˈdaɪəɡræmz/"
+  },
+  "dialogue": {
+    "tr": "diyalog, karşılıklı konuşma",
+    "primary": "karşılıklı konuşma",
+    "type": "İsim",
+    "phonetic": "/ˈdaɪəlɒɡ/"
+  },
+  "dictate": {
+    "tr": "dikte etmek, emretmek, belirlemek",
+    "primary": "şart koşmak, buyurmak",
+    "type": "Fiil",
+    "phonetic": "/dɪkˈteɪt/"
+  },
+  "digital": {
+    "tr": "dijital, sayısal",
+    "primary": "elektronik ve sayısal teknolojiye ait",
+    "type": "Sıfat",
+    "phonetic": "/ˈdɪdʒɪtl/"
+  },
+  "dignity": {
+    "tr": "haysiyet, onur, vakar",
+    "primary": "özsaygı ve insanlık onuru",
+    "type": "İsim",
+    "phonetic": "/ˈdɪɡnəti/"
+  },
+  "dimensions": {
+    "tr": "boyutlar, ebatlar",
+    "primary": "ölçüler, uzamsal boyutlar",
+    "type": "İsim",
+    "phonetic": "/daɪˈmenʃnz/"
+  },
+  "dioxide": {
+    "tr": "dioksit",
+    "primary": "iki oksijenli kimyasal bileşik (karbondioksit)",
+    "type": "İsim",
+    "phonetic": "/daɪˈɒksaɪd/"
+  },
+  "discipline": {
+    "tr": "disiplin, özdenetim",
+    "primary": "düzenli çalışma kuralı",
+    "type": "İsim",
+    "phonetic": "/ˈdɪsəplɪn/"
+  },
+  "discovered": {
+    "tr": "keşfedilmiş, ortaya çıkarılmış",
+    "primary": "keşfedildi",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/dɪˈskʌvəd/"
+  },
+  "discovery": {
+    "tr": "keşif, buluş",
+    "primary": "yeni bir şey bulma eylemi",
+    "type": "İsim",
+    "phonetic": "/dɪˈskʌvəri/"
+  },
+  "displays": {
+    "tr": "sergiler, gösterir; ekranlar",
+    "primary": "gözler önüne sermek; ekranlar",
+    "type": "Fiil / İsim",
+    "phonetic": "/dɪˈspleɪz/"
+  },
+  "distant": {
+    "tr": "uzak, ırak",
+    "primary": "mesafece uzakta olan",
+    "type": "Sıfat",
+    "phonetic": "/ˈdɪstənt/"
+  },
+  "distinguishing": {
+    "tr": "ayırt edici, farklılaştırıcı",
+    "primary": "farkı belirleme yetisi",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/dɪˈstɪŋɡwɪʃɪŋ/"
+  },
+  "divided": {
+    "tr": "bölünmüş, parçalanmış",
+    "primary": "kısımlara ayrılmış",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/dɪˈvaɪdɪd/"
+  },
+  "does": {
+    "tr": "yapar, eder",
+    "primary": "do fiilinin 3. tekil şahıs hali",
+    "type": "Yardımcı Fiil / Fiil",
+    "phonetic": "/dʌz/"
+  },
+  "domesticate": {
+    "tr": "evcilleştirmek, tarıma almak",
+    "primary": "vahşi halden uysallaştırmak",
+    "type": "Fiil",
+    "phonetic": "/dəˈmestɪkeɪt/"
+  },
+  "dramatic": {
+    "tr": "çarpıcı, dramatik, ani",
+    "primary": "büyük yankı uyandıran",
+    "type": "Sıfat",
+    "phonetic": "/drəˈmætɪk/"
+  },
+  "drawings": {
+    "tr": "çizimler, resimler",
+    "primary": "elle yapılmış taslak çizimler",
+    "type": "İsim",
+    "phonetic": "/ˈdrɔːɪŋz/"
+  },
+  "dreamed": {
+    "tr": "hayal etti, düşledi",
+    "primary": "rüyasını gördü, arzuladı",
+    "type": "Fiil",
+    "phonetic": "/dremt, driːmd/"
+  },
+  "dreams": {
+    "tr": "hayaller, rüyalar",
+    "primary": "düşler, idealler",
+    "type": "İsim",
+    "phonetic": "/driːmz/"
+  },
+  "during": {
+    "tr": "sırasında, esnasında, boyunca",
+    "primary": "-in esnasında",
+    "type": "Edat",
+    "phonetic": "/ˈdjʊərɪŋ/"
+  },
+  "dust": {
+    "tr": "toz, kozmik toz",
+    "primary": "ince toz tanecikleri",
+    "type": "İsim",
+    "phonetic": "/dʌst/"
+  },
+  "dynamic": {
+    "tr": "dinamik, hareketli, değişken",
+    "primary": "sürekli değişen ve gelişen",
+    "type": "Sıfat / İsim",
+    "phonetic": "/daɪˈnæmɪk/"
+  },
+  "early": {
+    "tr": "erken, ilk dönem",
+    "primary": "zamanından önce; başlangıç evresi",
+    "type": "Sıfat / Zarf",
+    "phonetic": "/ˈɜːli/"
+  },
+  "earth": {
+    "tr": "Dünya, yeryüzü; toprak",
+    "primary": "yaşadığımız gezegen",
+    "type": "İsim",
+    "phonetic": "/ɜːθ/"
+  },
+  "echoes": {
+    "tr": "yankılanır, yansır; yankılar",
+    "primary": "sesin yansıması; derin izler",
+    "type": "İsim / Fiil",
+    "phonetic": "/ˈekəʊz/"
+  },
+  "economic": {
+    "tr": "ekonomik, iktisadi",
+    "primary": "mali ve ticari sisteme ait",
+    "type": "Sıfat",
+    "phonetic": "/ˌiːkəˈnɒmɪk/"
+  },
+  "edge": {
+    "tr": "kenar, sınır; üstünlük (cutting edge)",
+    "primary": "uç, köşe, keskin taraf",
+    "type": "İsim",
+    "phonetic": "/edʒ/"
+  },
+  "eerie": {
+    "tr": "ürpertici, tekinsiz, esrarengiz",
+    "primary": "korku ve merak uyandıran tuhaflık",
+    "type": "Sıfat",
+    "phonetic": "/ˈɪəri/"
+  },
+  "effortless": {
+    "tr": "zahmetsiz, kendiliğinden, kolay",
+    "primary": "zorlanmadan yapılan",
+    "type": "Sıfat",
+    "phonetic": "/ˈefətləs/"
+  },
+  "egyptian": {
+    "tr": "Mısır, Mısırlı",
+    "primary": "Antik Mısır'a ait",
+    "type": "Sıfat / İsim",
+    "phonetic": "/ɪˈdʒɪpʃn/"
+  },
+  "elaborate": {
+    "tr": "ayrıntılı, özenli, karmaşık",
+    "primary": "ince ince işlenmiş",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/ɪˈlæbərət/"
+  },
+  "electrical": {
+    "tr": "elektriksel, elektrikli",
+    "primary": "elektrik akımına ait",
+    "type": "Sıfat",
+    "phonetic": "/ɪˈlektrɪkl/"
+  },
+  "eleven": {
+    "tr": "on bir",
+    "primary": "11 sayısı",
+    "type": "Sayı",
+    "phonetic": "/ɪˈlevn/"
+  },
+  "embracing": {
+    "tr": "kucaklama, benimseme",
+    "primary": "bağrına basma, kabul etme",
+    "type": "Fiil / Sıfat",
+    "phonetic": "/ɪmˈbreɪsɪŋ/"
+  },
+  "emerald": {
+    "tr": "zümrüt, zümrüt yeşili",
+    "primary": "değerli yeşil taş",
+    "type": "İsim / Sıfat",
+    "phonetic": "/ˈemərəld/"
+  },
+  "emergence": {
+    "tr": "ortaya çıkış, beliriş",
+    "primary": "yeni bir durumun belirmesi",
+    "type": "İsim",
+    "phonetic": "/ɪˈmɜːdʒəns/"
+  },
+  "emotional": {
+    "tr": "duygusal, hissi",
+    "primary": "duygularla ilgili",
+    "type": "Sıfat",
+    "phonetic": "/ɪˈməʊʃənl/"
+  },
+  "emotionally": {
+    "tr": "duygusal açıdan, hissen",
+    "primary": "duygusal olarak",
+    "type": "Zarf",
+    "phonetic": "/ɪˈməʊʃənəli/"
+  },
+  "emotions": {
+    "tr": "duygular, hisler",
+    "primary": "içsel hisler",
+    "type": "İsim",
+    "phonetic": "/ɪˈməʊʃnz/"
+  },
+  "emperor": {
+    "tr": "imparator",
+    "primary": "imparatorluk hükümdarı",
+    "type": "İsim",
+    "phonetic": "/ˈempərə/"
+  },
+  "enabling": {
+    "tr": "olanak sağlayan, imkan veren",
+    "primary": "mümkün kılan",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/ɪˈneɪblɪŋ/"
+  },
+  "enchanted": {
+    "tr": "büyülenmiş, sihirli",
+    "primary": "büyünün etkisinde kalan",
+    "type": "Sıfat",
+    "phonetic": "/ɪnˈtʃɑːntɪd/"
+  },
+  "endure": {
+    "tr": "katlanmak, dayanmak, sürmek",
+    "primary": "zorluklara direnmek",
+    "type": "Fiil",
+    "phonetic": "/ɪnˈdjʊər/"
+  },
+  "endures": {
+    "tr": "dayanır, ayakta kalır",
+    "primary": "varlığını sürdürmek",
+    "type": "Fiil",
+    "phonetic": "/ɪnˈdjʊəz/"
+  },
+  "enduring": {
+    "tr": "kalıcı, dayanıklı, uzun ömürlü",
+    "primary": "zamana karşı koyan",
+    "type": "Sıfat",
+    "phonetic": "/ɪnˈdjʊərɪŋ/"
+  },
+  "energy": {
+    "tr": "enerji, güç",
+    "primary": "çalışma ve hareket gücü",
+    "type": "İsim",
+    "phonetic": "/ˈenədʒi/"
+  },
+  "engineering": {
+    "tr": "mühendislik",
+    "primary": "teknik tasarım ve uygulama bilimi",
+    "type": "İsim",
+    "phonetic": "/ˌendʒɪˈnɪərɪŋ/"
+  },
+  "enigma": {
+    "tr": "muamma, gizem, bilmece",
+    "primary": "çözülmesi güç gizem",
+    "type": "İsim",
+    "phonetic": "/ɪˈnɪɡmə/"
+  },
+  "enigmatic": {
+    "tr": "gizemli, esrarengiz, muammalı",
+    "primary": "anlaşılması zor ve çekici",
+    "type": "Sıfat",
+    "phonetic": "/ˌenɪɡˈmætɪk/"
+  },
+  "entering": {
+    "tr": "giriş yapma, dahil olma",
+    "primary": "içeri girme",
+    "type": "Fiil / İsim",
+    "phonetic": "/ˈentərɪŋ/"
+  },
+  "entertainment": {
+    "tr": "eğlence, gösteri dünyası",
+    "primary": "hoşça vakit geçirme",
+    "type": "İsim",
+    "phonetic": "/ˌentəˈteɪnmənt/"
+  },
+  "entirely": {
+    "tr": "tamamen, bütünüyle",
+    "primary": "eksiksiz olarak, baştan aşağı",
+    "type": "Zarf",
+    "phonetic": "/ɪnˈtaɪəli/"
+  },
+  "epictetus": {
+    "tr": "Epiktetos",
+    "primary": "Ünlü Antik Stoacı filozof",
+    "type": "Özel İsim",
+    "phonetic": "/ˌepɪkˈtiːtəs/"
+  },
+  "era": {
+    "tr": "çağ, dönem, devir",
+    "primary": "tarihi zaman dilimi",
+    "type": "İsim",
+    "phonetic": "/ˈɪərə/"
+  },
+  "essence": {
+    "tr": "öz, esas, mahiyet",
+    "primary": "en temel ve vazgeçilmez nitelik",
+    "type": "İsim",
+    "phonetic": "/ˈesns/"
+  },
+  "ethical": {
+    "tr": "etik, ahlaki",
+    "primary": "ahlak kurallarına uygun",
+    "type": "Sıfat",
+    "phonetic": "/ˈeθɪkl/"
+  },
+  "evaluate": {
+    "tr": "değerlendirmek, ölçüp tartmak",
+    "primary": "kıymet takdir etmek",
+    "type": "Fiil",
+    "phonetic": "/ɪˈvæljueɪt/"
+  },
+  "events": {
+    "tr": "olaylar, hadiseler",
+    "primary": "meydana gelen durumlar",
+    "type": "İsim",
+    "phonetic": "/ɪˈvents/"
+  },
+  "every": {
+    "tr": "her, bütün",
+    "primary": "ayrı ayrı her biri",
+    "type": "Belirteç",
+    "phonetic": "/ˈevri/"
+  },
+  "everyday": {
+    "tr": "gündelik, sıradan, her günkü",
+    "primary": "günlük yaşama ait",
+    "type": "Sıfat",
+    "phonetic": "/ˈevrideɪ/"
+  },
+  "evolution": {
+    "tr": "evrim, gelişim, dönüşüm",
+    "primary": "kademeli değişim ve uyum süreci",
+    "type": "İsim",
+    "phonetic": "/ˌiːvəˈluːʃn/"
+  },
+  "evolutionary": {
+    "tr": "evrimsel, gelişime ait",
+    "primary": "evrim yasalarına ilişkin",
+    "type": "Sıfat",
+    "phonetic": "/ˌiːvəˈluːʃənri/"
+  },
+  "evolved": {
+    "tr": "evrilmiş, gelişmiş",
+    "primary": "zamanla evrim geçirmiş",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/ɪˈvɒlvd/"
+  },
+  "exact": {
+    "tr": "tam, kesin, kusursuz",
+    "primary": "noktası noktasına uyan",
+    "type": "Sıfat",
+    "phonetic": "/ɪɡˈzækt/"
+  },
+  "examining": {
+    "tr": "inceleme, tetkik etme",
+    "primary": "ayrıntılı biçimde gözden geçirme",
+    "type": "Fiil / İsim",
+    "phonetic": "/ɪɡˈzæmɪnɪŋ/"
+  },
+  "exceeds": {
+    "tr": "aşar, geçer, sınırın üstüne çıkar",
+    "primary": "beklenenden veya sınırdan fazla olmak",
+    "type": "Fiil",
+    "phonetic": "/ɪkˈsiːdz/"
+  },
+  "exhibits": {
+    "tr": "sergiler, sergi nesneleri",
+    "primary": "gözler önüne koymak; sergi parçaları",
+    "type": "Fiil / İsim",
+    "phonetic": "/ɪɡˈzɪbɪts/"
+  },
+  "experiencing": {
+    "tr": "deneyimleme, tecrübe etme",
+    "primary": "yaşayarak hissetme süreci",
+    "type": "Fiil / İsim",
+    "phonetic": "/ɪkˈspɪəriənsɪŋ/"
+  },
+  "exploring": {
+    "tr": "keşfetme, araştırma",
+    "primary": "keşfe çıkma",
+    "type": "Fiil / İsim",
+    "phonetic": "/ɪkˈsplɔːrɪŋ/"
+  },
+  "expressive": {
+    "tr": "ifadeli, anlamlı, dışavurumcu",
+    "primary": "duyguları güçlü yansıtan",
+    "type": "Sıfat",
+    "phonetic": "/ɪkˈspresɪv/"
+  },
+  "external": {
+    "tr": "dışsal, harici",
+    "primary": "dışarıda olan, dış etkenlere ait",
+    "type": "Sıfat",
+    "phonetic": "/ɪkˈstɜːnl/"
+  },
+  "extinct": {
+    "tr": "nesli tükenmiş, sönmüş",
+    "primary": "türü yok olmuş canlı",
+    "type": "Sıfat",
+    "phonetic": "/ɪkˈstɪŋkt/"
+  },
+  "extreme": {
+    "tr": "aşırı, uç, radikal",
+    "primary": "en uç noktadaki durum",
+    "type": "Sıfat / İsim",
+    "phonetic": "/ɪkˈstriːm/"
+  },
+  "eyes": {
+    "tr": "gözler, bakışlar",
+    "primary": "görme organları",
+    "type": "İsim",
+    "phonetic": "/aɪz/"
+  },
+  "facial": {
+    "tr": "yüze ait, yüz (mimikler)",
+    "primary": "yüz bölgesiyle ilgili",
+    "type": "Sıfat",
+    "phonetic": "/ˈfeɪʃl/"
+  },
+  "faculties": {
+    "tr": "yetiler, kabiliyetler; fakülteler",
+    "primary": "zihinsel veya bedensel yetenekler",
+    "type": "İsim",
+    "phonetic": "/ˈfækəltiz/"
+  },
+  "fam": {
+    "tr": "Família (Sagrada Família)",
+    "primary": "Kutsal Aile anlamına gelen Katalanca kelime",
+    "type": "Özel İsim",
+    "phonetic": "/fəˈmiːliə/"
+  },
+  "fantastical": {
+    "tr": "fantastik, olağanüstü, masalsı",
+    "primary": "hayal gücüne dayalı",
+    "type": "Sıfat",
+    "phonetic": "/fænˈtæstɪkl/"
+  },
+  "farming": {
+    "tr": "çiftçilik, tarım",
+    "primary": "toprağı işleme faaliyeti",
+    "type": "İsim",
+    "phonetic": "/ˈfɑːmɪŋ/"
+  },
+  "fastest": {
+    "tr": "en hızlı, en çabuk, en süratli",
+    "primary": "en hızlı (üstünlük derecesi)",
+    "type": "Sıfat",
+    "phonetic": "/ˈfɑːstɪst, ˈfæstɪst/"
+  },
+  "fatty": {
+    "tr": "yağlı, yağ içeren (yağ asitleri)",
+    "primary": "yağ bileşiğine ait",
+    "type": "Sıfat",
+    "phonetic": "/ˈfæti/"
+  },
+  "feared": {
+    "tr": "korkulan, çekinilen",
+    "primary": "korku duyulmuş",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/fɪəd/"
+  },
+  "feasts": {
+    "tr": "ziyafetler, şölenler",
+    "primary": "büyük kutlama yemekleri",
+    "type": "İsim",
+    "phonetic": "/fiːsts/"
+  },
+  "feels": {
+    "tr": "hisseder, duyumsar",
+    "primary": "hissetmek fiili 3. tekil şahıs",
+    "type": "Fiil",
+    "phonetic": "/fiːlz/"
+  },
+  "fibers": {
+    "tr": "lifler, sinir lifleri",
+    "primary": "ipliksi ince dokular",
+    "type": "İsim",
+    "phonetic": "/ˈfaɪbəz/"
+  },
+  "fifteenth": {
+    "tr": "on beşinci",
+    "primary": "15. sıra sayısı",
+    "type": "Sıra Sayısı",
+    "phonetic": "/ˌfɪfˈtiːnθ/"
+  },
+  "fifty": {
+    "tr": "elli",
+    "primary": "50 sayısı",
+    "type": "Sayı",
+    "phonetic": "/ˈfɪfti/"
+  },
+  "figures": {
+    "tr": "figürler, heykeller, rakamlar",
+    "primary": "insan/hayvan tasvirleri; sayılar",
+    "type": "İsim",
+    "phonetic": "/ˈfɪɡəz/"
+  },
+  "filled": {
+    "tr": "dolu, doldurulmuş",
+    "primary": "içi dolmuş",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/fɪld/"
+  },
+  "filmmakers": {
+    "tr": "film yapımcıları, yönetmenler",
+    "primary": "sinema eseri üretenler",
+    "type": "İsim",
+    "phonetic": "/ˈfɪlmeɪkəz/"
+  },
+  "filmmaking": {
+    "tr": "film yapımı, sinemacılık",
+    "primary": "film çekme sanatı",
+    "type": "İsim",
+    "phonetic": "/ˈfɪlmeɪkɪŋ/"
+  },
+  "filters": {
+    "tr": "filtreler, süzgeçler",
+    "primary": "ayıklayıcı filtreler",
+    "type": "İsim / Fiil",
+    "phonetic": "/ˈfɪltəz/"
+  },
+  "find": {
+    "tr": "bulmak, rastlamak, tespit etmek",
+    "primary": "bulmak, keşfetmek",
+    "type": "Fiil",
+    "phonetic": "/faɪnd/"
+  },
+  "finding": {
+    "tr": "bulma, keşfetme; bulgular",
+    "primary": "bulgu, saptama; bulmak",
+    "type": "İsim / Fiil",
+    "phonetic": "/ˈfaɪndɪŋ/"
+  },
+  "firsthand": {
+    "tr": "ilk elden, doğrudan, bizzat",
+    "primary": "aracısız bizzat tecrübe edilen",
+    "type": "Sıfat / Zarf",
+    "phonetic": "/ˌfɜːstˈhænd/"
+  },
+  "fixed": {
+    "tr": "sabit, değişmez",
+    "primary": "yerinden oynamayan, değişmeyen",
+    "type": "Sıfat",
+    "phonetic": "/fɪkst/"
+  },
+  "flora": {
+    "tr": "bitki örtüsü, flora",
+    "primary": "bir bölgenin tüm bitki varlığı",
+    "type": "İsim",
+    "phonetic": "/ˈflɔːrə/"
+  },
+  "flourishes": {
+    "tr": "serpilir, gelişir, parlar",
+    "primary": "sağlıkla büyümek",
+    "type": "Fiil",
+    "phonetic": "/ˈflʌrɪʃɪz/"
+  },
+  "fluidity": {
+    "tr": "akıcılık, akışkanlık",
+    "primary": "kesintisiz akma durumu",
+    "type": "İsim",
+    "phonetic": "/fluːˈɪdəti/"
+  },
+  "flying": {
+    "tr": "uçan, uçuş",
+    "primary": "havada süzülen",
+    "type": "Sıfat / İsim",
+    "phonetic": "/ˈflaɪɪŋ/"
+  },
+  "focal": {
+    "tr": "odak, merkezî",
+    "primary": "odak noktasına ait",
+    "type": "Sıfat",
+    "phonetic": "/ˈfəʊkl/"
+  },
+  "force": {
+    "tr": "güç, kuvvet; zorlamak",
+    "primary": "fiziksel güç, kuvvet",
+    "type": "İsim / Fiil",
+    "phonetic": "/fɔːs/"
+  },
+  "foreign": {
+    "tr": "yabancı, dış dünyadan",
+    "primary": "başka bir yere/diyara ait",
+    "type": "Sıfat",
+    "phonetic": "/ˈfɒrən/"
+  },
+  "forest": {
+    "tr": "orman",
+    "primary": "ağaçlarla kaplı geniş alan",
+    "type": "İsim",
+    "phonetic": "/ˈfɒrɪst/"
+  },
+  "forge": {
+    "tr": "şekillendirmek, dövmek, kurmak",
+    "primary": "sağlam bağlar oluşturmak; demir dövmek",
+    "type": "Fiil",
+    "phonetic": "/fɔːdʒ/"
+  },
+  "form": {
+    "tr": "biçim, şekil; oluşturmak",
+    "primary": "şekil, form; biçimlendirmek",
+    "type": "İsim / Fiil",
+    "phonetic": "/fɔːm/"
+  },
+  "formed": {
+    "tr": "oluşmuş, şekillenmiş",
+    "primary": "meydana gelmiş",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/fɔːmd/"
+  },
+  "foundational": {
+    "tr": "temel, kurucu, köklü",
+    "primary": "temeli oluşturan",
+    "type": "Sıfat",
+    "phonetic": "/faʊnˈdeɪʃənl/"
+  },
+  "frontier": {
+    "tr": "sınır, keşif sınırı, hudut",
+    "primary": "bilinenin ötesindeki yeni alan",
+    "type": "İsim",
+    "phonetic": "/ˈfrʌntɪər/"
+  },
+  "fundamental": {
+    "tr": "esas, temel, asli",
+    "primary": "en önemli ve vazgeçilmez temel",
+    "type": "Sıfat",
+    "phonetic": "/ˌfʌndəˈmentl/"
+  },
+  "fundamentally": {
+    "tr": "esas olarak, kökten, temelde",
+    "primary": "temelinden, esasen",
+    "type": "Zarf",
+    "phonetic": "/ˌfʌndəˈmentəli/"
+  },
+  "furthermore": {
+    "tr": "ayrıca, dahası, üstelik",
+    "primary": "buna ek olarak",
+    "type": "Zarf / Bağlaç",
+    "phonetic": "/ˌfɜːðəˈmɔːr/"
+  },
+  "fuses": {
+    "tr": "kaynaşır, birleşir, eritir",
+    "primary": "birbirine kaynaşmak",
+    "type": "Fiil",
+    "phonetic": "/ˈfjuːzɪz/"
+  },
+  "g": {
+    "tr": "g (yerçekimi ivmesi)",
+    "primary": "yerçekimi birimi (gravity)",
+    "type": "Birim",
+    "phonetic": "/dʒiː/"
+  },
+  "galaxies": {
+    "tr": "galaksiler, gökadalar",
+    "primary": "milyarlarca yıldızdan oluşan gökadalar",
+    "type": "İsim",
+    "phonetic": "/ˈɡæləksiz/"
+  },
+  "gather": {
+    "tr": "toplamak, bir araya getirmek",
+    "primary": "toplanmak, biriktirmek",
+    "type": "Fiil",
+    "phonetic": "/ˈɡæðər/"
+  },
+  "gathered": {
+    "tr": "toplanmış, bir araya gelmiş",
+    "primary": "toplandı",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/ˈɡæðəd/"
+  },
+  "gatherers": {
+    "tr": "toplayıcılar (avcı-toplayıcılar)",
+    "primary": "yaban meyveleri ve bitkileri toplayanlar",
+    "type": "İsim",
+    "phonetic": "/ˈɡæðərəz/"
+  },
+  "gaud": {
+    "tr": "Gaudí (Antoni Gaudí)",
+    "primary": "Katalan mimarın soyadı",
+    "type": "Özel İsim",
+    "phonetic": "/ɡaʊˈdiː/"
+  },
+  "generate": {
+    "tr": "üretmek, oluşturmak, meydana getirmek",
+    "primary": "enerji/fikir üretmek",
+    "type": "Fiil",
+    "phonetic": "/ˈdʒenəreɪt/"
+  },
+  "geological": {
+    "tr": "jeolojik, yerbilimsel",
+    "primary": "yerkabuğu yapısına ilişkin",
+    "type": "Sıfat",
+    "phonetic": "/ˌdʒiːəˈlɒdʒɪkl/"
+  },
+  "geometry": {
+    "tr": "geometri",
+    "primary": "uzamsal şekiller ve ölçüm bilimi",
+    "type": "İsim",
+    "phonetic": "/dʒiˈɒmətri/"
+  },
+  "glass": {
+    "tr": "cam, bardak; vitray",
+    "primary": "saydam cam maddesi",
+    "type": "İsim",
+    "phonetic": "/ɡlɑːs/"
+  },
+  "globally": {
+    "tr": "küresel olarak, dünya çapında",
+    "primary": "tüm dünyada",
+    "type": "Zarf",
+    "phonetic": "/ˈɡləʊbəli/"
+  },
+  "glowing": {
+    "tr": "parıldayan, ışık saçan",
+    "primary": "karanlıkta ışıldayan",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/ˈɡləʊɪŋ/"
+  },
+  "god": {
+    "tr": "tanrı, ilah",
+    "primary": "yaratıcı kudret",
+    "type": "İsim",
+    "phonetic": "/ɡɒd/"
+  },
+  "greeting": {
+    "tr": "selamlama, karşılama",
+    "primary": "esenleme sözü",
+    "type": "İsim",
+    "phonetic": "/ˈɡriːtɪŋ/"
+  },
+  "growth": {
+    "tr": "büyüme, gelişme, artış",
+    "primary": "boyutça veya nitelikçe ilerleme",
+    "type": "İsim",
+    "phonetic": "/ɡrəʊθ/"
+  },
+  "habits": {
+    "tr": "alışkanlıklar, rutinler",
+    "primary": "sürekli tekrarlanan davranışlar",
+    "type": "İsim",
+    "phonetic": "/ˈhæbɪts/"
+  },
+  "had": {
+    "tr": "vardı, sahip oldu",
+    "primary": "have fiilinin geçmiş zaman hali",
+    "type": "Fiil / Yardımcı Fiil",
+    "phonetic": "/hæd, həd/"
+  },
+  "hadal": {
+    "tr": "hadal bölge (okyanusun en derin çukurları)",
+    "primary": "6000 metreden daha derin okyanus katmanı",
+    "type": "Sıfat / İsim",
+    "phonetic": "/ˈheɪdl/"
+  },
+  "handwritten": {
+    "tr": "el yazması, elle yazılmış",
+    "primary": "kalemle elle yazılan eser",
+    "type": "Sıfat",
+    "phonetic": "/ˌhændˈrɪtn/"
+  },
+  "hardships": {
+    "tr": "zorluklar, sıkıntılar, meşakkatler",
+    "primary": "yaşam mücadelesindeki güçlükler",
+    "type": "İsim",
+    "phonetic": "/ˈhɑːdʃɪps/"
+  },
+  "harmonizing": {
+    "tr": "uyumlaştırma, ahenk sağlama",
+    "primary": "birbiriyle uyumlu hale getirme",
+    "type": "Fiil / Sıfat",
+    "phonetic": "/ˈhɑːmənaɪzɪŋ/"
+  },
+  "harmony": {
+    "tr": "ahenk, uyum",
+    "primary": "parçaların kusursuz dengesi",
+    "type": "İsim",
+    "phonetic": "/ˈhɑːməni/"
+  },
+  "has": {
+    "tr": "sahiptir, var",
+    "primary": "have fiilinin 3. tekil hali",
+    "type": "Fiil / Yardımcı Fiil",
+    "phonetic": "/hæz, həz/"
+  },
+  "hat": {
+    "tr": "şapka",
+    "primary": "başlık, şapka",
+    "type": "İsim",
+    "phonetic": "/hæt/"
+  },
+  "have": {
+    "tr": "sahip olmak, bulunmak",
+    "primary": "elde bulundurmak",
+    "type": "Fiil / Yardımcı Fiil",
+    "phonetic": "/hæv, həv/"
+  },
+  "he": {
+    "tr": "o (erkek)",
+    "primary": "3. tekil şahıs zamiri (eril)",
+    "type": "Zamir",
+    "phonetic": "/hiː, hi/"
+  },
+  "hearing": {
+    "tr": "işitme, duyma",
+    "primary": "sesleri algılama duyusu",
+    "type": "İsim / Fiil",
+    "phonetic": "/ˈhɪərɪŋ/"
+  },
+  "heart": {
+    "tr": "kalp, yürek; merkez",
+    "primary": "yaşamsal kan pompalayan organ; bir şeyin özü",
+    "type": "İsim",
+    "phonetic": "/hɑːt/"
+  },
+  "held": {
+    "tr": "tutulan, düzenlenen, gerçekleşen",
+    "primary": "hold fiilinin geçmiş hali",
+    "type": "Fiil / Sıfat",
+    "phonetic": "/held/"
+  },
+  "helpers": {
+    "tr": "yardımcılar, destekçiler",
+    "primary": "yardım eden kimseler",
+    "type": "İsim",
+    "phonetic": "/ˈhelpəz/"
+  },
+  "helps": {
+    "tr": "yardım eder, destek olur",
+    "primary": "yardım etmek",
+    "type": "Fiil",
+    "phonetic": "/helps/"
+  },
+  "here": {
+    "tr": "burada, buraya",
+    "primary": "bulunulan yer",
+    "type": "Zarf",
+    "phonetic": "/hɪər/"
+  },
+  "high": {
+    "tr": "yüksek, yüce",
+    "primary": "irtifası veya derecesi fazla olan",
+    "type": "Sıfat / Zarf",
+    "phonetic": "/haɪ/"
+  },
+  "his": {
+    "tr": "onun (eril)",
+    "primary": "erkek için iyelik sıfatı/zamiri",
+    "type": "Zamir / Belirteç",
+    "phonetic": "/hɪz/"
+  },
+  "history": {
+    "tr": "tarih, geçmiş",
+    "primary": "geçmiş olayların bütünü ve bilimi",
+    "type": "İsim",
+    "phonetic": "/ˈhɪstri/"
+  },
+  "honeycombs": {
+    "tr": "bal petekleri",
+    "primary": "altıgen petek gözleri",
+    "type": "İsim",
+    "phonetic": "/ˈhʌnikəʊmz/"
+  },
+  "how": {
+    "tr": "nasıl, ne şekilde",
+    "primary": "durum ve yöntem belirten soru sözcüğü",
+    "type": "Zarf",
+    "phonetic": "/haʊ/"
+  },
+  "however": {
+    "tr": "ancak, oysa, ne var ki",
+    "primary": "bununla birlikte, fakat",
+    "type": "Bağlaç / Zarf",
+    "phonetic": "/haʊˈevər/"
+  },
+  "hubble": {
+    "tr": "Hubble (Hubble Uzay Teleskobu)",
+    "primary": "Ünlü uzay gözlemevi",
+    "type": "Özel İsim",
+    "phonetic": "/ˈhʌbl/"
+  },
+  "human": {
+    "tr": "insan, insani",
+    "primary": "insana özgü, insan türü",
+    "type": "Sıfat / İsim",
+    "phonetic": "/ˈhjuːmən/"
+  },
+  "humanity": {
+    "tr": "insanlık",
+    "primary": "tüm insan soyu; insancıllık",
+    "type": "İsim",
+    "phonetic": "/hjuːˈmænəti/"
+  },
+  "humans": {
+    "tr": "insanlar, insan evlatları",
+    "primary": "insan topluluğu",
+    "type": "İsim",
+    "phonetic": "/ˈhjuːmənz/"
+  },
+  "humor": {
+    "tr": "mizah, espri, nükte",
+    "primary": "güldürü unsuru, espri yeteneği",
+    "type": "İsim",
+    "phonetic": "/ˈhjuːmər/"
+  },
+  "hundreds": {
+    "tr": "yüzlerce",
+    "primary": "yüzler (sayı)",
+    "type": "İsim / Sıfat",
+    "phonetic": "/ˈhʌndrədz/"
+  },
+  "hunger": {
+    "tr": "açlık, arzu, açlık hissi",
+    "primary": "besin ihtiyacı; şiddetli istek",
+    "type": "İsim",
+    "phonetic": "/ˈhʌŋɡər/"
+  },
+  "hunter": {
+    "tr": "avcı",
+    "primary": "avlanan kimse veya yırtıcı",
+    "type": "İsim",
+    "phonetic": "/ˈhʌntər/"
+  },
+  "iconic": {
+    "tr": "ikonik, simgesel",
+    "primary": "döneminin simgesi haline gelmiş",
+    "type": "Sıfat",
+    "phonetic": "/aɪˈkɒnɪk/"
+  },
+  "icy": {
+    "tr": "buzlu, buz gibi, soğuk",
+    "primary": "buzla kaplı",
+    "type": "Sıfat",
+    "phonetic": "/ˈaɪsi/"
+  },
+  "if": {
+    "tr": "eğer, şayet, -se/-sa",
+    "primary": "koşul bağlacı",
+    "type": "Bağlaç",
+    "phonetic": "/ɪf/"
+  },
+  "ignite": {
+    "tr": "tutuşturmak, ateşlemek, tetiklemek",
+    "primary": "yangın/kıvılcım başlatmak",
+    "type": "Fiil",
+    "phonetic": "/ɪɡˈnaɪt/"
+  },
+  "illuminating": {
+    "tr": "aydınlatıcı, ışık saçan",
+    "primary": "karanlığı aydınlatan, açıklığa kavuşturan",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/ɪˈluːmɪneɪtɪŋ/"
+  },
+  "illustrations": {
+    "tr": "illüstrasyonlar, çizimler, resimlemeler",
+    "primary": "kitap içi çizimler",
+    "type": "İsim",
+    "phonetic": "/ˌɪləˈstreɪʃnz/"
+  },
+  "imagination": {
+    "tr": "hayal gücü, imgelem",
+    "primary": "zihinde canlandırma yeteneği",
+    "type": "İsim",
+    "phonetic": "/ɪˌmædʒɪˈneɪʃn/"
+  },
+  "immense": {
+    "tr": "muazzam, devasa, engin",
+    "primary": "ölçülemeyecek kadar büyük",
+    "type": "Sıfat",
+    "phonetic": "/ɪˈmens/"
+  },
+  "imposing": {
+    "tr": "heybetli, görkemli, etkileyici",
+    "primary": "büyüklüğüyle hayranlık uyandıran",
+    "type": "Sıfat",
+    "phonetic": "/ɪmˈpəʊzɪŋ/"
+  },
+  "improve": {
+    "tr": "iyileştirmek, geliştirmek",
+    "primary": "daha iyi duruma getirmek",
+    "type": "Fiil",
+    "phonetic": "/ɪmˈpruːv/"
+  },
+  "individuals": {
+    "tr": "bireyler, fertler",
+    "primary": "toplumu oluşturan her bir kişi",
+    "type": "İsim",
+    "phonetic": "/ˌɪndɪˈvɪdʒuəlz/"
+  },
+  "information": {
+    "tr": "bilgi, enformasyon",
+    "primary": "öğrenilen veya iletilen malumat",
+    "type": "İsim",
+    "phonetic": "/ˌɪnfəˈmeɪʃn/"
+  },
+  "inner": {
+    "tr": "iç, içsel, dâhili",
+    "primary": "iç kısımda bulunan, ruhsal",
+    "type": "Sıfat",
+    "phonetic": "/ˈɪnər/"
+  },
+  "inside": {
+    "tr": "içinde, içeride; iç kısım",
+    "primary": "bir şeyin iç tarafı",
+    "type": "Edat / Zarf / İsim",
+    "phonetic": "/ˌɪnˈsaɪd/"
+  },
+  "insights": {
+    "tr": "içgörüler, derin kavrayışlar",
+    "primary": "olayların özünü anlama yetisi",
+    "type": "İsim",
+    "phonetic": "/ˈɪnsaɪts/"
+  },
+  "inspire": {
+    "tr": "ilham vermek, esinlemek",
+    "primary": "yaratıcı heves aşılamak",
+    "type": "Fiil",
+    "phonetic": "/ɪnˈspaɪər/"
+  },
+  "inspired": {
+    "tr": "ilham almış, esinlenmiş",
+    "primary": "ilham verici, esin kaynaklı",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/ɪnˈspaɪəd/"
+  },
+  "instead": {
+    "tr": "yerine, onun yerine",
+    "primary": "bunun yerine tercih edilen",
+    "type": "Zarf",
+    "phonetic": "/ɪnˈsted/"
+  },
+  "integrity": {
+    "tr": "bütünlük; dürüstlük, erdem",
+    "primary": "bozulmamışlık; ahlaki sağlamlık",
+    "type": "İsim",
+    "phonetic": "/ɪnˈteɡrəti/"
+  },
+  "intellectual": {
+    "tr": "entelektüel, zihinsel, aydın",
+    "primary": "düşünceye ve akla dayalı",
+    "type": "Sıfat / İsim",
+    "phonetic": "/ˌɪntəˈlektʃuəl/"
+  },
+  "intelligence": {
+    "tr": "zeka, akıl; istihbarat",
+    "primary": "öğrenme ve kavrama yetisi",
+    "type": "İsim",
+    "phonetic": "/ɪnˈtelɪdʒəns/"
+  },
+  "international": {
+    "tr": "uluslararası, beynelmilel",
+    "primary": "milletlerarası",
+    "type": "Sıfat",
+    "phonetic": "/ˌɪntəˈnæʃnəl/"
+  },
+  "interstellar": {
+    "tr": "yıldızlararası",
+    "primary": "yıldızların arasındaki uzay boşluğu",
+    "type": "Sıfat",
+    "phonetic": "/ˌɪntəˈstelər/"
+  },
+  "intimacy": {
+    "tr": "samimiyet, içtenlik, yakınlık",
+    "primary": "yakın duygusal bağ",
+    "type": "İsim",
+    "phonetic": "/ˈɪntɪməsi/"
+  },
+  "intricate": {
+    "tr": "girift, ince ayrıntılı, karmaşık",
+    "primary": "çözülmesi zor incelikler barındıran",
+    "type": "Sıfat",
+    "phonetic": "/ˈɪntrɪkət/"
+  },
+  "intricately": {
+    "tr": "ince ince, karmaşık ve özenle",
+    "primary": "büyük bir titizlik ve detayla",
+    "type": "Zarf",
+    "phonetic": "/ˈɪntrɪkətli/"
+  },
+  "introducing": {
+    "tr": "tanıtma, takdim etme, başlatma",
+    "primary": "ilk kez sunma",
+    "type": "Fiil / İsim",
+    "phonetic": "/ˌɪntrəˈdjuːsɪŋ/"
+  },
+  "invaluable": {
+    "tr": "paha biçilmez, çok değerli",
+    "primary": "değeri para ile ölçülemeyen",
+    "type": "Sıfat",
+    "phonetic": "/ɪnˈvæljuəbl/"
+  },
+  "inventive": {
+    "tr": "yaratıcı, icat edici, becerikli",
+    "primary": "yeni buluşlar yapmaya yatkın",
+    "type": "Sıfat",
+    "phonetic": "/ɪnˈventɪv/"
+  },
+  "invertebrates": {
+    "tr": "omurgasızlar",
+    "primary": "omurga kemiği bulunmayan canlılar",
+    "type": "İsim",
+    "phonetic": "/ɪnˈvɜːtɪbrəts/"
+  },
+  "inverted": {
+    "tr": "tersyüz edilmiş, baş aşağı çevrilmiş",
+    "primary": "tersine dönmüş",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/ɪnˈvɜːtɪd/"
+  },
+  "invisible": {
+    "tr": "görünmez, gözle görülemeyen",
+    "primary": "görüş alanına girmeyen",
+    "type": "Sıfat",
+    "phonetic": "/ɪnˈvɪzəbl/"
+  },
+  "italian": {
+    "tr": "İtalyan, İtalyanca",
+    "primary": "İtalya'ya ait",
+    "type": "Sıfat / İsim",
+    "phonetic": "/ɪˈtæliən/"
+  },
+  "itself": {
+    "tr": "kendisi, bizzat kendisi",
+    "primary": "3. tekil şahıs dönüşlülük zamiri (cansız)",
+    "type": "Zamir",
+    "phonetic": "/ɪtˈself/"
+  },
+  "james": {
+    "tr": "James (James Webb)",
+    "primary": "Özel isim",
+    "type": "Özel İsim",
+    "phonetic": "/dʒeɪmz/"
+  },
+  "jets": {
+    "tr": "fışkıran akıntılar, jetler, püskürmeler",
+    "primary": "hızlı fışkıran sıvı/gaz akımları",
+    "type": "İsim",
+    "phonetic": "/dʒets/"
+  },
+  "journey": {
+    "tr": "yolculuk, seyahat, serüven",
+    "primary": "uzun seyahat",
+    "type": "İsim / Fiil",
+    "phonetic": "/ˈdʒɜːni/"
+  },
+  "jumbo": {
+    "tr": "dev, devasa (jumbo)",
+    "primary": "sıra dışı büyüklükte",
+    "type": "Sıfat",
+    "phonetic": "/ˈdʒʌmbəʊ/"
+  },
+  "just": {
+    "tr": "sadece, yalnızca; adil; henüz",
+    "primary": "yalnızca; hakkaniyetli",
+    "type": "Zarf / Sıfat",
+    "phonetic": "/dʒʌst/"
+  },
+  "keep": {
+    "tr": "tutmak, korumak, sürdürmek",
+    "primary": "muhafaza etmek",
+    "type": "Fiil",
+    "phonetic": "/kiːp/"
+  },
+  "kilometers": {
+    "tr": "kilometreler",
+    "primary": "uzunluk ölçü birimi",
+    "type": "İsim",
+    "phonetic": "/kɪˈlɒmɪtəz/"
+  },
+  "known": {
+    "tr": "bilinen, tanınan",
+    "primary": "malum, bilinen",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/nəʊn/"
+  },
+  "language": {
+    "tr": "dil, lisan",
+    "primary": "insanlar arası iletişim dizgesi",
+    "type": "İsim",
+    "phonetic": "/ˈlæŋɡwɪdʒ/"
+  },
+  "lasting": {
+    "tr": "kalıcı, uzun süreli, baki",
+    "primary": "uzun zaman etkisini yitirmeyen",
+    "type": "Sıfat",
+    "phonetic": "/ˈlɑːstɪŋ/"
+  },
+  "late": {
+    "tr": "geç, sonlarında",
+    "primary": "vaktinden sonra olan; gecikmiş",
+    "type": "Sıfat / Zarf",
+    "phonetic": "/leɪt/"
+  },
+  "laugh": {
+    "tr": "gülmek, kahkaha atmak",
+    "primary": "gülme eylemi",
+    "type": "Fiil / İsim",
+    "phonetic": "/lɑːf/"
+  },
+  "launch": {
+    "tr": "fırlatmak, başlatmak; fırlatma",
+    "primary": "uzaya göndermek; projeye başlamak",
+    "type": "Fiil / İsim",
+    "phonetic": "/lɔːntʃ/"
+  },
+  "leap": {
+    "tr": "sıçrama, atılım, büyük adım",
+    "primary": "büyük ilerleme hamlesi",
+    "type": "İsim / Fiil",
+    "phonetic": "/liːp/"
+  },
+  "learning": {
+    "tr": "öğrenme, tahsil, ilim",
+    "primary": "bilgi edinme süreci",
+    "type": "İsim / Fiil",
+    "phonetic": "/ˈlɜːnɪŋ/"
+  },
+  "legendary": {
+    "tr": "efsanevi, dillere destan",
+    "primary": "efsanelere konu olmuş",
+    "type": "Sıfat",
+    "phonetic": "/ˈledʒəndri/"
+  },
+  "leopards": {
+    "tr": "leoparlar, pars hayvanları",
+    "primary": "benekli yırtıcı kedigiller",
+    "type": "İsim",
+    "phonetic": "/ˈlepədz/"
+  },
+  "less": {
+    "tr": "daha az",
+    "primary": "miktar olarak daha düşük",
+    "type": "Belirteç / Zarf",
+    "phonetic": "/les/"
+  },
+  "leveraging": {
+    "tr": "kaldıraç olarak kullanma, yararlanma",
+    "primary": "güç alarak fırsata çevirme",
+    "type": "Fiil / İsim",
+    "phonetic": "/ˈliːvərɪdʒɪŋ/"
+  },
+  "lia": {
+    "tr": "Família (Sagrada Família)",
+    "primary": "Katalanca kelimenin son hecesi",
+    "type": "Özel İsim",
+    "phonetic": "/liːə/"
+  },
+  "lies": {
+    "tr": "yatar, bulunur; yalanlar",
+    "primary": "bulunmak, yer almak; yalan söylemek",
+    "type": "Fiil / İsim",
+    "phonetic": "/laɪz/"
+  },
+  "life": {
+    "tr": "yaşam, hayat, ömür",
+    "primary": "canlılık, ömür",
+    "type": "İsim",
+    "phonetic": "/laɪf/"
+  },
+  "lifelong": {
+    "tr": "yaşam boyu süren, ömürlük",
+    "primary": "tüm hayat boyunca devam eden",
+    "type": "Sıfat",
+    "phonetic": "/ˈlaɪflɒŋ/"
+  },
+  "lifespans": {
+    "tr": "ömür süreleri, yaşam süreleri",
+    "primary": "canlının yaşayabildiği süre",
+    "type": "İsim",
+    "phonetic": "/ˈlaɪfspænz/"
+  },
+  "light": {
+    "tr": "ışık; aydınlık; hafif",
+    "primary": "ışık enerjisi; hafif ağırlık",
+    "type": "İsim / Sıfat / Fiil",
+    "phonetic": "/laɪt/"
+  },
+  "like": {
+    "tr": "gibi; sevmek, hoşlanmak",
+    "primary": "benzerlik belirteci; beğenmek",
+    "type": "Edat / Fiil",
+    "phonetic": "/laɪk/"
+  },
+  "limestone": {
+    "tr": "kireçtaşı, kalker",
+    "primary": "tortul bir kayaç türü",
+    "type": "İsim",
+    "phonetic": "/ˈlaɪmstəʊn/"
+  },
+  "lines": {
+    "tr": "çizgiler, hatlar, dizeler",
+    "primary": "çizilmiş doğrular veya metin satırları",
+    "type": "İsim",
+    "phonetic": "/laɪnz/"
+  },
+  "linguistic": {
+    "tr": "dilbilimsel, lisana ait",
+    "primary": "dille ilgili",
+    "type": "Sıfat",
+    "phonetic": "/lɪŋˈɡwɪstɪk/"
+  },
+  "listen": {
+    "tr": "dinlemek, kulak vermek",
+    "primary": "dikkatle dinlemek",
+    "type": "Fiil",
+    "phonetic": "/ˈlɪsn/"
+  },
+  "listener": {
+    "tr": "dinleyici, dinleyen kimse",
+    "primary": "kulak veren şahıs",
+    "type": "İsim",
+    "phonetic": "/ˈlɪsənər/"
+  },
+  "literature": {
+    "tr": "edebiyat, yazın",
+    "primary": "edebi eserler bütünü",
+    "type": "İsim",
+    "phonetic": "/ˈlɪtrətʃər/"
+  },
+  "little": {
+    "tr": "küçük, azıcık, ufak",
+    "primary": "boyutça ufak; miktar olarak az",
+    "type": "Sıfat / Zarf",
+    "phonetic": "/ˈlɪtl/"
+  },
+  "lived": {
+    "tr": "yaşadı, yaşanmış",
+    "primary": "hayat sürdü",
+    "type": "Fiil / Sıfat",
+    "phonetic": "/lɪvd/"
+  },
+  "lives": {
+    "tr": "yaşamlar, hayatlar; yaşar",
+    "primary": "hayatlar; yaşamak fiilinin 3. tekil hali",
+    "type": "İsim / Fiil",
+    "phonetic": "/laɪvz, lɪvz/"
+  },
+  "living": {
+    "tr": "yaşayan, canlı; geçim",
+    "primary": "canlı, varlığını sürdüren",
+    "type": "Sıfat / İsim",
+    "phonetic": "/ˈlɪvɪŋ/"
+  },
+  "locked": {
+    "tr": "kilitli, hapsolmuş",
+    "primary": "kilit altına alınmış",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/lɒkt/"
+  },
+  "logic": {
+    "tr": "mantık, muhakeme",
+    "primary": "doğru düşünme kuralı",
+    "type": "İsim",
+    "phonetic": "/ˈlɒdʒɪk/"
+  },
+  "london": {
+    "tr": "Londra",
+    "primary": "İngiltere'nin başkenti",
+    "type": "Özel İsim",
+    "phonetic": "/ˈlʌndən/"
+  },
+  "long": {
+    "tr": "uzun, uzun süreli; özlemek",
+    "primary": "mesafece veya zamanla uzun",
+    "type": "Sıfat / Zarf / Fiil",
+    "phonetic": "/lɒŋ/"
+  },
+  "look": {
+    "tr": "bakmak, görünmek; bakış",
+    "primary": "göz gezdirmek, bakmak",
+    "type": "Fiil / İsim",
+    "phonetic": "/lʊk/"
+  },
+  "looking": {
+    "tr": "bakma, arama, bakış",
+    "primary": "gözlemleme eylemi",
+    "type": "Fiil / İsim",
+    "phonetic": "/ˈlʊkɪŋ/"
+  },
+  "loss": {
+    "tr": "kayıp, yitim, zarar",
+    "primary": "eldeki bir şeyin yitirilmesi",
+    "type": "İsim",
+    "phonetic": "/lɒs/"
+  },
+  "luminous": {
+    "tr": "ışıl ışıl, parlak, ışık saçan",
+    "primary": "parıldayan, ışık yayan",
+    "type": "Sıfat",
+    "phonetic": "/ˈluːmɪnəs/"
+  },
+  "lure": {
+    "tr": "cezbetmek, tuzağa çekmek; yem",
+    "primary": "kendine çekmek; yem",
+    "type": "Fiil / İsim",
+    "phonetic": "/ljʊər/"
+  },
+  "luxury": {
+    "tr": "lüks, debdebe, gösteriş",
+    "primary": "ihtiyaç fazlası konfor ve zenginlik",
+    "type": "İsim / Sıfat",
+    "phonetic": "/ˈlʌkʃəri/"
+  },
+  "machine": {
+    "tr": "makine, aygıt",
+    "primary": "mekanik düzenek",
+    "type": "İsim",
+    "phonetic": "/məˈʃiːn/"
+  },
+  "made": {
+    "tr": "yapılmış, üretilmiş",
+    "primary": "make fiilinin geçmiş zaman hali",
+    "type": "Fiil / Sıfat",
+    "phonetic": "/meɪd/"
+  },
+  "magic": {
+    "tr": "büyü, sihir, sihirli",
+    "primary": "olağanüstü doğaüstü etki",
+    "type": "İsim / Sıfat",
+    "phonetic": "/ˈmædʒɪk/"
+  },
+  "maintain": {
+    "tr": "sürdürmek, korumak, bakım yapmak",
+    "primary": "mevcut durumu muhafaza etmek",
+    "type": "Fiil",
+    "phonetic": "/meɪnˈteɪn/"
+  },
+  "maintained": {
+    "tr": "korunmuş, muhafaza edilmiş",
+    "primary": "sürdürüldü",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/meɪnˈteɪnd/"
+  },
+  "maintaining": {
+    "tr": "sürdürme, koruma eylemi",
+    "primary": "muhafaza etme",
+    "type": "Fiil / İsim",
+    "phonetic": "/meɪnˈteɪnɪŋ/"
+  },
+  "make": {
+    "tr": "yapmak, oluşturmak, üretmek",
+    "primary": "meydana getirmek",
+    "type": "Fiil",
+    "phonetic": "/meɪk/"
+  },
+  "manufactured": {
+    "tr": "üretilmiş, imal edilmiş",
+    "primary": "fabrikasyon olarak üretilen",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/ˌmænjuˈfæktʃəd/"
+  },
+  "manuscript": {
+    "tr": "el yazması, yazma eser",
+    "primary": "elle yazılmış tarihi kitap",
+    "type": "İsim",
+    "phonetic": "/ˈmænjuskrɪpt/"
+  },
+  "map": {
+    "tr": "harita; haritalamak",
+    "primary": "yeryüzü planı, harita",
+    "type": "İsim / Fiil",
+    "phonetic": "/mæp/"
+  },
+  "marcus": {
+    "tr": "Marcus (Marcus Aurelius)",
+    "primary": "Stoacı filozof imparatorun adı",
+    "type": "Özel İsim",
+    "phonetic": "/ˈmɑːkəs/"
+  },
+  "mariana": {
+    "tr": "Mariana (Mariana Çukuru)",
+    "primary": "Dünyanın en derin okyanus çukuru",
+    "type": "Özel İsim",
+    "phonetic": "/ˌmæriˈænə/"
+  },
+  "massive": {
+    "tr": "muazzam, devasa, heybetli",
+    "primary": "çok büyük ve ağır",
+    "type": "Sıfat",
+    "phonetic": "/ˈmæsɪv/"
+  },
+  "mastering": {
+    "tr": "ustalaşma, hakim olma",
+    "primary": "bir konuda tam uzmanlık kazanma",
+    "type": "Fiil / İsim",
+    "phonetic": "/ˈmɑːstərɪŋ/"
+  },
+  "masterpiece": {
+    "tr": "başyapıt, şaheser",
+    "primary": "sanatçının en seçkin eseri",
+    "type": "İsim",
+    "phonetic": "/ˈmɑːstəpiːs/"
+  },
+  "mates": {
+    "tr": "eşler, çiftleşme eşleri; dostlar",
+    "primary": "çiftleşen hayvan eşleri; arkadaşlar",
+    "type": "İsim",
+    "phonetic": "/meɪts/"
+  },
+  "matured": {
+    "tr": "olgunlaşmış, yetkinleşmiş",
+    "primary": "tam gelişimine ulaşmış",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/məˈtʃʊəd/"
+  },
+  "meaning": {
+    "tr": "anlam, mana, önem",
+    "primary": "kelimenin veya hayatın ifade ettiği değer",
+    "type": "İsim",
+    "phonetic": "/ˈmiːnɪŋ/"
+  },
+  "mechanism": {
+    "tr": "mekanizma, işleyiş düzeni",
+    "primary": "çalışma sistemi, düzenek",
+    "type": "İsim",
+    "phonetic": "/ˈmekənɪzəm/"
+  },
+  "medical": {
+    "tr": "tıbbi, hekimlikle ilgili",
+    "primary": "tıp bilimine ait",
+    "type": "Sıfat",
+    "phonetic": "/ˈmedɪkl/"
+  },
+  "medieval": {
+    "tr": "orta çağ'a ait, orta çağ",
+    "primary": "tarihteki orta çağ dönemi",
+    "type": "Sıfat",
+    "phonetic": "/ˌmediˈiːvl/"
+  },
+  "medium": {
+    "tr": "araç, vasıta, ortam; orta boy",
+    "primary": "sanatsal aktarım aracı; ortam",
+    "type": "İsim / Sıfat",
+    "phonetic": "/ˈmiːdiəm/"
+  },
+  "membrane": {
+    "tr": "zar, hücre zarı",
+    "primary": "ince koruyucu doku tabakası",
+    "type": "İsim",
+    "phonetic": "/ˈmembreɪn/"
+  },
+  "memory": {
+    "tr": "hafıza, bellek; anı",
+    "primary": "bilgiyi saklama yetisi; hatıra",
+    "type": "İsim",
+    "phonetic": "/ˈmeməri/"
+  },
+  "mental": {
+    "tr": "zihinsel, akli",
+    "primary": "zihne ve düşünceye ilişkin",
+    "type": "Sıfat",
+    "phonetic": "/ˈmentl/"
+  },
+  "merely": {
+    "tr": "yalnızca, sadece, sırf",
+    "primary": "sadece, ancak o kadar",
+    "type": "Zarf",
+    "phonetic": "/ˈmɪəli/"
+  },
+  "methane": {
+    "tr": "metan gazı",
+    "primary": "CH4 hidrokarbon gazı",
+    "type": "İsim",
+    "phonetic": "/ˈmiːθeɪn/"
+  },
+  "miles": {
+    "tr": "miller (mesafe)",
+    "primary": "mil uzunluk ölçü birimi",
+    "type": "İsim",
+    "phonetic": "/maɪlz/"
+  },
+  "military": {
+    "tr": "askeri, orduya ait",
+    "primary": "silahlı kuvvetlere ilişkin",
+    "type": "Sıfat / İsim",
+    "phonetic": "/ˈmɪlətri/"
+  },
+  "millennia": {
+    "tr": "binyıllar",
+    "primary": "biner yıllık devirler (millennium çoğulu)",
+    "type": "İsim",
+    "phonetic": "/mɪˈleniə/"
+  },
+  "million": {
+    "tr": "milyon",
+    "primary": "1.000.000 sayısı",
+    "type": "Sayı",
+    "phonetic": "/ˈmɪljən/"
+  },
+  "millions": {
+    "tr": "milyonlarca",
+    "primary": "milyonlar",
+    "type": "İsim / Sıfat",
+    "phonetic": "/ˈmɪljənz/"
+  },
+  "mimic": {
+    "tr": "taklit etmek, benzeşmek",
+    "primary": "bir başkasının davranışını taklit etmek",
+    "type": "Fiil",
+    "phonetic": "/ˈmɪmɪk/"
+  },
+  "mind": {
+    "tr": "zihin, akıl; önemsemek",
+    "primary": "düşünme ve idrak merkezi",
+    "type": "İsim / Fiil",
+    "phonetic": "/maɪnd/"
+  },
+  "minds": {
+    "tr": "zihinler, akıllar",
+    "primary": "insan zihinleri",
+    "type": "İsim",
+    "phonetic": "/maɪndz/"
+  },
+  "mobile": {
+    "tr": "mobil, taşınabilir, hareketli",
+    "primary": "kolayca taşınan cihaz veya yapı",
+    "type": "Sıfat",
+    "phonetic": "/ˈməʊbaɪl/"
+  },
+  "modern": {
+    "tr": "modern, çağdaş, güncel",
+    "primary": "çağımıza uygun",
+    "type": "Sıfat",
+    "phonetic": "/ˈmɒdn/"
+  },
+  "monumental": {
+    "tr": "anıtsal, abidevi, devasa",
+    "primary": "anıt niteliğinde heybetli",
+    "type": "Sıfat",
+    "phonetic": "/ˌmɒnjuˈmentl/"
+  },
+  "monuments": {
+    "tr": "anıtlar, abideler",
+    "primary": "tarihi yapıtlar ve abideler",
+    "type": "İsim",
+    "phonetic": "/ˈmɒnjumənts/"
+  },
+  "moons": {
+    "tr": "uydular, aylar",
+    "primary": "gezegenlerin etrafında dönen doğal uydular",
+    "type": "İsim",
+    "phonetic": "/muːnz/"
+  },
+  "moral": {
+    "tr": "ahlaki, manevi; kıssadan hisse",
+    "primary": "ahlak değerlerine dayalı",
+    "type": "Sıfat / İsim",
+    "phonetic": "/ˈmɒrəl/"
+  },
+  "more": {
+    "tr": "daha, daha fazla",
+    "primary": "artı miktar, daha çok",
+    "type": "Belirteç / Zarf",
+    "phonetic": "/mɔːr/"
+  },
+  "morning": {
+    "tr": "sabah, sabah vakti",
+    "primary": "günün başlangıç saatleri",
+    "type": "İsim",
+    "phonetic": "/ˈmɔːnɪŋ/"
+  },
+  "most": {
+    "tr": "en çok, çoğu, en fazla",
+    "primary": "en yüksek miktar veya oran",
+    "type": "Belirteç / Zarf",
+    "phonetic": "/məʊst/"
+  },
+  "motion": {
+    "tr": "hareket, devinim; önerge",
+    "primary": "konum değiştirme hareketi",
+    "type": "İsim",
+    "phonetic": "/ˈməʊʃn/"
+  },
+  "motivated": {
+    "tr": "motive olmuş, gayretli",
+    "primary": "harekete geçme şevki olan",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/ˈməʊtɪveɪtɪd/"
+  },
+  "moving": {
+    "tr": "hareket eden; dokunaklı",
+    "primary": "yer değiştiren; duygulandıran",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/ˈmuːvɪŋ/"
+  },
+  "music": {
+    "tr": "müzik, musiki",
+    "primary": "melodi ve ritim sanatı",
+    "type": "İsim",
+    "phonetic": "/ˈmjuːzɪk/"
+  },
+  "musical": {
+    "tr": "müzikal, müziğe ait",
+    "primary": "müzikle ilgili, ezgili",
+    "type": "Sıfat / İsim",
+    "phonetic": "/ˈmjuːzɪkl/"
+  },
+  "mysteries": {
+    "tr": "gizemler, sırlar, muammalar",
+    "primary": "çözülememiş sırlar",
+    "type": "İsim",
+    "phonetic": "/ˈmɪstəriz/"
+  },
+  "mysterious": {
+    "tr": "gizemli, esrarengiz",
+    "primary": "akıl erdirilemeyen gizem taşıyan",
+    "type": "Sıfat",
+    "phonetic": "/mɪˈstɪəriəs/"
+  },
+  "mystery": {
+    "tr": "gizem, sır, muamma",
+    "primary": "bilinmeyen veya sır dolu olay",
+    "type": "İsim",
+    "phonetic": "/ˈmɪstri/"
+  },
+  "narrator": {
+    "tr": "anlatıcı, hikaye eden",
+    "primary": "öyküyü aktaran ses",
+    "type": "İsim",
+    "phonetic": "/nəˈreɪtər/"
+  },
+  "nasa": {
+    "tr": "NASA",
+    "primary": "Amerikan Havacılık ve Uzay Dairesi",
+    "type": "Özel İsim",
+    "phonetic": "/ˈnæsə/"
+  },
+  "natural": {
+    "tr": "doğal, natürel",
+    "primary": "tabiata uygun, yapay olmayan",
+    "type": "Sıfat",
+    "phonetic": "/ˈnætʃrəl/"
+  },
+  "nature": {
+    "tr": "doğa, tabiat; mizaç",
+    "primary": "tabiat; bir şeyin öz doğası",
+    "type": "İsim",
+    "phonetic": "/ˈneɪtʃər/"
+  },
+  "nave": {
+    "tr": "nef, kilise orta salonu",
+    "primary": "katedralin ana gövdesi",
+    "type": "İsim",
+    "phonetic": "/neɪv/"
+  },
+  "navigation": {
+    "tr": "navigasyon, seyrüsefer, yön bulma",
+    "primary": "rotayı belirleyip ilerleme",
+    "type": "İsim",
+    "phonetic": "/ˌnævɪˈɡeɪʃn/"
+  },
+  "nearly": {
+    "tr": "neredeyse, yaklaşık olarak",
+    "primary": "hemen hemen",
+    "type": "Zarf",
+    "phonetic": "/ˈnɪəli/"
+  },
+  "nerve": {
+    "tr": "sinir; cesaret",
+    "primary": "sinir lifi dokusu; yüreklilik",
+    "type": "İsim",
+    "phonetic": "/nɜːv/"
+  },
+  "networks": {
+    "tr": "ağlar, bağlantı şebekeleri",
+    "primary": "birbirine bağlı sistemler",
+    "type": "İsim",
+    "phonetic": "/ˈnetwɜːks/"
+  },
+  "neural": {
+    "tr": "sinirsel, nöral",
+    "primary": "sinir sistemine ve beyne ait",
+    "type": "Sıfat",
+    "phonetic": "/ˈnjʊərəl/"
+  },
+  "neuroimaging": {
+    "tr": "beyin görüntüleme, nörogörüntüleme",
+    "primary": "beyin aktivitelerini tarama",
+    "type": "İsim",
+    "phonetic": "/ˌnjʊərəʊˈɪmɪdʒɪŋ/"
+  },
+  "neurons": {
+    "tr": "nöronlar, beyin sinir hücreleri",
+    "primary": "elektriksel sinyal ileten beyin hücreleri",
+    "type": "İsim",
+    "phonetic": "/ˈnjʊərɒnz/"
+  },
+  "neuroplastic": {
+    "tr": "nöroplastik (beynin şekillenebilirliği)",
+    "primary": "deneyimle değişebilen beyin yapısı",
+    "type": "Sıfat",
+    "phonetic": "/ˌnjʊərəʊˈplæstɪk/"
+  },
+  "neuroscientists": {
+    "tr": "sinirbilimciler, nörologlar",
+    "primary": "beyin ve sinir araştırmacıları",
+    "type": "İsim",
+    "phonetic": "/ˌnjʊərəʊˈsaɪəntɪsts/"
+  },
+  "never": {
+    "tr": "asla, hiçbir zaman",
+    "primary": "katiyen, hiçbir vakit",
+    "type": "Zarf",
+    "phonetic": "/ˈnevər/"
+  },
+  "new": {
+    "tr": "yeni, taze, özgün",
+    "primary": "daha önce var olmayan",
+    "type": "Sıfat",
+    "phonetic": "/njuː/"
+  },
+  "no": {
+    "tr": "hayır; hiçbir",
+    "primary": "olumsuz yanıt; yokluk belirteci",
+    "type": "Ünlem / Belirteç",
+    "phonetic": "/nəʊ/"
+  },
+  "nomadic": {
+    "tr": "göçebe, göçer",
+    "primary": "yerleşik olmayan yaşam tarzı",
+    "type": "Sıfat",
+    "phonetic": "/nəʊˈmædɪk/"
+  },
+  "notes": {
+    "tr": "notlar; müzik notaları; ses tonu",
+    "primary": "alınan notlar; ezgi sesleri",
+    "type": "İsim / Fiil",
+    "phonetic": "/nəʊts/"
+  },
+  "notice": {
+    "tr": "fark etmek, dikkat etmek; bildiri",
+    "primary": "ayrımına varmak",
+    "type": "Fiil / İsim",
+    "phonetic": "/ˈnəʊtɪs/"
+  },
+  "obstacles": {
+    "tr": "engeller, manialar",
+    "primary": "ilerlemeyi durduran güçlükler",
+    "type": "İsim",
+    "phonetic": "/ˈɒbstəklz/"
+  },
+  "ocean": {
+    "tr": "okyanus, umman",
+    "primary": "büyük deniz kütlesi",
+    "type": "İsim",
+    "phonetic": "/ˈəʊʃn/"
+  },
+  "oceanographers": {
+    "tr": "okyanusbilimciler",
+    "primary": "deniz ve okyanus araştırmacıları",
+    "type": "İsim",
+    "phonetic": "/ˌəʊʃəˈnɒɡrəfəz/"
+  },
+  "offering": {
+    "tr": "sunma, takdim etme; adak, hediye",
+    "primary": "bağışlanan veya sunulan şey",
+    "type": "İsim / Fiil",
+    "phonetic": "/ˈɒfərɪŋ/"
+  },
+  "offers": {
+    "tr": "sunar, teklif eder",
+    "primary": "fırsat veya öneri sağlamak",
+    "type": "Fiil / İsim",
+    "phonetic": "/ˈɒfəz/"
+  },
+  "old": {
+    "tr": "eski, yaşlı, kadim",
+    "primary": "geçmişe ait; yaşı ilerlemiş",
+    "type": "Sıfat",
+    "phonetic": "/əʊld/"
+  },
+  "once": {
+    "tr": "bir zamanlar, bir kez",
+    "primary": "bir defa; vaktiyle",
+    "type": "Zarf / Bağlaç",
+    "phonetic": "/wʌns/"
+  },
+  "one": {
+    "tr": "bir, tek bir; biri",
+    "primary": "1 sayısı; belirli bir kişi/nesne",
+    "type": "Sayı / Zamir",
+    "phonetic": "/wʌn/"
+  },
+  "online": {
+    "tr": "çevrim içi, internet üzerinden",
+    "primary": "ağa bağlı olarak",
+    "type": "Sıfat / Zarf",
+    "phonetic": "/ˌɒnˈlaɪn/"
+  },
+  "only": {
+    "tr": "sadece, yalnızca, tek",
+    "primary": "başka hiçbir şey olmaksızın",
+    "type": "Zarf / Sıfat",
+    "phonetic": "/ˈəʊnli/"
+  },
+  "opaque": {
+    "tr": "opak, mat, ışık geçirmez",
+    "primary": "arkası görünmeyen, saydam olmayan",
+    "type": "Sıfat",
+    "phonetic": "/əʊˈpeɪk/"
+  },
+  "open": {
+    "tr": "açık; açmak",
+    "primary": "kapalı olmayan; başlatmak",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/ˈəʊpən/"
+  },
+  "operating": {
+    "tr": "faaliyet gösteren, çalışan",
+    "primary": "işlem yürüten",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/ˈɒpəreɪtɪŋ/"
+  },
+  "opinions": {
+    "tr": "görüşler, fikirler",
+    "primary": "düşünceler ve kanaatler",
+    "type": "İsim",
+    "phonetic": "/əˈpɪnjənz/"
+  },
+  "opportunities": {
+    "tr": "fırsatlar, olanaklar",
+    "primary": "elverişli durumlar",
+    "type": "İsim",
+    "phonetic": "/ˌɒpəˈtjuːnətiz/"
+  },
+  "opposite": {
+    "tr": "zıt, karşıt, karşıdaki",
+    "primary": "tam zıt yönde veya tarafta",
+    "type": "Sıfat / Edat",
+    "phonetic": "/ˈɒpəzɪt/"
+  },
+  "orbital": {
+    "tr": "yörüngesel, yörüngeye ait",
+    "primary": "yörüngede hareket eden",
+    "type": "Sıfat",
+    "phonetic": "/ˈɔːbɪtl/"
+  },
+  "organ": {
+    "tr": "organ, uzuv; org çalgısı",
+    "primary": "vücut fonksiyonunu gören yapı",
+    "type": "İsim",
+    "phonetic": "/ˈɔːɡən/"
+  },
+  "organic": {
+    "tr": "organik, canlıya ait; doğal",
+    "primary": "biyolojik kökenli",
+    "type": "Sıfat",
+    "phonetic": "/ɔːˈɡænɪk/"
+  },
+  "organisms": {
+    "tr": "organizmalar, canlı varlıklar",
+    "primary": "yaşayan canlı yapılar",
+    "type": "İsim",
+    "phonetic": "/ˈɔːɡənɪzəmz/"
+  },
+  "organize": {
+    "tr": "düzenlemek, organize etmek",
+    "primary": "sistematik hale getirmek",
+    "type": "Fiil",
+    "phonetic": "/ˈɔːɡənaɪz/"
+  },
+  "organized": {
+    "tr": "düzenli, örgütlü",
+    "primary": "planlı ve tertipli",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/ˈɔːɡənaɪzd/"
+  },
+  "origami": {
+    "tr": "origami, kağıt katlama sanatı",
+    "primary": "Japon kağıt katlama ustalığı",
+    "type": "İsim",
+    "phonetic": "/ˌɒrɪˈɡɑːmi/"
+  },
+  "origins": {
+    "tr": "kökenler, başlangıçlar, menşeler",
+    "primary": "ilk ortaya çıkış noktaları",
+    "type": "İsim",
+    "phonetic": "/ˈɒrɪdʒɪnz/"
+  },
+  "other": {
+    "tr": "diğer, başka, öteki",
+    "primary": "farklı olan",
+    "type": "Sıfat / Zamir",
+    "phonetic": "/ˈʌðər/"
+  },
+  "others": {
+    "tr": "diğerleri, başkaları",
+    "primary": "öteki kişiler/nesneler",
+    "type": "Zamir",
+    "phonetic": "/ˈʌðəz/"
+  },
+  "our": {
+    "tr": "bizim",
+    "primary": "1. çoğul şahıs iyelik belirteci",
+    "type": "Belirteç",
+    "phonetic": "/ɑːr, ˈaʊər/"
+  },
+  "outsider": {
+    "tr": "dışarıdan biri, yabancı",
+    "primary": "topluluğun dışındaki kişi",
+    "type": "İsim",
+    "phonetic": "/ˌaʊtˈsaɪdər/"
+  },
+  "over": {
+    "tr": "üzerinde, aşırı; bitmiş",
+    "primary": "üstünde; sonlanmış",
+    "type": "Edat / Zarf",
+    "phonetic": "/ˈəʊvər/"
+  },
+  "oversized": {
+    "tr": "büyük beden, aşırı büyük",
+    "primary": "normal boyutun çok üstünde",
+    "type": "Sıfat",
+    "phonetic": "/ˈəʊvəsaɪzd/"
+  },
+  "own": {
+    "tr": "kendi, öz; sahip olmak",
+    "primary": "kendine ait; sahiplik",
+    "type": "Sıfat / Zamir / Fiil",
+    "phonetic": "/əʊn/"
+  },
+  "pacific": {
+    "tr": "Büyük Okyanus, Pasifik",
+    "primary": "dünyanın en büyük okyanusu",
+    "type": "Özel İsim",
+    "phonetic": "/pəˈsɪfɪk/"
+  },
+  "pages": {
+    "tr": "sayfalar",
+    "primary": "kitap sayfaları",
+    "type": "İsim",
+    "phonetic": "/ˈpeɪdʒɪz/"
+  },
+  "paradigm": {
+    "tr": "paradigma, model, değerler dizisi",
+    "primary": "temel düşünce modeli",
+    "type": "İsim",
+    "phonetic": "/ˈpærədaɪm/"
+  },
+  "parchment": {
+    "tr": "parşömen, hayvan derisi yazı kağıdı",
+    "primary": "antik el yazması derisi",
+    "type": "İsim",
+    "phonetic": "/ˈpɑːtʃmənt/"
+  },
+  "pathways": {
+    "tr": "yollar, sinir iletim patikaları",
+    "primary": "iletişim ve sinir güzergahları",
+    "type": "İsim",
+    "phonetic": "/ˈpɑːθweɪz/"
+  },
+  "peace": {
+    "tr": "huzur, barış, dinginlik",
+    "primary": "sükunet ve çatışmasızlık",
+    "type": "İsim",
+    "phonetic": "/piːs/"
+  },
+  "peers": {
+    "tr": "dikkatle bakar; akranlar",
+    "primary": "gözlerini dikip bakmak; yaşıtlar",
+    "type": "Fiil / İsim",
+    "phonetic": "/pɪəz/"
+  },
+  "penetrate": {
+    "tr": "nüfuz etmek, içine işlemek",
+    "primary": "derinlemesine geçip girmek",
+    "type": "Fiil",
+    "phonetic": "/ˈpenətreɪt/"
+  },
+  "people": {
+    "tr": "insanlar, halk",
+    "primary": "bireyler topluluğu",
+    "type": "İsim",
+    "phonetic": "/ˈpiːpl/"
+  },
+  "perched": {
+    "tr": "tünemiş, yüksekte yerleşmiş",
+    "primary": "yüksek ve dar bir yerde duran",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/pɜːtʃt/"
+  },
+  "permanent": {
+    "tr": "kalıcı, daimi",
+    "primary": "sürekli var olan",
+    "type": "Sıfat",
+    "phonetic": "/ˈpɜːmənənt/"
+  },
+  "permanently": {
+    "tr": "kalıcı olarak, temelli",
+    "primary": "ebediyen, daimi surette",
+    "type": "Zarf",
+    "phonetic": "/ˈpɜːmənəntli/"
+  },
+  "perpetual": {
+    "tr": "sürekli, daimi, bitimsiz",
+    "primary": "aralıksız devam eden",
+    "type": "Sıfat",
+    "phonetic": "/pəˈpetʃuəl/"
+  },
+  "perseverance": {
+    "tr": "azim, sebat, kararlılık",
+    "primary": "güçlüklere rağmen vazgeçmeme erdemi",
+    "type": "İsim",
+    "phonetic": "/ˌpɜːsɪˈvɪərəns/"
+  },
+  "personal": {
+    "tr": "kişisel, şahsi, özel",
+    "primary": "bireyin kendine has",
+    "type": "Sıfat",
+    "phonetic": "/ˈpɜːsənl/"
+  },
+  "phenomena": {
+    "tr": "fenomenler, doğa olayları",
+    "primary": "gözlemlenebilen olağanüstü olaylar (çoğul)",
+    "type": "İsim",
+    "phonetic": "/fəˈnɒmɪnə/"
+  },
+  "philosophy": {
+    "tr": "felsefe",
+    "primary": "varlık ve bilgi sorgulama disiplini",
+    "type": "İsim",
+    "phonetic": "/fəˈlɒsəfi/"
+  },
+  "photons": {
+    "tr": "fotonlar, ışık parçacıkları",
+    "primary": "ışık kuantumu tanecikleri",
+    "type": "İsim",
+    "phonetic": "/ˈfəʊtɒnz/"
+  },
+  "photorealism": {
+    "tr": "fotogerçekçilik",
+    "primary": "fotoğraf netliğinde görsel üslup",
+    "type": "İsim",
+    "phonetic": "/ˌfəʊtəʊˈrɪəlɪzəm/"
+  },
+  "physical": {
+    "tr": "fiziksel, bedensel, maddi",
+    "primary": "somut ve maddeye ait",
+    "type": "Sıfat",
+    "phonetic": "/ˈfɪzɪkl/"
+  },
+  "pictures": {
+    "tr": "resimler, fotoğraflar, filmler",
+    "primary": "görsel görüntüler; sinema filmleri",
+    "type": "İsim",
+    "phonetic": "/ˈpɪktʃəz/"
+  },
+  "pierces": {
+    "tr": "delip geçer, yarar",
+    "primary": "nüfuz edip yarmak",
+    "type": "Fiil",
+    "phonetic": "/ˈpɪəsɪz/"
+  },
+  "pillars": {
+    "tr": "sütunlar, direkler; temel direkler",
+    "primary": "taşıyıcı dev dikitler",
+    "type": "İsim",
+    "phonetic": "/ˈpɪləz/"
+  },
+  "pioneered": {
+    "tr": "öncülük etti, çığır açtı",
+    "primary": "ilk kez başlatıp yol gösterdi",
+    "type": "Fiil",
+    "phonetic": "/ˌpaɪəˈnɪəd/"
+  },
+  "pioneers": {
+    "tr": "öncüler, yol açanlar",
+    "primary": "yeni bir sahayı ilk açanlar",
+    "type": "İsim",
+    "phonetic": "/ˌpaɪəˈnɪəz/"
+  },
+  "pitch": {
+    "tr": "zifiri (pitch-black); perde, perde ayarı",
+    "primary": "zifiri karanlık; ses perdesi",
+    "type": "İsim / Sıfat",
+    "phonetic": "/pɪtʃ/"
+  },
+  "planetary": {
+    "tr": "gezegensel, gezegenlere ait",
+    "primary": "gezegen sistemine ilişkin",
+    "type": "Sıfat",
+    "phonetic": "/ˈplænətri/"
+  },
+  "plateau": {
+    "tr": "yayla, plato; duraklama dönemi",
+    "primary": "yüksek düzlük; sabit seviye",
+    "type": "İsim",
+    "phonetic": "/ˈplætəʊ/"
+  },
+  "playlists": {
+    "tr": "çalma listeleri, müzik listeleri",
+    "primary": "sıralı müzik listeleri",
+    "type": "İsim",
+    "phonetic": "/ˈpleɪlɪsts/"
+  },
+  "poetic": {
+    "tr": "şiirsel, lirik",
+    "primary": "şiire özgü estetik duygu",
+    "type": "Sıfat",
+    "phonetic": "/pəʊˈetɪk/"
+  },
+  "points": {
+    "tr": "noktalar; işaret eder",
+    "primary": "konum noktaları; göstermek",
+    "type": "İsim / Fiil",
+    "phonetic": "/pɔɪnts/"
+  },
+  "polish": {
+    "tr": "cilalamak, geliştirmek; lehçe",
+    "primary": "parlatmak; yeteneği mükemmelleştirmek",
+    "type": "Fiil / İsim",
+    "phonetic": "/ˈpɒlɪʃ/"
+  },
+  "polyunsaturated": {
+    "tr": "çoklu doymamış (yağlar)",
+    "primary": "sağlıklı çoklu doymamış kimyasal bağ",
+    "type": "Sıfat",
+    "phonetic": "/ˌpɒliʌnˈsætʃəreɪtɪd/"
+  },
+  "possibilities": {
+    "tr": "olasılıklar, ihtimaller",
+    "primary": "gerçekleşebilecek durumlar",
+    "type": "İsim",
+    "phonetic": "/ˌpɒsəˈbɪlətiz/"
+  },
+  "potential": {
+    "tr": "potansiyel, gizilgüç",
+    "primary": "ortaya çıkmaya hazır olanak",
+    "type": "İsim / Sıfat",
+    "phonetic": "/pəˈtenʃl/"
+  },
+  "pounding": {
+    "tr": "gümbürdeyen, şiddetle çarpan",
+    "primary": "kuvvetli darbeler indiren",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/ˈpaʊndɪŋ/"
+  },
+  "poverty": {
+    "tr": "yoksulluk, fakirlik",
+    "primary": "maddi yetersizlik ve çaresizlik",
+    "type": "İsim",
+    "phonetic": "/ˈpɒvəti/"
+  },
+  "power": {
+    "tr": "güç, kudret, iktidar; enerji",
+    "primary": "etki etme yetisi, kuvvet",
+    "type": "İsim",
+    "phonetic": "/ˈpaʊər/"
+  },
+  "practical": {
+    "tr": "pratik, uygulamalı, işe yarar",
+    "primary": "hayatta kolayca tatbik edilen",
+    "type": "Sıfat",
+    "phonetic": "/ˈpræktɪkl/"
+  },
+  "practice": {
+    "tr": "pratik, uygulama, idman",
+    "primary": "tecrübe ve alıştırma",
+    "type": "İsim / Fiil",
+    "phonetic": "/ˈpræktɪs/"
+  },
+  "practicing": {
+    "tr": "uygulama, pratik yapma",
+    "primary": "sürekli alıştırma yaparak öğrenme",
+    "type": "Fiil / İsim",
+    "phonetic": "/ˈpræktɪsɪŋ/"
+  },
+  "precision": {
+    "tr": "hassasiyet, dakiklik, titizlik",
+    "primary": "en ince ayrıntısına kadar doğruluk",
+    "type": "İsim",
+    "phonetic": "/prɪˈsɪʒn/"
+  },
+  "predatory": {
+    "tr": "yırtıcı, avcı, av peşinde koşan",
+    "primary": "diğer canlıları avlayarak beslenen",
+    "type": "Sıfat",
+    "phonetic": "/ˈpredətri/"
+  },
+  "prehistoric": {
+    "tr": "tarih öncesi, prehistorik",
+    "primary": "yazının icadından önceki devirler",
+    "type": "Sıfat",
+    "phonetic": "/ˌpriːhɪˈstɒrɪk/"
+  },
+  "prehistory": {
+    "tr": "tarih öncesi çağlar",
+    "primary": "insanlığın yazılı kayıt öncesi dönemi",
+    "type": "İsim",
+    "phonetic": "/ˌpriːˈhɪstri/"
+  },
+  "premier": {
+    "tr": "en önde gelen, birincil, baş",
+    "primary": "en yetkin ve prestijli",
+    "type": "Sıfat",
+    "phonetic": "/ˈpremiər/"
+  },
+  "preserve": {
+    "tr": "korumak, muhafaza etmek",
+    "primary": "özünü bozmadan saklamak",
+    "type": "Fiil",
+    "phonetic": "/prɪˈzɜːv/"
+  },
+  "preserved": {
+    "tr": "korunmuş, bozulmamış",
+    "primary": "asırlar boyu saklanmış",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/prɪˈzɜːvd/"
+  },
+  "pressure": {
+    "tr": "basınç, tazyik; baskı",
+    "primary": "fiziksel sıkıştırma kuvveti; stres",
+    "type": "İsim",
+    "phonetic": "/ˈpreʃər/"
+  },
+  "prevent": {
+    "tr": "önlemek, engel olmak",
+    "primary": "bir şeyin olmasını durdurmak",
+    "type": "Fiil",
+    "phonetic": "/prɪˈvent/"
+  },
+  "previous": {
+    "tr": "önceki, evvelki",
+    "primary": "zamanca daha önce gerçekleşen",
+    "type": "Sıfat",
+    "phonetic": "/ˈpriːviəs/"
+  },
+  "previously": {
+    "tr": "önceden, daha önce",
+    "primary": "geçmiş zamanda",
+    "type": "Zarf",
+    "phonetic": "/ˈpriːviəsli/"
+  },
+  "prey": {
+    "tr": "av, yem; avlamak",
+    "primary": "avlanan hayvan kurban",
+    "type": "İsim / Fiil",
+    "phonetic": "/preɪ/"
+  },
+  "principles": {
+    "tr": "ilkeler, prensipler, umdeler",
+    "primary": "davranış ve bilim kuralları",
+    "type": "İsim",
+    "phonetic": "/ˈprɪnsəplz/"
+  },
+  "prioritizes": {
+    "tr": "öncelik verir, ilk sıraya koyar",
+    "primary": "önem sırasına göre öne almak",
+    "type": "Fiil",
+    "phonetic": "/praɪˈɒrətaɪzɪz/"
+  },
+  "problem": {
+    "tr": "sorun, problem, mesele",
+    "primary": "çözülmesi gereken güçlük",
+    "type": "İsim",
+    "phonetic": "/ˈprɒbləm/"
+  },
+  "production": {
+    "tr": "üretim, yapım",
+    "primary": "meydana getirme, ortaya koyma",
+    "type": "İsim",
+    "phonetic": "/prəˈdʌkʃn/"
+  },
+  "profound": {
+    "tr": "derin, engin, çarpıcı",
+    "primary": "büyük anlam ve tesir taşıyan",
+    "type": "Sıfat",
+    "phonetic": "/prəˈfaʊnd/"
+  },
+  "prose": {
+    "tr": "düz yazı, nesir",
+    "primary": "şiir olmayan serbest edebi anlatı",
+    "type": "İsim",
+    "phonetic": "/prəʊz/"
+  },
+  "protective": {
+    "tr": "koruyucu, koruma sağlayan",
+    "primary": "zararlardan muhafaza eden",
+    "type": "Sıfat",
+    "phonetic": "/prəˈtektɪv/"
+  },
+  "proteins": {
+    "tr": "proteinler",
+    "primary": "canlı hücrelerin temel yapı taşları",
+    "type": "İsim",
+    "phonetic": "/ˈprəʊtiːnz/"
+  },
+  "proves": {
+    "tr": "kanıtlar, ispat eder",
+    "primary": "doğruluğunu ortaya koymak",
+    "type": "Fiil",
+    "phonetic": "/pruːvz/"
+  },
+  "purists": {
+    "tr": "gelenekçiler, safçılar",
+    "primary": "özün değişmesini istemeyenler",
+    "type": "İsim",
+    "phonetic": "/ˈpjʊərɪsts/"
+  },
+  "purpose": {
+    "tr": "amaç, gaye, maksat",
+    "primary": "ulaşılmak istenen hedef",
+    "type": "İsim",
+    "phonetic": "/ˈpɜːpəs/"
+  },
+  "puzzles": {
+    "tr": "bulmacalar, bilmeceler",
+    "primary": "zihin yoran gizemler",
+    "type": "İsim",
+    "phonetic": "/ˈpʌzlz/"
+  },
+  "pyramids": {
+    "tr": "piramitler",
+    "primary": "antik üçgen cepheli yapıtlar",
+    "type": "İsim",
+    "phonetic": "/ˈpɪrəmɪdz/"
+  },
+  "quiet": {
+    "tr": "sessiz, sakin, dingin",
+    "primary": "gürültüsüz ve huzurlu",
+    "type": "Sıfat / İsim",
+    "phonetic": "/ˈkwaɪət/"
+  },
+  "radiant": {
+    "tr": "parlak, ışıl ışıl, ışık saçan",
+    "primary": "ışık ve sevinç yayan",
+    "type": "Sıfat",
+    "phonetic": "/ˈreɪdiənt/"
+  },
+  "rain": {
+    "tr": "yağmur; yağmak",
+    "primary": "gökten yağan su damlaları",
+    "type": "İsim / Fiil",
+    "phonetic": "/reɪn/"
+  },
+  "rapidly": {
+    "tr": "hızla, süratle",
+    "primary": "çabucak, yüksek hızla",
+    "type": "Zarf",
+    "phonetic": "/ˈræpɪdli/"
+  },
+  "rather": {
+    "tr": "oldukça; -den ziyade",
+    "primary": "tercihen, daha ziyade",
+    "type": "Zarf",
+    "phonetic": "/ˈrɑːðər/"
+  },
+  "reactions": {
+    "tr": "tepkiler, kimyasal reaksiyonlar",
+    "primary": "etkiye verilen karşılıklar",
+    "type": "İsim",
+    "phonetic": "/riˈækʃnz/"
+  },
+  "realism": {
+    "tr": "gerçekçilik, realizm",
+    "primary": "olayları olduğu gibi yansıtma",
+    "type": "İsim",
+    "phonetic": "/ˈrɪəlɪzəm/"
+  },
+  "reality": {
+    "tr": "gerçeklik, hakikat",
+    "primary": "var olan somut durum",
+    "type": "İsim",
+    "phonetic": "/riˈæləti/"
+  },
+  "realm": {
+    "tr": "diyar, alem, alan",
+    "primary": "krallık veya uzmanlık alanı",
+    "type": "İsim",
+    "phonetic": "/relm/"
+  },
+  "recommended": {
+    "tr": "tavsiye edilen, önerilen",
+    "primary": "övgüyle sunulan",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/ˌrekəˈmendɪd/"
+  },
+  "recount": {
+    "tr": "anlatmak, hikaye etmek",
+    "primary": "ayrıntılarıyla dile getirmek",
+    "type": "Fiil",
+    "phonetic": "/rɪˈkaʊnt/"
+  },
+  "redefine": {
+    "tr": "yeniden tanımlamak",
+    "primary": "kavramı baştan şekillendirmek",
+    "type": "Fiil",
+    "phonetic": "/ˌriːdɪˈfaɪn/"
+  },
+  "regions": {
+    "tr": "bölgeler, diyarlar",
+    "primary": "coğrafi veya anatomik sahalar",
+    "type": "İsim",
+    "phonetic": "/ˈriːdʒənz/"
+  },
+  "relentless": {
+    "tr": "amansız, acımasız, durmaksızın",
+    "primary": "hiç yorulmadan devam eden",
+    "type": "Sıfat",
+    "phonetic": "/rɪˈlentləs/"
+  },
+  "relied": {
+    "tr": "güvendi, dayandı",
+    "primary": "rely fiilinin geçmiş hali",
+    "type": "Fiil",
+    "phonetic": "/rɪˈlaɪd/"
+  },
+  "reliefs": {
+    "tr": "kabartmalar (taş kabartma rölyef)",
+    "primary": "yüzeyden yükselen oyma kabartma",
+    "type": "İsim",
+    "phonetic": "/rɪˈliːfs/"
+  },
+  "rely": {
+    "tr": "güvenmek, bel bağlamak, dayanmak",
+    "primary": "destek olarak görmek",
+    "type": "Fiil",
+    "phonetic": "/rɪˈlaɪ/"
+  },
+  "remain": {
+    "tr": "kalmak, sürdürmek",
+    "primary": "durumunu korumak",
+    "type": "Fiil",
+    "phonetic": "/rɪˈmeɪn/"
+  },
+  "remains": {
+    "tr": "kalıntılar; kalır",
+    "primary": "tarihi kalıntılar; varlığını korumak",
+    "type": "İsim / Fiil",
+    "phonetic": "/rɪˈmeɪnz/"
+  },
+  "remarkable": {
+    "tr": "dikkate değer, olağanüstü",
+    "primary": "hayranlık uyandıran derecede özel",
+    "type": "Sıfat",
+    "phonetic": "/rɪˈmɑːkəbl/"
+  },
+  "remind": {
+    "tr": "hatırlatmak",
+    "primary": "unutulmuş bir şeyi akla getirmek",
+    "type": "Fiil",
+    "phonetic": "/rɪˈmaɪnd/"
+  },
+  "renaissance": {
+    "tr": "Rönesans, yeniden doğuş",
+    "primary": "tarihi ve sanatsal diriliş çağı",
+    "type": "İsim",
+    "phonetic": "/rɪˈneɪsns/"
+  },
+  "renowned": {
+    "tr": "ünlü, meşhur, tanınmış",
+    "primary": "herkesçe bilinen ve takdir edilen",
+    "type": "Sıfat",
+    "phonetic": "/rɪˈnaʊnd/"
+  },
+  "represented": {
+    "tr": "temsil edilen, canlandırılan",
+    "primary": "temsil edildi",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/ˌreprɪˈzentɪd/"
+  },
+  "represents": {
+    "tr": "temsil eder, simgeler",
+    "primary": "bir kavramın simgesi olmak",
+    "type": "Fiil",
+    "phonetic": "/ˌreprɪˈzents/"
+  },
+  "required": {
+    "tr": "gerekli, icap eden, zorunlu",
+    "primary": "şart koşulan",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/rɪˈkwaɪəd/"
+  },
+  "researchers": {
+    "tr": "araştırmacılar",
+    "primary": "bilimsel araştırma yapanlar",
+    "type": "İsim",
+    "phonetic": "/rɪˈsɜːtʃəz/"
+  },
+  "resentment": {
+    "tr": "kırgınlık, hınç, içerleme",
+    "primary": "haksızlığa karşı duyulan öfke",
+    "type": "İsim",
+    "phonetic": "/rɪˈzentmənt/"
+  },
+  "reshape": {
+    "tr": "yeniden şekillendirmek",
+    "primary": "baştan biçimlendirmek",
+    "type": "Fiil",
+    "phonetic": "/ˌriːˈʃeɪp/"
+  },
+  "resolution": {
+    "tr": "çözünürlük; kararlılık, azim",
+    "primary": "görüntü netliği; verilmiş kesin karar",
+    "type": "İsim",
+    "phonetic": "/ˌrezəˈluːʃn/"
+  },
+  "resonant": {
+    "tr": "yankılanan, çınlayan, etkili",
+    "primary": "derin ses ve etki bırakan",
+    "type": "Sıfat",
+    "phonetic": "/ˈrezənənt/"
+  },
+  "responsibility": {
+    "tr": "sorumluluk, mesuliyet",
+    "primary": "ödev ve yükümlülük",
+    "type": "İsim",
+    "phonetic": "/rɪˌspɒnsəˈbɪləti/"
+  },
+  "restorative": {
+    "tr": "yenileyici, şifa verici, onarıcı",
+    "primary": "tazelik ve güç kazandıran",
+    "type": "Sıfat / İsim",
+    "phonetic": "/rɪˈstɔːrətɪv/"
+  },
+  "reveals": {
+    "tr": "ortaya çıkarır, gözler önüne serer",
+    "primary": "saklı olanı göstermek",
+    "type": "Fiil",
+    "phonetic": "/rɪˈviːlz/"
+  },
+  "revolutionary": {
+    "tr": "devrimsel, çığır açıcı, köklü",
+    "primary": "düzeni tamamen yenileyen",
+    "type": "Sıfat",
+    "phonetic": "/ˌrevəˈluːʃənri/"
+  },
+  "rewires": {
+    "tr": "yeniden yapılandırır, yeniden bağlar",
+    "primary": "beyin sinir ağlarını yeniden örmek",
+    "type": "Fiil",
+    "phonetic": "/ˌriːˈwaɪəz/"
+  },
+  "rewriting": {
+    "tr": "yeniden yazma, güncelleme",
+    "primary": "metni baştan kaleme alma",
+    "type": "Fiil / İsim",
+    "phonetic": "/ˌriːˈraɪtɪŋ/"
+  },
+  "rigid": {
+    "tr": "sert, katı, esnemeyen",
+    "primary": "bükülmez ve tavizsiz",
+    "type": "Sıfat",
+    "phonetic": "/ˈrɪdʒɪd/"
+  },
+  "rituals": {
+    "tr": "ritüeller, ayinler, törenler",
+    "primary": "geleneksel kutsal merasimler",
+    "type": "İsim",
+    "phonetic": "/ˈrɪtʃuəlz/"
+  },
+  "romance": {
+    "tr": "romans, aşk macerası, romantizm",
+    "primary": "romantik ilişki veya duygu",
+    "type": "İsim",
+    "phonetic": "/rəʊˈmæns/"
+  },
+  "rome": {
+    "tr": "Roma",
+    "primary": "Antik Roma İmparatorluğu veya İtalya'nın başkenti",
+    "type": "Özel İsim",
+    "phonetic": "/rəʊm/"
+  },
+  "rooted": {
+    "tr": "kök salmış, kökleşmiş",
+    "primary": "derin temellere dayanan",
+    "type": "Sıfat",
+    "phonetic": "/ˈruːtɪd/"
+  },
+  "route": {
+    "tr": "rota, güzergâh, izlenen yol",
+    "primary": "ulaşım yolu, rota",
+    "type": "İsim",
+    "phonetic": "/ruːt/"
+  },
+  "s": {
+    "tr": "-s eki (çoğul veya 3. şahıs)",
+    "primary": "İngilizce çoğul ve geniş zaman takısı",
+    "type": "Ek",
+    "phonetic": "/s, z/"
+  },
+  "sacred": {
+    "tr": "kutsal, mukaddes",
+    "primary": "dini ve manevi değere sahip",
+    "type": "Sıfat",
+    "phonetic": "/ˈseɪkrɪd/"
+  },
+  "safer": {
+    "tr": "daha güvenli, daha emin",
+    "primary": "tehlikeden daha uzak",
+    "type": "Sıfat",
+    "phonetic": "/ˈseɪfər/"
+  },
+  "sagrada": {
+    "tr": "Sagrada (Sagrada Família)",
+    "primary": "Kutsal (Katalanca)",
+    "type": "Özel İsim",
+    "phonetic": "/səˈɡrɑːdə/"
+  },
+  "sapphire": {
+    "tr": "safir, göktaşı mavisi",
+    "primary": "kıymetli mavi taş",
+    "type": "İsim / Sıfat",
+    "phonetic": "/ˈsæfaɪər/"
+  },
+  "sat": {
+    "tr": "oturdu",
+    "primary": "sit fiilinin geçmiş hali",
+    "type": "Fiil",
+    "phonetic": "/sæt/"
+  },
+  "saving": {
+    "tr": "kurtarma; tasarruf",
+    "primary": "hayat kurtarma; birikim yapma",
+    "type": "İsim / Fiil",
+    "phonetic": "/ˈseɪvɪŋ/"
+  },
+  "scent": {
+    "tr": "koku, güzel koku",
+    "primary": "hoş rayiha",
+    "type": "İsim",
+    "phonetic": "/sent/"
+  },
+  "scholars": {
+    "tr": "akademisyenler, bilginler, alimler",
+    "primary": "bilim ve felsefe uzmanları",
+    "type": "İsim",
+    "phonetic": "/ˈskɒləz/"
+  },
+  "school": {
+    "tr": "okul, mektep; ekol",
+    "primary": "eğitim kurumu; düşünce ekolü",
+    "type": "İsim",
+    "phonetic": "/skuːl/"
+  },
+  "schooling": {
+    "tr": "okul eğitimi, öğrenim",
+    "primary": "örgün eğitim görme",
+    "type": "İsim",
+    "phonetic": "/ˈskuːlɪŋ/"
+  },
+  "science": {
+    "tr": "bilim, ilim",
+    "primary": "düzenli ve deneysel bilgi bütünü",
+    "type": "İsim",
+    "phonetic": "/ˈsaɪəns/"
+  },
+  "scientists": {
+    "tr": "bilim insanları",
+    "primary": "araştırmacı fen ve toplum bilginleri",
+    "type": "İsim",
+    "phonetic": "/ˈsaɪəntɪsts/"
+  },
+  "scorching": {
+    "tr": "kavurucu, yakıcı",
+    "primary": "aşırı sıcaklık saçan",
+    "type": "Sıfat",
+    "phonetic": "/ˈskɔːtʃɪŋ/"
+  },
+  "scorpions": {
+    "tr": "akrepler",
+    "primary": "kuyruğunda iğnesi olan zehirli eklembacaklılar",
+    "type": "İsim",
+    "phonetic": "/ˈskɔːpiənz/"
+  },
+  "script": {
+    "tr": "yazı, alfabe; senaryo",
+    "primary": "yazı sistemi veya film senaryosu",
+    "type": "İsim",
+    "phonetic": "/skrɪpt/"
+  },
+  "scripts": {
+    "tr": "yazı sistemleri, senaryolar",
+    "primary": "alfabeler ve yazılı metinler",
+    "type": "İsim",
+    "phonetic": "/skrɪpts/"
+  },
+  "sea": {
+    "tr": "deniz, derya",
+    "primary": "büyük tuzlu su kütlesi",
+    "type": "İsim",
+    "phonetic": "/siː/"
+  },
+  "search": {
+    "tr": "arama, araştırma; aramak",
+    "primary": "bulmaya çalışmak",
+    "type": "Fiil / İsim",
+    "phonetic": "/sɜːtʃ/"
+  },
+  "second": {
+    "tr": "ikinci; saniye",
+    "primary": "2. sıra sayısı; zaman birimi",
+    "type": "Sıra Sayısı / İsim",
+    "phonetic": "/ˈsekənd/"
+  },
+  "secrets": {
+    "tr": "sırlar, gizler",
+    "primary": "saklanan bilinmezler",
+    "type": "İsim",
+    "phonetic": "/ˈsiːkrəts/"
+  },
+  "security": {
+    "tr": "güvenlik, emniyet",
+    "primary": "güven içinde olma hali",
+    "type": "İsim",
+    "phonetic": "/sɪˈkjʊərəti/"
+  },
+  "self": {
+    "tr": "öz, benlik, kendi",
+    "primary": "bireyin öz kişiliği",
+    "type": "İsim",
+    "phonetic": "/self/"
+  },
+  "sense": {
+    "tr": "duyu, his; anlam, mantık",
+    "primary": "algı yetisi; kavrayış",
+    "type": "İsim / Fiil",
+    "phonetic": "/sens/"
+  },
+  "sentence": {
+    "tr": "cümle, tümce; hüküm",
+    "primary": "yargı bildiren sözcükler dizisi",
+    "type": "İsim",
+    "phonetic": "/ˈsentəns/"
+  },
+  "serenity": {
+    "tr": "dinginlik, sükunet, iç huzuru",
+    "primary": "sarsılmaz içsel huzur",
+    "type": "İsim",
+    "phonetic": "/səˈrenəti/"
+  },
+  "served": {
+    "tr": "hizmet etti, yaradı",
+    "primary": "görev yaptı",
+    "type": "Fiil",
+    "phonetic": "/sɜːvd/"
+  },
+  "services": {
+    "tr": "hizmetler, servisler",
+    "primary": "sağlanan yararlar ve olanaklar",
+    "type": "İsim",
+    "phonetic": "/ˈsɜːvɪsɪz/"
+  },
+  "set": {
+    "tr": "küme, set; kurmak, ayarlamak",
+    "primary": "dizi; yerleştirmek",
+    "type": "İsim / Fiil",
+    "phonetic": "/set/"
+  },
+  "settle": {
+    "tr": "yerleşmek; karara bağlamak",
+    "primary": "bir yere yurt edinmek",
+    "type": "Fiil",
+    "phonetic": "/ˈsetl/"
+  },
+  "settled": {
+    "tr": "yerleşik, durulmuş",
+    "primary": "yerleşik düzene geçmiş",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/ˈsetld/"
+  },
+  "shadows": {
+    "tr": "gölgeler",
+    "primary": "ışık kesildiğinde oluşan karanlıklar",
+    "type": "İsim",
+    "phonetic": "/ˈʃædəʊz/"
+  },
+  "shaped": {
+    "tr": "şekillenmiş, biçimlendirilmiş",
+    "primary": "belirli bir forma sokulmuş",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/ʃeɪpt/"
+  },
+  "shapes": {
+    "tr": "şekiller; şekillendirir",
+    "primary": "geometrik biçimler; biçim vermek",
+    "type": "İsim / Fiil",
+    "phonetic": "/ʃeɪps/"
+  },
+  "shared": {
+    "tr": "paylaşılan, ortak",
+    "primary": "birlikte bölüşülen",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/ʃeəd/"
+  },
+  "shattered": {
+    "tr": "tuzla buz olmuş, parçalanmış",
+    "primary": "kırılıp dağılmış",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/ˈʃætəd/"
+  },
+  "sheaths": {
+    "tr": "kılıflar, koruyucu zarlar",
+    "primary": "koruyucu dış kabuklar",
+    "type": "İsim",
+    "phonetic": "/ʃiːðz/"
+  },
+  "shield": {
+    "tr": "kalkan, koruyucu zırh; korumak",
+    "primary": "koruma sağlayan levha",
+    "type": "İsim / Fiil",
+    "phonetic": "/ʃiːld/"
+  },
+  "shields": {
+    "tr": "kalkanlar; korur",
+    "primary": "koruyucu kalkanlar; muhafaza etmek",
+    "type": "İsim / Fiil",
+    "phonetic": "/ʃiːldz/"
+  },
+  "shifted": {
+    "tr": "kaydı, dönüştü, değişti",
+    "primary": "konum veya nitelik değiştirdi",
+    "type": "Fiil",
+    "phonetic": "/ˈʃɪftɪd/"
+  },
+  "shifting": {
+    "tr": "değişen, kayan, dönüşen",
+    "primary": "sürekli yer/biçim değiştiren",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/ˈʃɪftɪŋ/"
+  },
+  "shortly": {
+    "tr": "kısa süre sonra, az sonra",
+    "primary": "az bir zaman içinde",
+    "type": "Zarf",
+    "phonetic": "/ˈʃɔːtli/"
+  },
+  "signals": {
+    "tr": "sinyaller, işaretler",
+    "primary": "bilgi taşıyan uyarılar",
+    "type": "İsim",
+    "phonetic": "/ˈsɪɡnəlz/"
+  },
+  "signatures": {
+    "tr": "imzalar, karakteristik izler",
+    "primary": "kimlik belirten özgün işaretler",
+    "type": "İsim",
+    "phonetic": "/ˈsɪɡnətʃəz/"
+  },
+  "silent": {
+    "tr": "sessiz, sözsüz (sessiz sinema)",
+    "primary": "ses çıkarmayan, sükunetli",
+    "type": "Sıfat",
+    "phonetic": "/ˈsaɪlənt/"
+  },
+  "similar": {
+    "tr": "benzer, eşdeğer",
+    "primary": "nitelikleri birbirine yakın",
+    "type": "Sıfat",
+    "phonetic": "/ˈsɪmələr/"
+  },
+  "simple": {
+    "tr": "basit, sade, yalın",
+    "primary": "karmaşık olmayan",
+    "type": "Sıfat",
+    "phonetic": "/ˈsɪmpl/"
+  },
+  "simply": {
+    "tr": "basitçe, yalnızca, sade bir şekilde",
+    "primary": "yalnızca, doğrudan doğruya",
+    "type": "Zarf",
+    "phonetic": "/ˈsɪmpli/"
+  },
+  "simultaneously": {
+    "tr": "aynı anda, eşzamanlı olarak",
+    "primary": "birlikte aynı saniyede",
+    "type": "Zarf",
+    "phonetic": "/ˌsɪmlˈteɪniəsli/"
+  },
+  "single": {
+    "tr": "tek, tek bir, bekâr",
+    "primary": "yalnız bir adet",
+    "type": "Sıfat",
+    "phonetic": "/ˈsɪŋɡl/"
+  },
+  "skull": {
+    "tr": "kafatası",
+    "primary": "beyni koruyan baş iskeleti",
+    "type": "İsim",
+    "phonetic": "/skʌl/"
+  },
+  "sleep": {
+    "tr": "uyku; uyumak",
+    "primary": "bedenin dinlenme hali",
+    "type": "İsim / Fiil",
+    "phonetic": "/sliːp/"
+  },
+  "smart": {
+    "tr": "akıllı, zeki",
+    "primary": "hızlı kavrayan; yapay zekalı",
+    "type": "Sıfat",
+    "phonetic": "/smɑːt/"
+  },
+  "smartphones": {
+    "tr": "akıllı telefonlar",
+    "primary": "gelişmiş mobil cihazlar",
+    "type": "İsim",
+    "phonetic": "/ˈsmɑːtfəʊnz/"
+  },
+  "soaring": {
+    "tr": "yükselen, göğe uzanan",
+    "primary": "havalanıp yükseklere çıkan",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/ˈsɔːrɪŋ/"
+  },
+  "societal": {
+    "tr": "toplumsal, topluma ait",
+    "primary": "toplum yapısına ilişkin",
+    "type": "Sıfat",
+    "phonetic": "/səˈsaɪətl/"
+  },
+  "societies": {
+    "tr": "toplumlar, cemiyetler",
+    "primary": "birlikte yaşayan insan grupları",
+    "type": "İsim",
+    "phonetic": "/səˈsaɪətiz/"
+  },
+  "society": {
+    "tr": "toplum, cemiyet",
+    "primary": "birlikte yaşayan insanlar bütünü",
+    "type": "İsim",
+    "phonetic": "/səˈsaɪəti/"
+  },
+  "solar": {
+    "tr": "güneş, güneşe ait",
+    "primary": "Güneş enerjisiyle ilgili",
+    "type": "Sıfat",
+    "phonetic": "/ˈsəʊlər/"
+  },
+  "solve": {
+    "tr": "çözmek, halletmek",
+    "primary": "soruna çare bulmak",
+    "type": "Fiil",
+    "phonetic": "/sɒlv/"
+  },
+  "some": {
+    "tr": "bazı, biraz, kimi",
+    "primary": "belirli olmayan bir miktar",
+    "type": "Belirteç / Zamir",
+    "phonetic": "/sʌm, səm/"
+  },
+  "sophisticated": {
+    "tr": "gelişmiş, sofistike, incelikli",
+    "primary": "yüksek düzeyde incelik taşıyan",
+    "type": "Sıfat",
+    "phonetic": "/səˈfɪstɪkeɪtɪd/"
+  },
+  "sound": {
+    "tr": "ses; sağlam, sağlıklı",
+    "primary": "işitilen ses dalgası; güvenilir",
+    "type": "İsim / Sıfat",
+    "phonetic": "/saʊnd/"
+  },
+  "southeastern": {
+    "tr": "güneydoğu, güneydoğuya ait",
+    "primary": "güneydoğu yönünde olan",
+    "type": "Sıfat",
+    "phonetic": "/ˌsaʊθˈiːstən/"
+  },
+  "space": {
+    "tr": "uzay; alan, boşluk",
+    "primary": "evren boşluğu; mesafe",
+    "type": "İsim",
+    "phonetic": "/speɪs/"
+  },
+  "sparked": {
+    "tr": "kıvılcım saçtı, ateşledi, başlattı",
+    "primary": "bir hareketi tetikledi",
+    "type": "Fiil",
+    "phonetic": "/spɑːkt/"
+  },
+  "specific": {
+    "tr": "belirli, özgül, hususi",
+    "primary": "özel olarak tanımlanmış",
+    "type": "Sıfat",
+    "phonetic": "/spəˈsɪfɪk/"
+  },
+  "spectators": {
+    "tr": "seyirciler, izleyiciler",
+    "primary": "gösteriyi izleyenler",
+    "type": "İsim",
+    "phonetic": "/spekˈteɪtəz/"
+  },
+  "spectroscopy": {
+    "tr": "spektroskopi, tayfölçüm",
+    "primary": "ışık tayfını inceleme yöntemi",
+    "type": "İsim",
+    "phonetic": "/spekˈtrɒskəpi/"
+  },
+  "speed": {
+    "tr": "hız, sürat",
+    "primary": "hareket hızı",
+    "type": "İsim",
+    "phonetic": "/spiːd/"
+  },
+  "spiritual": {
+    "tr": "ruhani, manevi",
+    "primary": "ruha ve inanca ait",
+    "type": "Sıfat",
+    "phonetic": "/ˈspɪrɪtʃuəl/"
+  },
+  "spoken": {
+    "tr": "konuşulan, sözlü",
+    "primary": "dile dökülen sözler",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/ˈspəʊkən/"
+  },
+  "sprawling": {
+    "tr": "geniş alana yayılan, serpilmiş",
+    "primary": "düzensizce genişleyen",
+    "type": "Sıfat",
+    "phonetic": "/ˈsprɔːlɪŋ/"
+  },
+  "spurred": {
+    "tr": "mahmuzladı, teşvik etti, tetikledi",
+    "primary": "harekete geçirdi",
+    "type": "Fiil",
+    "phonetic": "/spɜːd/"
+  },
+  "stages": {
+    "tr": "aşamalar, evreler; sahneler",
+    "primary": "gelişim basamakları; tiyatro sahnesi",
+    "type": "İsim",
+    "phonetic": "/ˈsteɪdʒɪz/"
+  },
+  "stained": {
+    "tr": "vitraylı, lekeli (stained glass)",
+    "primary": "renkli cam sanatı",
+    "type": "Sıfat",
+    "phonetic": "/steɪnd/"
+  },
+  "stands": {
+    "tr": "durur, yükselir; tribünler",
+    "primary": "ayakta durmak; heybetle yükselmek",
+    "type": "Fiil / İsim",
+    "phonetic": "/stændz/"
+  },
+  "stargazers": {
+    "tr": "yıldız gözlemcileri",
+    "primary": "gökbilim meraklıları",
+    "type": "İsim",
+    "phonetic": "/ˈstɑːɡeɪzəz/"
+  },
+  "state": {
+    "tr": "durum; devlet; ifade etmek",
+    "primary": "hâl, vaziyet; ülke yönetimi",
+    "type": "İsim / Fiil",
+    "phonetic": "/steɪt/"
+  },
+  "stellar": {
+    "tr": "yıldızlara ait, yıldızsal; muhteşem",
+    "primary": "yıldızlarla ilgili kozmik yapı",
+    "type": "Sıfat",
+    "phonetic": "/ˈstelər/"
+  },
+  "step": {
+    "tr": "adım, aşama; adım atmak",
+    "primary": "ayak hareketi, basamak",
+    "type": "İsim / Fiil",
+    "phonetic": "/step/"
+  },
+  "stepping": {
+    "tr": "adım atma, girişme",
+    "primary": "adımını atarak ilerleme",
+    "type": "Fiil / İsim",
+    "phonetic": "/ˈstepɪŋ/"
+  },
+  "stoic": {
+    "tr": "Stoacı, metanetli, dirençli",
+    "primary": "acıya ve talihe boyun eğmeyen",
+    "type": "Sıfat / İsim",
+    "phonetic": "/ˈstəʊɪk/"
+  },
+  "stoicism": {
+    "tr": "Stoacılık felsefesi, metanet",
+    "primary": "iç huzur ve erdem felsefesi",
+    "type": "İsim",
+    "phonetic": "/ˈstəʊɪsɪzəm/"
+  },
+  "stone": {
+    "tr": "taş; taş gibi sert",
+    "primary": "doğal kayaç maddesi",
+    "type": "İsim / Sıfat",
+    "phonetic": "/stəʊn/"
+  },
+  "stonehenge": {
+    "tr": "Stonehenge",
+    "primary": "İngiltere'deki gizemli megalitik anıt",
+    "type": "Özel İsim",
+    "phonetic": "/ˌstəʊnˈhendʒ/"
+  },
+  "stories": {
+    "tr": "hikayeler, öyküler; katlar",
+    "primary": "anlatılar; bina katları",
+    "type": "İsim",
+    "phonetic": "/ˈstɔːriz/"
+  },
+  "stormy": {
+    "tr": "fırtınalı, çalkantılı",
+    "primary": "şiddetli rüzgar ve fırtına içeren",
+    "type": "Sıfat",
+    "phonetic": "/ˈstɔːmi/"
+  },
+  "storytelling": {
+    "tr": "hikaye anlatıcılığı, masal sanatı",
+    "primary": "öykü aktarma sanatı",
+    "type": "İsim",
+    "phonetic": "/ˈstɔːritelɪŋ/"
+  },
+  "straight": {
+    "tr": "düz, doğru, doğrudan",
+    "primary": "eğrisi olmayan dosdoğru hat",
+    "type": "Sıfat / Zarf",
+    "phonetic": "/streɪt/"
+  },
+  "stream": {
+    "tr": "akarsu, akıntı; canlı yayın",
+    "primary": "sürekli akan su; veri akışı",
+    "type": "İsim / Fiil",
+    "phonetic": "/striːm/"
+  },
+  "strips": {
+    "tr": "şeritler, parçalar",
+    "primary": "uzun ve dar parçalar",
+    "type": "İsim",
+    "phonetic": "/strɪps/"
+  },
+  "structural": {
+    "tr": "yapısal, strüktürel",
+    "primary": "yapının çatısına ilişkin",
+    "type": "Sıfat",
+    "phonetic": "/ˈstrʌktʃərəl/"
+  },
+  "struggling": {
+    "tr": "mücadele eden, çabalayan",
+    "primary": "güçlüklerle savaşan",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/ˈstrʌɡlɪŋ/"
+  },
+  "style": {
+    "tr": "tarz, üslup, biçim",
+    "primary": "özgün anlatım biçimi",
+    "type": "İsim",
+    "phonetic": "/staɪl/"
+  },
+  "subtle": {
+    "tr": "ince, göze batmayan, zekice",
+    "primary": "kolay fark edilmeyen incelik",
+    "type": "Sıfat",
+    "phonetic": "/ˈsʌtl/"
+  },
+  "such": {
+    "tr": "böyle, bu gibi, böylesi",
+    "primary": "bu türde olan",
+    "type": "Belirteç",
+    "phonetic": "/sʌtʃ/"
+  },
+  "suggest": {
+    "tr": "önermek, ima etmek, düşündürmek",
+    "primary": "akla getirmek, tavsiye etmek",
+    "type": "Fiil",
+    "phonetic": "/səˈdʒest/"
+  },
+  "sunlight": {
+    "tr": "güneş ışığı",
+    "primary": "Güneş'ten yeryüzüne gelen ışık",
+    "type": "İsim",
+    "phonetic": "/ˈsʌnlaɪt/"
+  },
+  "support": {
+    "tr": "destek, dayanak; desteklemek",
+    "primary": "arka çıkmak, taşımak",
+    "type": "İsim / Fiil",
+    "phonetic": "/səˈpɔːt/"
+  },
+  "supporting": {
+    "tr": "destekleyen, taşıyıcı",
+    "primary": "yükü omuzlayan",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/səˈpɔːtɪŋ/"
+  },
+  "supreme": {
+    "tr": "yüce, en üstün, mutlak",
+    "primary": "en yüksek derecedeki",
+    "type": "Sıfat",
+    "phonetic": "/suːˈpriːm/"
+  },
+  "surface": {
+    "tr": "yüzey, satıh; su üstüne çıkmak",
+    "primary": "dış tabaka",
+    "type": "İsim / Fiil",
+    "phonetic": "/ˈsɜːfɪs/"
+  },
+  "sustain": {
+    "tr": "sürdürmek, ayakta tutmak, beslemek",
+    "primary": "yaşamı devam ettirmek",
+    "type": "Fiil",
+    "phonetic": "/səˈsteɪn/"
+  },
+  "synthesize": {
+    "tr": "sentezlemek, birleştirmek",
+    "primary": "parçaları birleştirip yeni bir bütün kurmak",
+    "type": "Fiil",
+    "phonetic": "/ˈsɪnθəsaɪz/"
+  },
+  "system": {
+    "tr": "sistem, düzenek, dizge",
+    "primary": "düzenli işleyen yapı",
+    "type": "İsim",
+    "phonetic": "/ˈsɪstəm/"
+  },
+  "systems": {
+    "tr": "sistemler, dizgeler",
+    "primary": "birbirine bağlı işleyiş düzenleri",
+    "type": "İsim",
+    "phonetic": "/ˈsɪstəmz/"
+  },
+  "1920s": {
+    "tr": "1920'ler",
+    "primary": "1920'li yıllar",
+    "type": "Tarih",
+    "phonetic": "/ˌnaɪnˈtiːn ˈtwentiːz/"
+  },
+  "t": {
+    "tr": "-t (didn't, haven't kısaltması)",
+    "primary": "not olumsuzluk ekinin kısaltması",
+    "type": "Ek",
+    "phonetic": "/t/"
+  },
+  "tales": {
+    "tr": "masallar, hikayeler, efsaneler",
+    "primary": "halk öyküleri",
+    "type": "İsim",
+    "phonetic": "/teɪlz/"
+  },
+  "technology": {
+    "tr": "teknoloji",
+    "primary": "bilimsel buluşların uygulamaya dönüştürülmesi",
+    "type": "İsim",
+    "phonetic": "/tekˈnɒlədʒi/"
+  },
+  "telescope": {
+    "tr": "teleskop, ırakgörür",
+    "primary": "uzaktaki gök cisimlerini inceleme aygıtı",
+    "type": "İsim",
+    "phonetic": "/ˈtelɪskəʊp/"
+  },
+  "tells": {
+    "tr": "anlatır, söyler",
+    "primary": "dile getirmek",
+    "type": "Fiil",
+    "phonetic": "/telz/"
+  },
+  "temperatures": {
+    "tr": "sıcaklıklar",
+    "primary": "ısı dereceleri",
+    "type": "İsim",
+    "phonetic": "/ˈtemprətʃəz/"
+  },
+  "temple": {
+    "tr": "tapınak, mabet",
+    "primary": "ibadethane",
+    "type": "İsim",
+    "phonetic": "/ˈtempl/"
+  },
+  "tension": {
+    "tr": "gerilim, tansiyon, gerginlik",
+    "primary": "gerilme kuvveti veya duygusal baskı",
+    "type": "İsim",
+    "phonetic": "/ˈtenʃn/"
+  },
+  "tent": {
+    "tr": "çadır",
+    "primary": "taşınabilir barınak",
+    "type": "İsim",
+    "phonetic": "/tent/"
+  },
+  "testament": {
+    "tr": "kanıt, vasiyet, şahitlik",
+    "primary": "açık bir kanıt veya tanıklık",
+    "type": "İsim",
+    "phonetic": "/ˈtestəmənt/"
+  },
+  "tests": {
+    "tr": "testler, deneyler; test eder",
+    "primary": "sınamalar; denemek",
+    "type": "İsim / Fiil",
+    "phonetic": "/tests/"
+  },
+  "their": {
+    "tr": "onların",
+    "primary": "3. çoğul şahıs iyelik sıfatı",
+    "type": "Belirteç",
+    "phonetic": "/ðeər/"
+  },
+  "theories": {
+    "tr": "teoriler, kuramlar",
+    "primary": "bilimsel varsayım sistemleri",
+    "type": "İsim",
+    "phonetic": "/ˈθɪəriz/"
+  },
+  "they": {
+    "tr": "onlar",
+    "primary": "3. çoğul şahıs zamiri",
+    "type": "Zamir",
+    "phonetic": "/ðeɪ/"
+  },
+  "thicken": {
+    "tr": "kalınlaşmak, koyulaşmak",
+    "primary": "yoğun hale gelmek",
+    "type": "Fiil",
+    "phonetic": "/ˈθɪkən/"
+  },
+  "thousand": {
+    "tr": "bin",
+    "primary": "1.000 sayısı",
+    "type": "Sayı",
+    "phonetic": "/ˈθaʊznd/"
+  },
+  "thousands": {
+    "tr": "binlerce",
+    "primary": "binler",
+    "type": "İsim / Sıfat",
+    "phonetic": "/ˈθaʊzndz/"
+  },
+  "through": {
+    "tr": "içinden, boyunca, vasıtasıyla",
+    "primary": "bir ucundan girip ötekinden çıkarak; aracılığıyla",
+    "type": "Edat",
+    "phonetic": "/θruː/"
+  },
+  "time": {
+    "tr": "zaman, vakit; kez, defa",
+    "primary": "zaman boyutu; an",
+    "type": "İsim",
+    "phonetic": "/taɪm/"
+  },
+  "timeless": {
+    "tr": "zamansız, eskimeyen, ölümsüz",
+    "primary": "çağlar boyu değerini yitirmeyen",
+    "type": "Sıfat",
+    "phonetic": "/ˈtaɪmləs/"
+  },
+  "today": {
+    "tr": "bugün, günümüzde",
+    "primary": "içinde bulunulan gün veya çağ",
+    "type": "Zarf / İsim",
+    "phonetic": "/təˈdeɪ/"
+  },
+  "tokyo": {
+    "tr": "Tokyo",
+    "primary": "Japonya'nın başkenti",
+    "type": "Özel İsim",
+    "phonetic": "/ˈtəʊkiəʊ/"
+  },
+  "tongue": {
+    "tr": "dil (organ); lisan",
+    "primary": "ağızdaki tat ve konuşma organı; dil",
+    "type": "İsim",
+    "phonetic": "/tʌŋ/"
+  },
+  "tons": {
+    "tr": "tonlarca, ton (ağırlık)",
+    "primary": "ağırlık ölçü birimi; büyük miktar",
+    "type": "İsim",
+    "phonetic": "/tʌnz/"
+  },
+  "took": {
+    "tr": "aldı, götürdü; sürdü",
+    "primary": "take fiilinin geçmiş hali",
+    "type": "Fiil",
+    "phonetic": "/tʊk/"
+  },
+  "tools": {
+    "tr": "araçlar, aletler",
+    "primary": "iş görmeye yarayan aygıtlar",
+    "type": "İsim",
+    "phonetic": "/tuːlz/"
+  },
+  "traditional": {
+    "tr": "geleneksel, ananevi",
+    "primary": "kuşaktan kuşağa aktarılan",
+    "type": "Sıfat",
+    "phonetic": "/trəˈdɪʃənl/"
+  },
+  "tramp": {
+    "tr": "serseri, avare (The Little Tramp)",
+    "primary": "Charlie Chaplin'in canlandırdığı ikonik karakter",
+    "type": "İsim",
+    "phonetic": "/træmp/"
+  },
+  "transformed": {
+    "tr": "dönüşmüş, başkalaşmış",
+    "primary": "köklü değişime uğramış",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/trænsˈfɔːmd/"
+  },
+  "transforms": {
+    "tr": "dönüştürür, biçimini değiştirir",
+    "primary": "başkalaştırmak",
+    "type": "Fiil",
+    "phonetic": "/trænsˈfɔːmz/"
+  },
+  "transition": {
+    "tr": "geçiş, intikal, dönüşüm",
+    "primary": "bir durumdan ötekine geçiş",
+    "type": "İsim",
+    "phonetic": "/trænˈzɪʃn/"
+  },
+  "translation": {
+    "tr": "çeviri, tercüme",
+    "primary": "bir dilden diğerine aktarma",
+    "type": "İsim",
+    "phonetic": "/trænzˈleɪʃn/"
+  },
+  "tree": {
+    "tr": "ağaç; soy ağacı",
+    "primary": "odunsu gövdesi olan bitki",
+    "type": "İsim",
+    "phonetic": "/triː/"
+  },
+  "trench": {
+    "tr": "okyanus hendeği, çukur; siper",
+    "primary": "okyanusun en derin taban yarığı",
+    "type": "İsim",
+    "phonetic": "/trentʃ/"
+  },
+  "tribes": {
+    "tr": "kabileler, boylar, oymaklar",
+    "primary": "akraba topluluklar",
+    "type": "İsim",
+    "phonetic": "/traɪbz/"
+  },
+  "triggers": {
+    "tr": "tetikler, başlatır; tetikler",
+    "primary": "bir süreci başlatmak; silah tetiği",
+    "type": "Fiil / İsim",
+    "phonetic": "/ˈtrɪɡəz/"
+  },
+  "trousers": {
+    "tr": "pantolon",
+    "primary": "bacakları örten giysi",
+    "type": "İsim",
+    "phonetic": "/ˈtraʊzəz/"
+  },
+  "true": {
+    "tr": "doğru, gerçek, hakiki",
+    "primary": "gerçeğe uygun",
+    "type": "Sıfat",
+    "phonetic": "/truː/"
+  },
+  "trunks": {
+    "tr": "ağaç gövdeleri; sandıklar; fil hortumu",
+    "primary": "ağacın kalın gövdesi",
+    "type": "İsim",
+    "phonetic": "/trʌŋks/"
+  },
+  "turbulent": {
+    "tr": "çalkantılı, fırtınalı, huzursuz",
+    "primary": "düzensiz akıntılı ve karışık",
+    "type": "Sıfat",
+    "phonetic": "/ˈtɜːbjələnt/"
+  },
+  "twelve": {
+    "tr": "on iki",
+    "primary": "12 sayısı",
+    "type": "Sayı",
+    "phonetic": "/twelv/"
+  },
+  "twenty": {
+    "tr": "yirmi",
+    "primary": "20 sayısı",
+    "type": "Sayı",
+    "phonetic": "/ˈtwenti/"
+  },
+  "two": {
+    "tr": "iki",
+    "primary": "2 sayısı",
+    "type": "Sayı",
+    "phonetic": "/tuː/"
+  },
+  "ultimate": {
+    "tr": "nihai, en son, en büyük",
+    "primary": "en üstün veya en son aşamadaki",
+    "type": "Sıfat",
+    "phonetic": "/ˈʌltɪmət/"
+  },
+  "unchangeable": {
+    "tr": "değiştirilemez, sabit",
+    "primary": "başkalaşması imkansız",
+    "type": "Sıfat",
+    "phonetic": "/ʌnˈtʃeɪndʒəbl/"
+  },
+  "unchanged": {
+    "tr": "değişmemiş, aynı kalmış",
+    "primary": "başkalaşıma uğramamış",
+    "type": "Sıfat",
+    "phonetic": "/ʌnˈtʃeɪndʒd/"
+  },
+  "uncrackable": {
+    "tr": "kırılamaz, şifresi çözülemez",
+    "primary": "çözümü imkansız şifre",
+    "type": "Sıfat",
+    "phonetic": "/ʌnˈkrækəbl/"
+  },
+  "under": {
+    "tr": "altında, aşağısında",
+    "primary": "bir şeyin tabanında",
+    "type": "Edat",
+    "phonetic": "/ˈʌndər/"
+  },
+  "understanding": {
+    "tr": "anlayış, kavrayış, idrak",
+    "primary": "olayları ve insanları anlama yetisi",
+    "type": "İsim",
+    "phonetic": "/ˌʌndəˈstændɪŋ/"
+  },
+  "understood": {
+    "tr": "anlaşıldı, kavranmış",
+    "primary": "understand fiilinin geçmiş hali",
+    "type": "Fiil / Sıfat",
+    "phonetic": "/ˌʌndəˈstʊd/"
+  },
+  "unforgettable": {
+    "tr": "unutulmaz, akıldan çıkmayan",
+    "primary": "hafızada silinmez iz bırakan",
+    "type": "Sıfat",
+    "phonetic": "/ˌʌnfəˈɡetəbl/"
+  },
+  "uninterrupted": {
+    "tr": "kesintisiz, aralıksız",
+    "primary": "bölünmeden devam eden",
+    "type": "Sıfat",
+    "phonetic": "/ˌʌnɪntəˈrʌptɪd/"
+  },
+  "unique": {
+    "tr": "eşsiz, benzersiz, tek",
+    "primary": "bir eşi ve benzeri bulunmayan",
+    "type": "Sıfat",
+    "phonetic": "/juˈniːk/"
+  },
+  "unite": {
+    "tr": "birleşmek, bütünleşmek",
+    "primary": "tek bir vücut olmak",
+    "type": "Fiil",
+    "phonetic": "/juˈnaɪt/"
+  },
+  "universal": {
+    "tr": "evrensel, cihanşümul",
+    "primary": "tüm dünyayı ve insanlığı kapsayan",
+    "type": "Sıfat",
+    "phonetic": "/ˌjuːnɪˈvɜːsl/"
+  },
+  "universe": {
+    "tr": "evren, kainat",
+    "primary": "tüm gök cisimleri ve uzay bütünü",
+    "type": "İsim",
+    "phonetic": "/ˈjuːnɪvɜːs/"
+  },
+  "university": {
+    "tr": "üniversite",
+    "primary": "yükseköğretim ve araştırma kurumu",
+    "type": "İsim",
+    "phonetic": "/ˌjuːnɪˈvɜːsəti/"
+  },
+  "unlike": {
+    "tr": "aksine, -den farklı olarak",
+    "primary": "benzeri olmaksızın",
+    "type": "Edat",
+    "phonetic": "/ˌʌnˈlaɪk/"
+  },
+  "unlocked": {
+    "tr": "kilidi açılmış, serbest kalmış",
+    "primary": "engeli kaldırılmış",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/ʌnˈlɒkt/"
+  },
+  "unlocking": {
+    "tr": "kilidini açma, sırrı çözme",
+    "primary": "saklı potansiyeli ortaya çıkarma",
+    "type": "Fiil / İsim",
+    "phonetic": "/ʌnˈlɒkɪŋ/"
+  },
+  "unprecedented": {
+    "tr": "benzeri görülmemiş, eşi duyulmamış",
+    "primary": "tarihte ilk kez olan",
+    "type": "Sıfat",
+    "phonetic": "/ʌnˈpresɪdentɪd/"
+  },
+  "unpredictable": {
+    "tr": "öngörülemez, kestirilemez",
+    "primary": "önceden tahmin edilmesi imkansız",
+    "type": "Sıfat",
+    "phonetic": "/ˌʌnprɪˈdɪktəbl/"
+  },
+  "unsuspecting": {
+    "tr": "şüphelenmeyen, habersiz, saf",
+    "primary": "yaklaşan tehlikenin farkında olmayan",
+    "type": "Sıfat",
+    "phonetic": "/ˌʌnsəˈspektɪŋ/"
+  },
+  "until": {
+    "tr": "-e kadar, değin",
+    "primary": "belirli bir ana kadar",
+    "type": "Edat / Bağlaç",
+    "phonetic": "/ənˈtɪl/"
+  },
+  "untranslatable": {
+    "tr": "çevrilemez, tercüme edilemez",
+    "primary": "başka bir dile tam aktarılamayan",
+    "type": "Sıfat",
+    "phonetic": "/ˌʌntrænsˈleɪtəbl/"
+  },
+  "unveiling": {
+    "tr": "açığa çıkarma, gözler önüne serme",
+    "primary": "örtüyü kaldırıp sergileme",
+    "type": "İsim / Fiil",
+    "phonetic": "/ʌnˈveɪlɪŋ/"
+  },
+  "unwavering": {
+    "tr": "sarsılmaz, kararlı, tavizsiz",
+    "primary": "hiç tereddüt etmeyen inanç",
+    "type": "Sıfat",
+    "phonetic": "/ʌnˈweɪvərɪŋ/"
+  },
+  "up": {
+    "tr": "yukarı, üstte; uyanık",
+    "primary": "yüksek konuma doğru",
+    "type": "Edat / Zarf",
+    "phonetic": "/ʌp/"
+  },
+  "us": {
+    "tr": "bizi, bize",
+    "primary": "biz zamirinin nesne hali",
+    "type": "Zamir",
+    "phonetic": "/ʌs, əs/"
+  },
+  "use": {
+    "tr": "kullanmak; kullanım",
+    "primary": "yararlanmak, sarf etmek",
+    "type": "Fiil / İsim",
+    "phonetic": "/juːz, juːs/"
+  },
+  "uses": {
+    "tr": "kullanır; kullanımlar",
+    "primary": "kullanmak fiilinin 3. tekil hali",
+    "type": "Fiil / İsim",
+    "phonetic": "/ˈjuːzɪz/"
+  },
+  "vapor": {
+    "tr": "buhar (su buharı)",
+    "primary": "gaz halindeki sıvı",
+    "type": "İsim",
+    "phonetic": "/ˈveɪpər/"
+  },
+  "vaults": {
+    "tr": "tonozlar, kemerli tavanlar; kasalar",
+    "primary": "kavisli tavan mimarisi",
+    "type": "İsim",
+    "phonetic": "/vɔːlts/"
+  },
+  "via": {
+    "tr": "yoluyla, vasıtasıyla, üzerinden",
+    "primary": "aracılığıyla",
+    "type": "Edat",
+    "phonetic": "/ˈvaɪə/"
+  },
+  "vibrant": {
+    "tr": "canlı, ışıltılı, hayat dolu",
+    "primary": "canlı renkler ve enerji barındıran",
+    "type": "Sıfat",
+    "phonetic": "/ˈvaɪbrənt/"
+  },
+  "video": {
+    "tr": "video, görüntülü kayıt",
+    "primary": "hareketli görsel kayıt",
+    "type": "İsim",
+    "phonetic": "/ˈvɪdiəʊ/"
+  },
+  "virtual": {
+    "tr": "sanal, adeta, fiili",
+    "primary": "bilgisayar ortamında var olan",
+    "type": "Sıfat",
+    "phonetic": "/ˈvɜːtʃuəl/"
+  },
+  "virtue": {
+    "tr": "erdem, fazilet, meziyet",
+    "primary": "ahlaki olgunluk ve doğruluk",
+    "type": "İsim",
+    "phonetic": "/ˈvɜːtʃuː/"
+  },
+  "visible": {
+    "tr": "görünür, gözle görülebilir",
+    "primary": "gözle algılanabilen",
+    "type": "Sıfat",
+    "phonetic": "/ˈvɪzəbl/"
+  },
+  "visionary": {
+    "tr": "vizyoner, ileri görüşlü",
+    "primary": "geleceği öngören dahi",
+    "type": "Sıfat / İsim",
+    "phonetic": "/ˈvɪʒənri/"
+  },
+  "visual": {
+    "tr": "görsel, görmeye ait",
+    "primary": "görme duyusuyla ilgili",
+    "type": "Sıfat",
+    "phonetic": "/ˈvɪʒuəl/"
+  },
+  "vivid": {
+    "tr": "canlı, capcanlı, berrak",
+    "primary": "hafızada net kalan zengin görüntü",
+    "type": "Sıfat",
+    "phonetic": "/ˈvɪvɪd/"
+  },
+  "void": {
+    "tr": "boşluk, dipsiz karanlık, hükümsüz",
+    "primary": "hiçlik ve derin boşluk",
+    "type": "İsim / Sıfat",
+    "phonetic": "/vɔɪd/"
+  },
+  "volume": {
+    "tr": "hacim; ses seviyesi; cilt",
+    "primary": "kaplanan alan; ses düzeyi",
+    "type": "İsim",
+    "phonetic": "/ˈvɒljuːm/"
+  },
+  "voynich": {
+    "tr": "Voynich (Voynich El Yazması)",
+    "primary": "Tarihin çözülememiş en gizemli elyazması",
+    "type": "Özel İsim",
+    "phonetic": "/ˈvɔɪnɪtʃ/"
+  },
+  "vultures": {
+    "tr": "akbabalar",
+    "primary": "leş yiyen yırtıcı kuşlar",
+    "type": "İsim",
+    "phonetic": "/ˈvʌltʃəz/"
+  },
+  "wake": {
+    "tr": "uyanmak, uyandırmak; dümen suyu",
+    "primary": "uyku durumundan çıkmak",
+    "type": "Fiil / İsim",
+    "phonetic": "/weɪk/"
+  },
+  "walk": {
+    "tr": "yürümek; yürüyüş",
+    "primary": "adım atarak ilerlemek",
+    "type": "Fiil / İsim",
+    "phonetic": "/wɔːk/"
+  },
+  "walking": {
+    "tr": "yürüme, yürüyüş",
+    "primary": "adım atma eylemi",
+    "type": "İsim / Fiil",
+    "phonetic": "/ˈwɔːkɪŋ/"
+  },
+  "water": {
+    "tr": "su; sulamak",
+    "primary": "yaşam kaynağı sıvı bileşik",
+    "type": "İsim / Fiil",
+    "phonetic": "/ˈwɔːtər/"
+  },
+  "waterways": {
+    "tr": "su yolları, kanallar",
+    "primary": "ulaşım sağlanan nehir/kanal yolları",
+    "type": "İsim",
+    "phonetic": "/ˈwɔːtəweɪz/"
+  },
+  "we": {
+    "tr": "biz",
+    "primary": "1. çoğul şahıs zamiri",
+    "type": "Zamir",
+    "phonetic": "/wiː/"
+  },
+  "wealthy": {
+    "tr": "zengin, varlıklı",
+    "primary": "maddi imkanları geniş olan",
+    "type": "Sıfat",
+    "phonetic": "/ˈwelθi/"
+  },
+  "weather": {
+    "tr": "hava, hava durumu",
+    "primary": "meteorolojik durum",
+    "type": "İsim",
+    "phonetic": "/ˈweðər/"
+  },
+  "webb": {
+    "tr": "Webb (James Webb)",
+    "primary": "James Webb Uzay Teleskobu",
+    "type": "Özel İsim",
+    "phonetic": "/web/"
+  },
+  "weep": {
+    "tr": "ağlamak, gözyaşı dökmek",
+    "primary": "içten içe gözyaşı dökmek",
+    "type": "Fiil",
+    "phonetic": "/wiːp/"
+  },
+  "weighing": {
+    "tr": "tartma; ağırlığında olma",
+    "primary": "kütlesi gelme",
+    "type": "Fiil / İsim",
+    "phonetic": "/ˈweɪɪŋ/"
+  },
+  "weight": {
+    "tr": "ağırlık, sıklet, yük",
+    "primary": "yerçekiminin cisme uyguladığı kuvvet",
+    "type": "İsim",
+    "phonetic": "/weɪt/"
+  },
+  "western": {
+    "tr": "batı, batılı",
+    "primary": "Batı dünyasına veya yönüne ait",
+    "type": "Sıfat",
+    "phonetic": "/ˈwestən/"
+  },
+  "what": {
+    "tr": "ne, neyi, şey",
+    "primary": "soru zamiri veya ilgi zamiri",
+    "type": "Zamir / Belirteç",
+    "phonetic": "/wɒt/"
+  },
+  "wheat": {
+    "tr": "buğday",
+    "primary": "ekmek yapılan temel tahıl bitkisi",
+    "type": "İsim",
+    "phonetic": "/wiːt/"
+  },
+  "when": {
+    "tr": "ne zaman, -dığı zaman",
+    "primary": "zaman zarfı veya bağlacı",
+    "type": "Zarf / Bağlaç",
+    "phonetic": "/wen/"
+  },
+  "where": {
+    "tr": "nerede, nereye, -dığı yer",
+    "primary": "yer soru veya ilgi zarfı",
+    "type": "Zarf",
+    "phonetic": "/weər/"
+  },
+  "whether": {
+    "tr": "olup olmadığını, gerek... gerek",
+    "primary": "ikili seçenek bağlacı",
+    "type": "Bağlaç",
+    "phonetic": "/ˈweðər/"
+  },
+  "which": {
+    "tr": "hangi, hangisi, ki o",
+    "primary": "seçim bildiren zamir",
+    "type": "Zamir / Belirteç",
+    "phonetic": "/wɪtʃ/"
+  },
+  "while": {
+    "tr": "iken, -e rağmen; süre",
+    "primary": "aynı esnada; zaman dilimi",
+    "type": "Bağlaç / İsim",
+    "phonetic": "/waɪl/"
+  },
+  "white": {
+    "tr": "beyaz, ak",
+    "primary": "tüm ışığı yansıtan renk",
+    "type": "Sıfat / İsim",
+    "phonetic": "/waɪt/"
+  },
+  "who": {
+    "tr": "kim, ki o",
+    "primary": "insanlar için soru ve ilgi zamiri",
+    "type": "Zamir",
+    "phonetic": "/huː/"
+  },
+  "why": {
+    "tr": "neden, niçin, niye",
+    "primary": "sebep soran soru sözcüğü",
+    "type": "Zarf",
+    "phonetic": "/waɪ/"
+  },
+  "widely": {
+    "tr": "yaygın olarak, geniş çapta",
+    "primary": "büyük bir kitle tarafından",
+    "type": "Zarf",
+    "phonetic": "/ˈwaɪdli/"
+  },
+  "wilfrid": {
+    "tr": "Wilfrid (Wilfrid Voynich)",
+    "primary": "Voynich el yazmasını bulan sahaf",
+    "type": "Özel İsim",
+    "phonetic": "/ˈwɪlfrɪd/"
+  },
+  "will": {
+    "tr": "-ecek, -acak; irade, vasiyet",
+    "primary": "gelecek zaman eki; istek gücü",
+    "type": "Yardımcı Fiil / İsim",
+    "phonetic": "/wɪl/"
+  },
+  "windows": {
+    "tr": "pencereler",
+    "primary": "ışık alan açıklıklar; camlar",
+    "type": "İsim",
+    "phonetic": "/ˈwɪndəʊz/"
+  },
+  "wire": {
+    "tr": "tel, kablo; telgraf çekmek",
+    "primary": "metal iletken hat",
+    "type": "İsim / Fiil",
+    "phonetic": "/ˈwaɪər/"
+  },
+  "wisdom": {
+    "tr": "bilgelik, hikmet, irfan",
+    "primary": "derin kavrayış ve doğru yargı yeteneği",
+    "type": "İsim",
+    "phonetic": "/ˈwɪzdəm/"
+  },
+  "within": {
+    "tr": "içinde, dahilinde",
+    "primary": "sınırların içinde",
+    "type": "Edat / Zarf",
+    "phonetic": "/wɪˈðɪn/"
+  },
+  "without": {
+    "tr": "-sız, -siz, olmaksızın",
+    "primary": "bulunmadan, hariç tutularak",
+    "type": "Edat",
+    "phonetic": "/wɪˈðaʊt/"
+  },
+  "wonder": {
+    "tr": "harika, merak; merak etmek",
+    "primary": "hayranlık uyandıran mucize; düşünmek",
+    "type": "İsim / Fiil",
+    "phonetic": "/ˈwʌndər/"
+  },
+  "words": {
+    "tr": "kelimeler, sözcükler, sözler",
+    "primary": "anlam taşıyan ses birlikleri",
+    "type": "İsim",
+    "phonetic": "/wɜːdz/"
+  },
+  "work": {
+    "tr": "iş, çalışma; çalışmak, işlemek",
+    "primary": "emek sarf etmek; eser",
+    "type": "İsim / Fiil",
+    "phonetic": "/wɜːk/"
+  },
+  "world": {
+    "tr": "dünya, alem, yeryüzü",
+    "primary": "üzerinde yaşadığımız gezegen",
+    "type": "İsim",
+    "phonetic": "/wɜːld/"
+  },
+  "worlds": {
+    "tr": "dünyalar, alemler",
+    "primary": "farklı gezegenler veya sahalar",
+    "type": "İsim",
+    "phonetic": "/wɜːldz/"
+  },
+  "would": {
+    "tr": "-erdi, -ecekti, isterdi",
+    "primary": "will fiilinin geçmiş veya şart kipi",
+    "type": "Yardımcı Fiil",
+    "phonetic": "/wʊd, wəd/"
+  },
+  "writing": {
+    "tr": "yazı, yazma, metin",
+    "primary": "yazılı ifade biçimi",
+    "type": "İsim / Fiil",
+    "phonetic": "/ˈraɪtɪŋ/"
+  },
+  "written": {
+    "tr": "yazılmış, yazılı",
+    "primary": "yazıya dökülmüş",
+    "type": "Sıfat / Fiil",
+    "phonetic": "/ˈrɪtn/"
+  },
+  "yale": {
+    "tr": "Yale (Yale Üniversitesi)",
+    "primary": "Dünyaca ünlü araştırma üniversitesi",
+    "type": "Özel İsim",
+    "phonetic": "/jeɪl/"
+  },
+  "years": {
+    "tr": "yıllar, seneler",
+    "primary": "365 günlük zaman birimleri",
+    "type": "İsim",
+    "phonetic": "/jɪəz/"
+  },
+  "yet": {
+    "tr": "henüz; yine de, ama",
+    "primary": "şimdiye kadar; bununla birlikte",
+    "type": "Zarf / Bağlaç",
+    "phonetic": "/jet/"
+  },
+  "you": {
+    "tr": "sen, siz",
+    "primary": "2. şahıs zamiri",
+    "type": "Zamir",
+    "phonetic": "/juː/"
+  },
+  "your": {
+    "tr": "senin, sizin",
+    "primary": "2. şahıs iyelik belirteci",
+    "type": "Belirteç",
+    "phonetic": "/jɔːr/"
+  },
+  "zone": {
+    "tr": "bölge, alan, kuşak",
+    "primary": "belirli sınırları olan saha",
+    "type": "İsim",
+    "phonetic": "/zəʊn/"
+  }
+}

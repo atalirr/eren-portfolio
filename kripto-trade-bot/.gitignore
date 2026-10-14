@@ -1,0 +1,47 @@
+# Gizli anahtarlar ve hassas veriler - ASLA repoya commit etme
+.env
+.env.*
+!.env.example
+
+# Bakiye, Durum, İşlem ve Sinyal Kayıtları (Gerçek veya test verisi sızıntısını önler)
+bot_ledger*.json
+bot_state.json
+scan_state.json
+fleet_state.json
+signal_log.json
+signal_filter.json
+signal_filter_meta.json
+trade_history*.jsonl
+backtest_results*.json
+optimization_result.json
+reports/
+
+# Python derleme dosyaları
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Rapor ve doküman çıktıları
+*.docx
+*.pdf
+
+# Frontend bağımlılıkları ve derleme çıktıları
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+node_modules/
+
+# Geçici / yedek ve test scriptleri
+scratch/
+scratch_*.py
+.agents/
+*.bak
+*.log
+npm-debug.log*
+
+# IDE ve İşletim Sistemi dosyaları
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

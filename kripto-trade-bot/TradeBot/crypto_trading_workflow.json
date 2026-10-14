@@ -1,0 +1,504 @@
+{
+  "name": "Multi-Agent Crypto Day Trading Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 15
+            }
+          ]
+        }
+      },
+      "id": "node-schedule-trigger",
+      "name": "Every 15 Minutes",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [240, 400]
+    },
+    {
+      "parameters": {
+        "url": "https://api.binance.com/api/v3/ticker/24hr",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "id": "node-binance-ticker",
+      "name": "Binance 24h Ticker",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [460, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Sort all tickers by quoteVolume descending and pick top 3\nconst tickers = $input.all().map(item => item.json);\n\nconst sorted = tickers\n  .filter(t => t.symbol.endsWith('USDT'))\n  .sort((a, b) => parseFloat(b.quoteVolume) - parseFloat(a.quoteVolume))\n  .slice(0, 3)\n  .map(t => ({\n    symbol: t.symbol,\n    price: parseFloat(t.lastPrice),\n    volume: parseFloat(t.quoteVolume),\n    priceChangePercent: parseFloat(t.priceChangePercent)\n  }));\n\nreturn sorted.map(coin => ({ json: coin }));"
+      },
+      "id": "node-filter-top3",
+      "name": "Filter Top 3 Coins",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [680, 400]
+    },
+    {
+      "parameters": {
+        "url": "=https://cryptopanic.com/api/v1/posts/?auth_token=YOUR_CRYPTOPANIC_API_KEY&currencies={{ $json.symbol.replace('USDT','') }}&filter=important&public=true",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "id": "node-fetch-news",
+      "name": "Fetch News per Coin",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [900, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Merge coin data with its news results\nconst coin = $('Filter Top 3 Coins').item.json;\nconst newsData = $input.item.json;\n\nconst headlines = (newsData.results || [])\n  .slice(0, 5)\n  .map(n => n.title)\n  .join('\\n');\n\nreturn [{\n  json: {\n    symbol: coin.symbol,\n    price: coin.price,\n    volume: coin.volume,\n    priceChangePercent: coin.priceChangePercent,\n    newsHeadlines: headlines || 'No recent news found.'\n  }\n}];"
+      },
+      "id": "node-merge-news",
+      "name": "Merge Coin + News",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1120, 400]
+    },
+    {
+      "parameters": {
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpQueryAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "key",
+              "value": "YOUR_GEMINI_API_KEY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"contents\": [\n    {\n      \"parts\": [\n        {\n          \"text\": \"You are a crypto market sentiment analyst. Analyze the following news headlines for {{ $json.symbol }} and return ONLY a JSON object with this exact format: {\\\"score\\\": 0.75, \\\"reason\\\": \\\"brief reason in one sentence\\\"}. Score must be between -1 (very negative) and 1 (very positive). Headlines:\\n{{ $json.newsHeadlines }}\"\n        }\n      ]\n    }\n  ],\n  \"generationConfig\": {\n    \"temperature\": 0.2,\n    \"maxOutputTokens\": 200\n  }\n}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "id": "node-gemini-sentiment",
+      "name": "Gemini Sentiment Analysis",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1340, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse Gemini response and attach to coin data\nconst coinData = $('Merge Coin + News').item.json;\nconst geminiResponse = $input.item.json;\n\nlet score = 0;\nlet reason = 'N/A';\n\ntry {\n  const rawText = geminiResponse?.candidates?.[0]?.content?.parts?.[0]?.text || '{}';\n  const cleaned = rawText.replace(/```json|```/g, '').trim();\n  const parsed = JSON.parse(cleaned);\n  score = parsed.score ?? 0;\n  reason = parsed.reason ?? 'No reason provided';\n} catch(e) {\n  score = 0;\n  reason = 'Failed to parse Gemini response';\n}\n\nreturn [{\n  json: {\n    ...coinData,\n    geminiScore: score,\n    geminiReason: reason\n  }\n}];"
+      },
+      "id": "node-parse-gemini",
+      "name": "Parse Gemini Score",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1560, 400]
+    },
+    {
+      "parameters": {
+        "url": "=https://api.binance.com/api/v3/klines?symbol={{ $json.symbol }}&interval=15m&limit=50",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "id": "node-binance-candles",
+      "name": "Fetch 15m Candles",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1780, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Format candle data and merge with coin info\nconst coinData = $('Parse Gemini Score').item.json;\nconst candles = $input.item.json;\n\n// Extract OHLCV from last 20 candles for context\nconst formatted = candles.slice(-20).map(c => ({\n  time: new Date(c[0]).toISOString(),\n  open: parseFloat(c[1]),\n  high: parseFloat(c[2]),\n  low: parseFloat(c[3]),\n  close: parseFloat(c[4]),\n  volume: parseFloat(c[5])\n}));\n\nconst lastClose = formatted[formatted.length - 1]?.close || coinData.price;\n\nreturn [{\n  json: {\n    ...coinData,\n    currentPrice: lastClose,\n    candles: JSON.stringify(formatted)\n  }\n}];"
+      },
+      "id": "node-format-candles",
+      "name": "Format Candle Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2000, 400]
+    },
+    {
+      "parameters": {
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer YOUR_OPENROUTER_API_KEY"
+            },
+            {
+              "name": "HTTP-Referer",
+              "value": "https://tradebot.local"
+            },
+            {
+              "name": "X-Title",
+              "value": "CryptoTradeBot"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"deepseek/deepseek-chat\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"You are an expert crypto technical analyst. Analyze 15-minute OHLCV candle data and provide a trading decision. ALWAYS respond with ONLY valid JSON in this exact format: {\\\"decision\\\": \\\"Buy\\\", \\\"stopLoss\\\": 42000.50, \\\"confidence\\\": 0.82, \\\"technicalReason\\\": \\\"brief technical analysis summary\\\"}. Decision must be exactly 'Buy' or 'Wait'. stopLoss is the calculated dynamic stop-loss price level.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Analyze {{ $json.symbol }} with current price {{ $json.currentPrice }}. Here are the last 20 x 15-minute candles (OHLCV JSON): {{ $json.candles }}. Apply RSI, EMA crossover, support/resistance, and volume analysis. Determine if this is a good entry point and calculate a dynamic stop-loss level.\"\n    }\n  ],\n  \"max_tokens\": 300,\n  \"temperature\": 0.1\n}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "id": "node-deepseek-analysis",
+      "name": "DeepSeek Technical Analysis",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2220, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse DeepSeek response and build final decision object\nconst coinData = $('Format Candle Data').item.json;\nconst dsResponse = $input.item.json;\n\nlet decision = 'Wait';\nlet stopLoss = coinData.currentPrice * 0.98;\nlet confidence = 0;\nlet technicalReason = 'N/A';\n\ntry {\n  const rawText = dsResponse?.choices?.[0]?.message?.content || '{}';\n  const cleaned = rawText.replace(/```json|```/g, '').trim();\n  const parsed = JSON.parse(cleaned);\n  decision = parsed.decision ?? 'Wait';\n  stopLoss = parsed.stopLoss ?? stopLoss;\n  confidence = parsed.confidence ?? 0;\n  technicalReason = parsed.technicalReason ?? 'No analysis';\n} catch(e) {\n  decision = 'Wait';\n  technicalReason = 'Failed to parse DeepSeek response';\n}\n\nreturn [{\n  json: {\n    ...coinData,\n    deepseekDecision: decision,\n    stopLoss: parseFloat(stopLoss.toFixed(6)),\n    deepseekConfidence: confidence,\n    technicalReason: technicalReason,\n    timestamp: new Date().toISOString()\n  }\n}];"
+      },
+      "id": "node-parse-deepseek",
+      "name": "Parse DeepSeek Decision",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2440, 400]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "cond-gemini-score",
+              "leftValue": "={{ $json.geminiScore }}",
+              "rightValue": 0.4,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            },
+            {
+              "id": "cond-deepseek-buy",
+              "leftValue": "={{ $json.deepseekDecision }}",
+              "rightValue": "Buy",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "node-if-decision",
+      "name": "IF: Gemini > 0.4 AND DeepSeek = Buy",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [2660, 400]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_SHEETS_ID",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Trades",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{ $json.timestamp }}",
+            "Coin": "={{ $json.symbol }}",
+            "Price": "={{ $json.currentPrice }}",
+            "StopLoss": "={{ $json.stopLoss }}",
+            "GeminiScore": "={{ $json.geminiScore }}",
+            "GeminiReason": "={{ $json.geminiReason }}",
+            "DeepSeekConfidence": "={{ $json.deepseekConfidence }}",
+            "TechnicalReason": "={{ $json.technicalReason }}",
+            "Volume24h": "={{ $json.volume }}",
+            "PriceChange%": "={{ $json.priceChangePercent }}"
+          }
+        },
+        "options": {}
+      },
+      "id": "node-sheets-trade",
+      "name": "Log Trade to Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [2900, 280],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_GOOGLE_SHEETS_CREDENTIAL_ID",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "YOUR_TELEGRAM_CHAT_ID",
+        "text": "=🚀 *TRADE SIGNAL DETECTED*\n\n📈 *Coin:* `{{ $json.symbol }}`\n💰 *Price:* `${{ $json.currentPrice }}`\n🛑 *Stop-Loss:* `${{ $json.stopLoss }}`\n\n🤖 *Gemini Sentiment Score:* `{{ $json.geminiScore }}`\n💬 *Sentiment Reason:* {{ $json.geminiReason }}\n\n📊 *DeepSeek Decision:* ✅ `{{ $json.deepseekDecision }}`\n🎯 *Confidence:* `{{ ($json.deepseekConfidence * 100).toFixed(0) }}%`\n📉 *Technical Analysis:* {{ $json.technicalReason }}\n\n📦 *24h Volume:* `${{ ($json.volume / 1000000).toFixed(2) }}M`\n📊 *24h Change:* `{{ $json.priceChangePercent }}%`\n\n⏰ `{{ $json.timestamp }}`",
+        "additionalFields": {
+          "parse_mode": "Markdown"
+        }
+      },
+      "id": "node-telegram-alert",
+      "name": "Telegram Trade Alert",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [3120, 280],
+      "credentials": {
+        "telegramApi": {
+          "id": "YOUR_TELEGRAM_CREDENTIAL_ID",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_SHEETS_ID",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Backtest History",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{ $json.timestamp }}",
+            "Coin": "={{ $json.symbol }}",
+            "Price": "={{ $json.currentPrice }}",
+            "Status": "=WAIT",
+            "GeminiScore": "={{ $json.geminiScore }}",
+            "GeminiReason": "={{ $json.geminiReason }}",
+            "DeepSeekDecision": "={{ $json.deepseekDecision }}",
+            "TechnicalReason": "={{ $json.technicalReason }}",
+            "Volume24h": "={{ $json.volume }}",
+            "PriceChange%": "={{ $json.priceChangePercent }}"
+          }
+        },
+        "options": {}
+      },
+      "id": "node-sheets-wait",
+      "name": "Log Wait to Backtest History",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [2900, 540],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_GOOGLE_SHEETS_CREDENTIAL_ID",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Every 15 Minutes": {
+      "main": [
+        [
+          {
+            "node": "Binance 24h Ticker",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Binance 24h Ticker": {
+      "main": [
+        [
+          {
+            "node": "Filter Top 3 Coins",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Top 3 Coins": {
+      "main": [
+        [
+          {
+            "node": "Fetch News per Coin",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch News per Coin": {
+      "main": [
+        [
+          {
+            "node": "Merge Coin + News",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Coin + News": {
+      "main": [
+        [
+          {
+            "node": "Gemini Sentiment Analysis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini Sentiment Analysis": {
+      "main": [
+        [
+          {
+            "node": "Parse Gemini Score",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Gemini Score": {
+      "main": [
+        [
+          {
+            "node": "Fetch 15m Candles",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch 15m Candles": {
+      "main": [
+        [
+          {
+            "node": "Format Candle Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Candle Data": {
+      "main": [
+        [
+          {
+            "node": "DeepSeek Technical Analysis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DeepSeek Technical Analysis": {
+      "main": [
+        [
+          {
+            "node": "Parse DeepSeek Decision",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse DeepSeek Decision": {
+      "main": [
+        [
+          {
+            "node": "IF: Gemini > 0.4 AND DeepSeek = Buy",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF: Gemini > 0.4 AND DeepSeek = Buy": {
+      "main": [
+        [
+          {
+            "node": "Log Trade to Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log Wait to Backtest History",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Trade to Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Telegram Trade Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": ""
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "createdAt": "2026-03-19T12:00:00.000Z",
+      "updatedAt": "2026-03-19T12:00:00.000Z",
+      "id": "tag-crypto-bot",
+      "name": "crypto-trading"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2026-03-19T12:00:00.000Z",
+  "versionId": "1"
+}

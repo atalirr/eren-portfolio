@@ -1,0 +1,12 @@
+# Environment Variables & Secrets
+.env
+.env.*
+!.env.example
+
+# Dependencies
+node_modules/
+
+# Logs & OS artifacts
+Thumbs.db
+.DS_Store
+*.log

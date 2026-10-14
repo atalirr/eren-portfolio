@@ -1,0 +1,67 @@
+# ==========================================
+# GÜVENLİK & GİZLİLİK (ASLA DEĞİŞTİRMEYİN)
+# ==========================================
+# Çevre değişkenleri ve gizli anahtarlar (.env)
+.env
+.env.*
+**/.env
+**/.env.*
+!**/.env.example
+
+# Veritabanı ve yerel ikili dosyalar
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+**/*.db
+**/*.sqlite
+
+# Finans / Log / Geçmiş verileri
+**/bot_ledger*.json
+**/bot_state.json
+**/scan_state.json
+**/fleet_state.json
+**/signal_log.json
+**/signal_filter*.json
+**/trade_history*.jsonl
+**/backtest_results*.json
+**/optimization_result.json
+
+# ==========================================
+# BAĞIMLILIKLAR VE ÇIKTILAR (HEAVY FILES)
+# ==========================================
+node_modules/
+**/node_modules/
+dist/
+**/dist/
+build/
+**/build/
+out/
+**/out/
+
+# Python derleme dosyaları
+__pycache__/
+**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Log dosyaları
+*.log
+**/*.log
+npm-debug.log*
+yarn-debug.log*
+
+# ==========================================
+# İŞLETİM SİSTEMİ & EDİTÖR
+# ==========================================
+.DS_Store
+Thumbs.db
+.vscode/
+**/.vscode/
+.idea/
+**/.idea/
+.agents/
+**/.agents/
+.agent/
+**/.agent/
