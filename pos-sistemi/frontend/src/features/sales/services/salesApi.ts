@@ -1,0 +1,289 @@
+/**
+ * Sales API Service
+ */
+
+import { apiClient } from '@/shared/utils/api.client';
+import { OrderCreate, Product, Category } from '../types/sales.types';
+
+export interface StockAdvisoryBadge {
+  code: 'STAR' | 'VOLUME' | 'DEAD_STOCK' | 'CRITICAL_ORDER' | 'HEALTHY';
+  label: string;
+  color: 'purple' | 'red' | 'amber' | 'blue' | 'emerald';
+}
+
+export interface StockAdvisoryItem {
+  id: string;
+  name: string;
+  brand: string;
+  category: string;
+  barcode: string;
+  sku: string;
+  salesCount: number;
+  totalRevenue: number;
+  totalCost: number;
+  profit: number;
+  profitMargin: number;
+  stock: number;
+  stockStatus: 'critical' | 'low' | 'ok';
+  criticalLevel: number;
+  buy_price: number;
+  sell_price: number;
+  sold_30d: number;
+  sold_90d: number;
+  v_30: number;
+  v_90: number;
+  daily_demand: number;
+  safety_stock: number;
+  reorder_point: number;
+  recommended_order_qty: number;
+  days_remaining: number | null;
+  classification: 'STAR' | 'VOLUME' | 'DEAD_STOCK' | 'CRITICAL_ORDER' | 'HEALTHY';
+  badge: StockAdvisoryBadge;
+  advice: string;
+  rationale: string;
+  is_critical: boolean;
+  is_star: boolean;
+  is_dead_stock: boolean;
+  is_volume: boolean;
+  trend: 'up' | 'down' | 'stable';
+  trendPercent: number;
+}
+
+export interface StockAdvisorySummary {
+  total_products: number;
+  star_count: number;
+  critical_count: number;
+  dead_stock_count: number;
+  volume_count: number;
+  healthy_count: number;
+  total_reorder_qty: number;
+  total_dead_stock_value: number;
+}
+
+export interface GeminiTopSeller {
+  name: string;
+  sold_30d: number;
+  sold_90d: number;
+  current_stock: number;
+  recommended_stock: number;
+  daily_demand: number;
+  note: string;
+}
+
+export interface GeminiCriticalOrder {
+  name: string;
+  current_stock: number;
+  order_qty: number;
+  urgency: string;
+  note: string;
+}
+
+export interface GeminiDeadStock {
+  name: string;
+  stock: number;
+  capital_tied: number;
+  suggestion: string;
+}
+
+export interface GeminiAnalysis {
+  executive_summary: string;
+  quarterly_forecast: string;
+  strategic_recommendations: string[];
+  dead_stock_strategy: string;
+  top_sellers?: GeminiTopSeller[];
+  critical_orders?: GeminiCriticalOrder[];
+  top_dead_stock?: GeminiDeadStock[];
+  risk_score?: number;
+  health_note?: string;
+  gemini_powered: boolean;
+  model_name: string;
+  error_note?: string;
+}
+
+export interface StockAdvisoryResponse {
+  summary: StockAdvisorySummary;
+  items: StockAdvisoryItem[];
+  gemini_analysis?: GeminiAnalysis | null;
+}
+
+export const salesApi = {
+  // Ürünleri getir
+  getProducts: async (categoryId?: string): Promise<Product[]> => {
+    const response = await apiClient.get('/inventory/products', {
+      params: { category_id: categoryId || undefined },
+    });
+    return response.data.map((product: any) => ({
+      id: product.id,
+      name: product.name,
+      brand: product.brand ?? undefined,
+      sku: product.sku ?? undefined,
+      sell_price: product.price || product.sell_price || 0,
+      buy_price: product.cost || product.buy_price || 0,
+      stock_quantity: product.stock_quantity || 0,
+      critical_level: product.critical_level || 10,
+      unit: product.unit || 'adet',
+      category_id: product.category_id,
+      barcode: product.barcode,
+      image_url: product.image_url,
+      category: product.category,
+      tax_rate: product.tax_rate,
+      parent_id: product.parent_id || undefined,
+      size: product.size || undefined,
+      color: product.color || undefined,
+    }));
+  },
+
+  // Kategorileri getir
+  getCategories: async (): Promise<Category[]> => {
+    const response = await apiClient.get('/inventory/categories');
+    return response.data;
+  },
+
+  // Barkod ile ürün getir
+  getProductByBarcode: async (barcode: string): Promise<Product> => {
+    const response = await apiClient.get(`/inventory/products/barcode/${barcode}`);
+    const product = response.data;
+    return {
+      id: product.id,
+      name: product.name,
+      brand: product.brand ?? undefined,
+      sku: product.sku ?? undefined,
+      sell_price: product.price || product.sell_price || 0,
+      buy_price: product.cost || product.buy_price || 0,
+      stock_quantity: product.stock_quantity || 0,
+      critical_level: product.critical_level || 10,
+      unit: product.unit || 'adet',
+      category_id: product.category_id,
+      barcode: product.barcode,
+      image_url: product.image_url,
+      category: product.category,
+      tax_rate: product.tax_rate,
+    };
+  },
+
+  // Satış oluştur
+  createSale: async (orderData: {
+    customer_id?: string | null;
+    payment_method: 'CASH' | 'CARD' | 'TRANSFER' | 'DEBT' | 'SPLIT';
+    platform: 'STORE' | 'TRENDYOL' | 'HEPSIBURADA';
+    items: Array<{
+      product_id: string;
+      quantity: number;
+      price: number;
+    }>;
+    split_cash?: number;
+    split_card?: number;
+    split_transfer?: number;
+    split_debt?: number;
+  }, userId: string): Promise<any> => {
+    const response = await apiClient.post(`/sales?user_id=${userId}`, orderData);
+    return response.data;
+  },
+
+  // Veresiye satışını onayla
+  approveCreditSale: async (orderId: string, userId: string): Promise<any> => {
+    const response = await apiClient.patch(`/orders/${orderId}/approve?user_id=${userId}`);
+    return response.data;
+  },
+
+  // Yeni ürün oluştur
+  createProduct: async (productData: {
+    name: string;
+    barcode: string;
+    category_id: string;
+    price: number;
+    cost: number;
+    stock_quantity: number;
+    unit: string;
+  }): Promise<Product> => {
+    const response = await apiClient.post('/inventory/products', {
+      name: productData.name,
+      barcode: productData.barcode,
+      category_id: productData.category_id,
+      price: productData.price,
+      cost: productData.cost,
+      stock_quantity: productData.stock_quantity,
+      unit: productData.unit,
+    });
+    return {
+      id: response.data.id,
+      name: response.data.name,
+      sell_price: response.data.price || response.data.sell_price,
+      buy_price: response.data.cost || response.data.buy_price,
+      stock_quantity: response.data.stock_quantity || 0,
+      critical_level: response.data.critical_level || 10,
+      unit: response.data.unit || 'adet',
+      category_id: response.data.category_id,
+      barcode: response.data.barcode,
+      image_url: response.data.image_url,
+      tax_rate: response.data.tax_rate,
+    };
+  },
+
+  // AI Destekli Stok & Tedarik Danışmanı Analizi (Milestone 2 - R2)
+  getStockAdvisory: async (): Promise<StockAdvisoryResponse> => {
+    const response = await apiClient.get('/sales/analysis/stock-advisory');
+    return response.data;
+  },
+
+  // Ürün bazlı satış analizi (Raporlar sayfası için - AI danışman metrikleri dahil)
+  getProductSalesAnalysis: async (): Promise<StockAdvisoryItem[]> => {
+    const response = await apiClient.get('/sales/analysis/products');
+    return response.data;
+  },
+
+  // Ürün haftalık satış analizi (son 7 gün, stok kartı arka yüzü için)
+  getProductWeeklySales: async (productId: string): Promise<{
+    product_id: string;
+    days: Array<{ date: string; label: string; qty: number; revenue: number }>;
+    total_qty: number;
+    total_revenue: number;
+  }> => {
+    const response = await apiClient.get(`/sales/analysis/products/${productId}/weekly`);
+    return response.data;
+  },
+
+  // İade oranı ve istatistikleri
+  getRefundStats: async (days: number = 30): Promise<{
+    total_sales: number;
+    completed_sales: number;
+    refunded_sales: number;
+    refund_rate: number;
+    completed_amount: number;
+    refunded_amount: number;
+    period_days: number;
+  }> => {
+    const response = await apiClient.get('/sales/refund-stats', { params: { days } });
+    return response.data;
+  },
+
+  // Ödeme yöntemleri istatistiklerini getir
+  getPaymentMethodStatistics: async (): Promise<{
+    data: Array<{
+      method: string;
+      label: string;
+      count: number;
+      total: number;
+      percentage: number;
+    }>;
+    summary: {
+      total_count: number;
+      total_amount: number;
+    };
+  }> => {
+    const response = await apiClient.get('/orders/statistics/payment-methods');
+    return response.data;
+  },
+
+  // Siparişi numarasına göre getir
+  getOrderByCode: async (orderNumber: string): Promise<any> => {
+    const response = await apiClient.get(`/orders/code/${encodeURIComponent(orderNumber)}`);
+    return response.data;
+  },
+
+  // Satışı ID'sine göre getir
+  getSaleById: async (orderId: string): Promise<any> => {
+    const response = await apiClient.get(`/sales/${orderId}`);
+    return response.data;
+  },
+};

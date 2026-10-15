@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8"/>
+<title>İçecek Toptancısı Faturası</title>
+<style>
+  @page { size: A4; margin: 15mm; }
+  body { font-family: Arial, sans-serif; font-size: 10pt; color: #222; width: 210mm; margin: 0 auto; }
+  table { border-collapse: collapse; width: 100%; }
+  th, td { padding: 4px 6px; }
+  .bold { font-weight: bold; }
+  .right { text-align: right; }
+  .center { text-align: center; }
+  .border-table th, .border-table td { border: 1px solid #aaa; }
+  .header { margin-bottom: 10px; }
+  .totals td { padding: 3px 6px; }
+  .note { font-size: 8pt; color: #666; margin-top: 12px; }
+  .blue-band { background: #003e8c; color: white; padding: 8px 12px; }
+  .lite-band { background: #e8f0fb; padding: 6px 12px; }
+  h1, h2, h3 { margin: 0; }
+</style>
+</head>
+<body>
+
+<div style="display:flex;justify-content:space-between;background:#c0392b;color:#fff;padding:10px">
+  <div><h2>ANADOLU İÇECEK DAĞITICISI</h2><small>VKN: 5559290889 | Bayrampaşa, İstanbul</small></div>
+  <div class="right"><h3>Toptan Fatura</h3><small>İÇK2026869501 / 16.06.2026</small></div>
+</div>
+<p style="background:#fdecea;padding:6px"><b>Alıcı:</b> Yıldız Bayi Tic. – VKN: 9290911996</p>
+<table class="border-table" style="margin-top:8px">
+  <thead><tr style="background:#c0392b;color:#fff">
+    <th class="center">#</th><th>Ürün</th><th class="center">Miktar</th><th class="center">Adet/Koli</th>
+    <th class="right">Birim Fiyat</th><th class="right">Ara Toplam</th><th class="center">KDV</th><th class="right">Toplam</th>
+  </tr></thead>
+  <tbody><tr style='background:'><td class='center'>1</td><td>Coca-Cola Şişe 1.5Lt<br/><small style='color:#888'>8690805000067</small></td><td class='center'>6 Koli</td><td class='center'>24 Adet/Koli</td><td class='right'>35,00 ₺/Koli</td><td class='right'>210,00 ₺</td><td class='center'>%20</td><td class='right bold'>252,00 ₺</td></tr><tr style='background:#f0f8ff'><td class='center'>2</td><td>Fanta Portakal Kutu 330ml<br/><small style='color:#888'>5449000131553</small></td><td class='center'>6 Koli</td><td class='center'>24 Adet/Koli</td><td class='right'>22,50 ₺/Koli</td><td class='right'>135,00 ₺</td><td class='center'>%20</td><td class='right bold'>162,00 ₺</td></tr><tr style='background:'><td class='center'>3</td><td>Sprite Limon Şişe 250ml<br/><small style='color:#888'>5449000054227</small></td><td class='center'>6 Koli</td><td class='center'>24 Adet/Koli</td><td class='right'>18,00 ₺/Koli</td><td class='right'>108,00 ₺</td><td class='center'>%20</td><td class='right bold'>129,60 ₺</td></tr><tr style='background:#f0f8ff'><td class='center'>4</td><td>Çamlıca Gazlı İçecek 200ml Cam Şişe<br/><small style='color:#888'>8699543000099</small></td><td class='center'>12 Koli</td><td class='center'>24 Adet/Koli</td><td class='right'>14,00 ₺/Koli</td><td class='right'>168,00 ₺</td><td class='center'>%20</td><td class='right bold'>201,60 ₺</td></tr><tr style='background:'><td class='center'>5</td><td>Erikli Doğal Kaynak Suyu 0.5Lt<br/><small style='color:#888'>8690611000088</small></td><td class='center'>12 Koli</td><td class='center'>24 Adet/Koli</td><td class='right'>6,50 ₺/Koli</td><td class='right'>78,00 ₺</td><td class='center'>%20</td><td class='right bold'>93,60 ₺</td></tr><tr style='background:#f0f8ff'><td class='center'>6</td><td>Nestle Pure Life 1.5Lt<br/><small style='color:#888'>6300000013027</small></td><td class='center'>6 Koli</td><td class='center'>12 Adet/Koli</td><td class='right'>14,00 ₺/Koli</td><td class='right'>84,00 ₺</td><td class='center'>%20</td><td class='right bold'>100,80 ₺</td></tr><tr style='background:'><td class='center'>7</td><td>Lipton Ice Tea Şeftali 1Lt Karton<br/><small style='color:#888'>8690605017234</small></td><td class='center'>6 Koli</td><td class='center'>12 Adet/Koli</td><td class='right'>28,00 ₺/Koli</td><td class='right'>168,00 ₺</td><td class='center'>%20</td><td class='right bold'>201,60 ₺</td></tr></tbody>
+</table>
+<table class="totals" style="margin-top:8px;margin-left:auto;width:220px">
+  <tr style="background:#c0392b;color:#fff"><td class="bold">GENEL TOPLAM</td><td class="right bold">1.141,20 ₺</td></tr>
+</table>
+</body>
+</html>

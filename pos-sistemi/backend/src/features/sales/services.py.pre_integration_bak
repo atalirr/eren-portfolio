@@ -1,0 +1,623 @@
+"""
+Sales Services
+Satış Modülü - İş Mantığı ve Servisler
+"""
+
+from typing import Optional, Dict, Any
+from datetime import datetime
+import random
+from sqlalchemy.orm import Session
+from sqlalchemy import func, and_, case, or_
+
+from src.features.sales.models import (
+    SaleOrder,
+    SaleOrderItem,
+    PaymentMethod,
+    SalesPlatform,
+    OrderStatus,
+)
+from src.features.sales.schemas import OrderCreateSchema
+from src.features.inventory.models import Product
+from src.features.inventory.stock_movement import StockMovement, StockMovementReason
+from src.features.transactions.models import Transaction, TransactionType, TransactionSource
+from src.features.customers.models import Customer
+from src.shared.utils.currency import round_money, to_decimal
+
+
+def get_sale_order_effective_amount_column():
+    """Returns SQLAlchemy expression for effective final amount of SaleOrder (Issue C1 Zero-Safe)."""
+    return func.coalesce(
+        case(
+            (SaleOrder.final_amount > 0.0, SaleOrder.final_amount),
+            else_=SaleOrder.total_amount - func.coalesce(SaleOrder.discount_amount, 0.0)
+        ),
+        SaleOrder.total_amount,
+        0.0
+    )
+
+
+def calculate_unified_revenue(
+    db: Session,
+    start_date: Optional[datetime] = None,
+    end_date: Optional[datetime] = None,
+) -> Dict[str, Any]:
+    """
+    Calculates authoritative, non-duplicated commercial sales revenue (Single Source of Truth).
+    
+    Guarantees:
+    - POS sales (SaleOrder) are included across all payment methods (Cash, Card, Transfer, Debt, Split).
+    - Online/legacy completed sales (Order) are included without duplication.
+    - Virman, Tahsilat, Cari transfers, and internal cash movements are 100% excluded.
+    - Soft-deleted (is_deleted=True) and cancelled/refunded sales are excluded.
+    - Discounts are deducted; net final amounts are returned.
+    """
+    from src.features.orders.models import Order
+    
+    # 1. POS Sales Revenue (SaleOrder)
+    pos_filters = [
+        SaleOrder.is_deleted == False,
+        SaleOrder.status == OrderStatus.COMPLETED,
+    ]
+    if start_date:
+        pos_filters.append(SaleOrder.created_at >= start_date)
+    if end_date:
+        pos_filters.append(SaleOrder.created_at <= end_date)
+
+    effective_pos_amt = get_sale_order_effective_amount_column()
+    pos_result = (
+        db.query(
+            func.coalesce(func.sum(effective_pos_amt), 0.0).label("pos_revenue"),
+            func.count(SaleOrder.id).label("pos_count"),
+        )
+        .filter(and_(*pos_filters))
+        .first()
+    )
+    pos_revenue = float(pos_result.pos_revenue or 0.0) if pos_result else 0.0
+    pos_count = int(pos_result.pos_count or 0) if pos_result else 0
+
+    # 2. Online / E-Commerce / Non-duplicated Orders (Order)
+    order_filters = [
+        Order.is_deleted == False,
+        Order.status == "completed",
+    ]
+    if start_date:
+        order_filters.append(Order.created_at >= start_date)
+    if end_date:
+        order_filters.append(Order.created_at <= end_date)
+
+    order_result = (
+        db.query(
+            func.coalesce(func.sum(Order.final_amount), 0.0).label("order_revenue"),
+            func.count(Order.id).label("order_count"),
+        )
+        .filter(and_(*order_filters))
+        .first()
+    )
+    order_revenue = float(order_result.order_revenue or 0.0) if order_result else 0.0
+    order_count = int(order_result.order_count or 0) if order_result else 0
+
+    total_revenue = pos_revenue + order_revenue
+    total_count = pos_count + order_count
+
+    return {
+        "pos_revenue": round_money(pos_revenue),
+        "pos_order_count": pos_count,
+        "online_revenue": round_money(order_revenue),
+        "online_order_count": order_count,
+        "total_revenue": round_money(total_revenue),
+        "total_order_count": total_count,
+        "average_basket": round_money(total_revenue / total_count) if total_count > 0 else 0.0,
+    }
+
+
+class SalesService:
+    """Sales Service - Atomik Satış İşlemi"""
+
+    def __init__(self, db: Session):
+        self.db = db
+
+    def _generate_order_number(self) -> str:
+        """Sipariş numarası oluştur (her zaman benzersiz olacak şekilde)"""
+        # Zaman damgası + rastgele sayı ile benzersiz numara üret
+        # Örn: #S-20260218-141623-123
+        for _ in range(10):
+            timestamp = datetime.utcnow().strftime("%Y%m%d-%H%M%S")
+            rand_suffix = random.randint(100, 999)
+            order_number = f"#S-{timestamp}-{rand_suffix}"
+            
+            # Aynı numara zaten var mı kontrol et
+            exists = (
+                self.db.query(SaleOrder)
+                .filter(SaleOrder.order_number == order_number)
+                .first()
+            )
+            if not exists:
+                return order_number
+        
+        # Çok istisnai bir durumda bile tekrar ederse, UUID benzeri fallback
+        fallback_suffix = random.randint(100000, 999999)
+        return f"#S-{datetime.utcnow().strftime('%Y%m%d-%H%M%S')}-{fallback_suffix}"
+
+    def process_sale(
+        self, order_data: OrderCreateSchema, user_id: str = "default-user"
+    ) -> SaleOrder:
+        """
+        SATIŞ İŞLEMİ - Atomik Transaction
+
+        Veritabanı tutarlılığı için Atomik Transaction (db.begin()) içinde
+        şu zincirleme işlemleri yap:
+
+        ADIM 1: Stok ve Maliyet Kontrolü
+        - Gelen her ürün için stok yeterli mi kontrol et. Yetersizse hata fırlat.
+        - Ürünün o anki buy_price (Maliyet) bilgisini çek.
+
+        ADIM 2: Sipariş Kaydı
+        - Order ve OrderItem kayıtlarını oluştur.
+        - total_profit'i hesaplayıp Order tablosuna yaz.
+
+        ADIM 3: Stok Düşümü
+        - Satılan ürünlerin Product.stock_quantity değerini düşür.
+        - StockMovement tablosuna "SALE" sebebiyle log at.
+
+        ADIM 4: Finansal Yansıma (Domino Etkisi)
+        - Eğer Ödeme Tipi 'Nakit', 'Kart' veya 'Havale' ise:
+          Transaction (Kasa) tablosuna otomatik GELİR kaydı at.
+          Açıklama: "Satış #S-1024".
+        - Eğer Ödeme Tipi 'Veresiye (Debt)' ise:
+          Customer tablosundaki balance değerini artır (Müşteri borçlandı).
+          Kasaya para girişi yapma.
+        """
+        try:
+            # Transaction başlat (atomik işlem)
+            # ADIM 1: Stok ve Maliyet Kontrolü
+            order_items_data = []
+            gross_total = 0.0
+            subtotal_after_item_discounts = 0.0
+
+            for item_data in order_data.items:
+                # Ürünü getir
+                product = (
+                    self.db.query(Product)
+                    .filter(
+                        Product.id == item_data.product_id,
+                        Product.is_deleted == False,
+                    )
+                    .first()
+                )
+
+                if not product:
+                    raise ValueError(f"Ürün bulunamadı: {item_data.product_id}")
+
+                # Stok kontrolü
+                if product.stock_quantity < item_data.quantity:
+                    from src.features.settings.services import SettingService
+                    settings_service = SettingService(self.db)
+                    allow_negative = settings_service.get_value("allow_negative_stock", "false")
+                    
+                    if allow_negative.lower() == "true":
+                        print(f"[WARNING] Yetersiz stok: {product.name} (Stok: {product.stock_quantity}, İstenen: {item_data.quantity}). Satışa devam ediliyor.")
+                    else:
+                        raise ValueError(f"Yetersiz stok: {product.name} (Stok: {product.stock_quantity}, İstenen: {item_data.quantity})")
+
+                # Ürünün o anki maliyetini ve fiyatını al
+                unit_cost = float(product.buy_price or 0.0)
+                unit_price = float(item_data.price if item_data.price is not None else getattr(item_data, 'unit_sell_price', 0.0) or 0.0)
+                tax_rate = float(product.tax_rate if product.tax_rate is not None else 18.0)
+                item_discount = float(getattr(item_data, 'discount', 0.0) or 0.0)
+
+                line_gross = unit_price * item_data.quantity
+                line_after_item_disc = max(0.0, line_gross - item_discount)
+
+                gross_total += line_gross
+                subtotal_after_item_discounts += line_after_item_disc
+
+                # OrderItem verilerini sakla
+                order_items_data.append(
+                    {
+                        "product": product,
+                        "product_id": product.id,
+                        "product_name": product.name,  # Snapshot
+                        "quantity": item_data.quantity,
+                        "unit_price": unit_price,
+                        "unit_cost": unit_cost,
+                        "tax_rate": tax_rate,
+                        "item_discount": item_discount,
+                        "line_after_item_disc": line_after_item_disc,
+                    }
+                )
+
+            # ADIM 2: İskonto ve Kâr Dağıtımı (Issue C2)
+            order_discount_amount = float(getattr(order_data, 'discount_amount', None) or 0.0)
+            if order_discount_amount == 0.0 and getattr(order_data, 'discount_value', None):
+                disc_val = float(order_data.discount_value)
+                disc_type = str(getattr(order_data, 'discount_type', '') or '').upper()
+                if disc_type in ("PERCENT", "%"):
+                    order_discount_amount = subtotal_after_item_discounts * (disc_val / 100.0)
+                elif disc_type in ("FIXED", "AMOUNT", "TL", ""):
+                    order_discount_amount = disc_val
+            order_discount_amount = max(0.0, order_discount_amount)
+
+            final_amount = max(0.0, subtotal_after_item_discounts - order_discount_amount)
+            total_discount_amount = (gross_total - subtotal_after_item_discounts) + order_discount_amount
+
+            # Kalem bazında sipariş indirimi dağıtımı ve KDV'siz matrah üzerinden kâr hesabı
+            total_profit = 0.0
+            for item in order_items_data:
+                if subtotal_after_item_discounts > 0:
+                    allocated_order_disc = order_discount_amount * (item["line_after_item_disc"] / subtotal_after_item_discounts)
+                else:
+                    allocated_order_disc = 0.0
+
+                net_line_gross = max(0.0, item["line_after_item_disc"] - allocated_order_disc)
+                tax_factor = 1.0 + (item["tax_rate"] / 100.0)
+                item_matrah = net_line_gross / tax_factor
+                item_cogs = item["unit_cost"] * item["quantity"]
+                item_profit = item_matrah - item_cogs
+
+                total_profit += item_profit
+                item["final_discount"] = round_money(item["item_discount"] + allocated_order_disc)
+
+            # ADIM 3: Sipariş Kaydı
+            order_number = self._generate_order_number()
+
+            # Payment method ve platform enum'larını dönüştür
+            try:
+                payment_method = PaymentMethod(order_data.payment_method)
+            except ValueError:
+                payment_method = PaymentMethod.CASH
+
+            try:
+                platform = SalesPlatform(order_data.platform)
+            except ValueError:
+                platform = SalesPlatform.STORE
+
+            # Order oluştur
+            sale_order = SaleOrder(
+                order_number=order_number,
+                customer_id=order_data.customer_id,
+                user_id=user_id,
+                total_amount=round_money(gross_total),
+                total_profit=round_money(total_profit),  # KRİTİK: İskonto ve KDV düşülmüş net kâr
+                payment_method=payment_method,
+                platform=platform,
+                status=OrderStatus.COMPLETED,
+                due_date=order_data.due_date,
+                discount_type=getattr(order_data, 'discount_type', None),
+                discount_value=getattr(order_data, 'discount_value', None) or 0.0,
+                discount_amount=round_money(total_discount_amount),
+                final_amount=round_money(final_amount),
+            )
+
+            self.db.add(sale_order)
+            self.db.flush()  # Order ID'sini almak için flush
+
+            # OrderItem kayıtlarını oluştur
+            for item_data in order_items_data:
+                order_item = SaleOrderItem(
+                    order_id=sale_order.id,
+                    product_id=item_data["product_id"],
+                    product_name=item_data["product_name"],  # Snapshot
+                    quantity=item_data["quantity"],
+                    unit_price=item_data["unit_price"],
+                    unit_cost=item_data["unit_cost"],
+                    tax_rate=item_data["tax_rate"],
+                    discount=item_data["final_discount"],
+                )
+                self.db.add(order_item)
+
+                # ADIM 3: Stok Düşümü
+                product = item_data["product"]
+                product.stock_quantity -= item_data["quantity"]
+                product.is_synced = False
+
+                # StockMovement log
+                stock_movement = StockMovement(
+                    product_id=product.id,
+                    user_id=user_id,
+                    quantity_change=-item_data[
+                        "quantity"
+                    ],  # Eksi değer (satış = stok düşer)
+                    reason=StockMovementReason.SALE,
+                    notes=f"Satış: {order_number}",
+                )
+                self.db.add(stock_movement)
+
+            # ADIM 4: Finansal Yansıma (Domino Etkisi)
+            if payment_method in [
+                PaymentMethod.CASH,
+                PaymentMethod.CARD,
+                PaymentMethod.TRANSFER,
+            ]:
+                # Nakit, Kart veya Havale: Transaction (Kasa) tablosuna GELİR kaydı
+                # Payment method'u Transaction'a ekle (frontend'de cashValue/bankValue hesaplaması için)
+                from src.features.transactions.models import PaymentMethod as TransactionPaymentMethod
+                transaction_payment_method = None
+                if payment_method == PaymentMethod.CASH:
+                    transaction_payment_method = TransactionPaymentMethod.CASH
+                elif payment_method == PaymentMethod.CARD:
+                    transaction_payment_method = TransactionPaymentMethod.CARD
+                elif payment_method == PaymentMethod.TRANSFER:
+                    transaction_payment_method = TransactionPaymentMethod.TRANSFER
+                
+                transaction = Transaction(
+                    type=TransactionType.INCOME,
+                    category="Satış Geliri",
+                    amount=sale_order.final_amount,
+                    description=f"Satış {order_number}",
+                    user_id=user_id,
+                    related_order_id=None,  # SaleOrder için ayrı tablo olduğu için None
+                    reference_id=sale_order.id,  # İade/iz sürme için SaleOrder id
+                    payment_method=transaction_payment_method,  # Ödeme yöntemi eklendi
+                    payment_source='BANK' if payment_method in [PaymentMethod.CARD, PaymentMethod.TRANSFER] else 'CASH',
+                    source=TransactionSource.POS,  # Satış sayfasından gelen işlemler POS kaynaklı
+                )
+                self.db.add(transaction)
+
+            elif payment_method == PaymentMethod.DEBT:
+                # Veresiye: Customer balance'ı artır + DEBT Transaction oluştur
+                if order_data.customer_id:
+                    customer = (
+                        self.db.query(Customer)
+                        .filter(Customer.id == order_data.customer_id)
+                        .first()
+                    )
+
+                    if customer:
+                        customer.balance += sale_order.final_amount
+                        if order_data.due_date:
+                            customer.due_date = order_data.due_date
+                    else:
+                        raise ValueError(
+                            f"Müşteri bulunamadı: {order_data.customer_id}"
+                        )
+                else:
+                    raise ValueError(
+                        "Veresiye satış için müşteri ID'si zorunludur!"
+                    )
+
+                # Borçlar kartına düşmesi için DEBT transaction oluştur
+                from src.features.transactions.models import PaymentMethod as TransactionPaymentMethod
+                cust_fullname = f"{customer.name} {customer.last_name or ''}".strip()
+                vade_suffix = f" - Vade: {order_data.due_date}" if order_data.due_date else ""
+                debt_transaction = Transaction(
+                    type=TransactionType.INCOME,
+                    category="Veresiye Satış",
+                    amount=sale_order.final_amount,
+                    description=f"Veresiye Satış {order_number} - {cust_fullname}{vade_suffix}",
+                    user_id=user_id,
+                    reference_id=sale_order.id,
+                    payment_method=TransactionPaymentMethod.DEBT,
+                    payment_source='CASH',
+                    source=TransactionSource.POS,
+                )
+                self.db.add(debt_transaction)
+
+            elif payment_method == PaymentMethod.SPLIT:
+                # Parçalı Ödeme İşleme
+                from src.features.transactions.models import PaymentMethod as TransactionPaymentMethod
+                
+                cash_amt = order_data.split_cash or 0.0
+                card_amt = order_data.split_card or 0.0
+                transfer_amt = order_data.split_transfer or 0.0
+                debt_amt = order_data.split_debt or 0.0
+                
+                split_total = cash_amt + card_amt + transfer_amt + debt_amt
+                if abs(split_total - sale_order.final_amount) > 0.05:
+                    raise ValueError(f"Parçalı ödeme toplamı ({split_total} TL) satış toplamı ({sale_order.final_amount} TL) ile eşleşmiyor!")
+                
+                if cash_amt > 0:
+                    cash_trans = Transaction(
+                        type=TransactionType.INCOME,
+                        category="Satış Geliri (Nakit)",
+                        amount=cash_amt,
+                        description=f"Satış {order_number} - Nakit Kısmı",
+                        user_id=user_id,
+                        related_order_id=None,
+                        reference_id=sale_order.id,
+                        payment_method=TransactionPaymentMethod.CASH,
+                        payment_source='CASH',
+                        source=TransactionSource.POS,
+                    )
+                    self.db.add(cash_trans)
+                    
+                if card_amt > 0:
+                    card_trans = Transaction(
+                        type=TransactionType.INCOME,
+                        category="Satış Geliri (Kart)",
+                        amount=card_amt,
+                        description=f"Satış {order_number} - Kart Kısmı",
+                        user_id=user_id,
+                        related_order_id=None,
+                        reference_id=sale_order.id,
+                        payment_method=TransactionPaymentMethod.CARD,
+                        payment_source='BANK',
+                        source=TransactionSource.POS,
+                    )
+                    self.db.add(card_trans)
+                    
+                if transfer_amt > 0:
+                    transfer_trans = Transaction(
+                        type=TransactionType.INCOME,
+                        category="Satış Geliri (Havale)",
+                        amount=transfer_amt,
+                        description=f"Satış {order_number} - Havale Kısmı",
+                        user_id=user_id,
+                        related_order_id=None,
+                        reference_id=sale_order.id,
+                        payment_method=TransactionPaymentMethod.TRANSFER,
+                        payment_source='BANK',
+                        source=TransactionSource.POS,
+                    )
+                    self.db.add(transfer_trans)
+                    
+                if debt_amt > 0:
+                    if order_data.customer_id:
+                        customer = (
+                            self.db.query(Customer)
+                            .filter(Customer.id == order_data.customer_id)
+                            .first()
+                        )
+                        if customer:
+                            customer.balance += debt_amt
+                            if order_data.due_date:
+                                customer.due_date = order_data.due_date
+                        else:
+                            raise ValueError(f"Müşteri bulunamadı: {order_data.customer_id}")
+                    else:
+                        raise ValueError("Parçalı ödemede veresiye kısmı için müşteri seçilmesi zorunludur!")
+                        
+                    cust_fullname = f"{customer.name} {customer.last_name or ''}".strip()
+                    vade_suffix = f" - Vade: {order_data.due_date}" if order_data.due_date else ""
+                    debt_trans = Transaction(
+                        type=TransactionType.INCOME,
+                        category="Veresiye Satış",
+                        amount=debt_amt,
+                        description=f"Veresiye Satış {order_number} - {cust_fullname}{vade_suffix}",
+                        user_id=user_id,
+                        reference_id=sale_order.id,
+                        payment_method=TransactionPaymentMethod.DEBT,
+                        payment_source='CASH',
+                        source=TransactionSource.POS,
+                    )
+                    self.db.add(debt_trans)
+
+            # Transaction'ı commit et
+            self.db.commit()
+
+            # Order'ı refresh et
+            self.db.refresh(sale_order)
+
+            return sale_order
+
+        except Exception as e:
+            # Hata durumunda rollback
+            self.db.rollback()
+            error_detail = str(e)
+            print(f"[ERROR] Satis islemi hatasi: {error_detail}")
+            raise ValueError(f"Satış işlemi başarısız: {error_detail}")
+
+    def get_order_by_id(self, order_id: str) -> Optional[SaleOrder]:
+        """ID'ye göre sipariş getir"""
+        return (
+            self.db.query(SaleOrder)
+            .filter(SaleOrder.id == order_id, SaleOrder.is_deleted == False)
+            .first()
+        )
+
+    def search_products(self, query: str) -> list[Product]:
+        """
+        Ürün arama
+        - Barkod tam eşleşirse tek ürün dön
+        - İsimse benzerleri dön
+        """
+        if not query:
+            return []
+
+        query = query.strip()
+
+        # Önce barkod ile tam eşleşme dene
+        product = (
+            self.db.query(Product)
+            .filter(Product.barcode == query, Product.is_deleted == False)
+            .first()
+        )
+
+        if product:
+            return [product]
+
+        # Barkod eşleşmediyse isim ile arama yap
+        products = (
+            self.db.query(Product)
+            .filter(
+                Product.name.ilike(f"%{query}%"), Product.is_deleted == False
+            )
+            .limit(20)
+            .all()
+        )
+
+        return products
+
+    def get_product_sales_analysis(self) -> list[dict]:
+        """
+        Ürün bazlı satış analizi
+        Raporlar sayfası için ürün bazlı satış istatistikleri
+        """
+        from src.features.inventory.models import Product as ProductModel
+        from src.features.inventory.models import Category
+
+        # Ürün bazlı satış istatistikleri (Issue C2: KDV'siz matrah ve indirimler düşülmüş kâr)
+        net_base_expr = (
+            SaleOrderItem.quantity * SaleOrderItem.unit_price - func.coalesce(SaleOrderItem.discount, 0.0)
+        ) / (1.0 + func.coalesce(SaleOrderItem.tax_rate, 18.0) / 100.0)
+        cost_expr = SaleOrderItem.quantity * func.coalesce(SaleOrderItem.unit_cost, 0.0)
+
+        results = (
+            self.db.query(
+                SaleOrderItem.product_id,
+                SaleOrderItem.product_name,
+                func.sum(SaleOrderItem.quantity).label("total_quantity"),
+                func.sum(
+                    SaleOrderItem.quantity * SaleOrderItem.unit_price - func.coalesce(SaleOrderItem.discount, 0.0)
+                ).label("total_revenue"),
+                func.sum(
+                    cost_expr
+                ).label("total_cost"),
+                func.sum(
+                    net_base_expr - cost_expr
+                ).label("total_profit"),
+                func.count(SaleOrderItem.order_id.distinct()).label(
+                    "order_count"
+                ),
+            )
+            .join(SaleOrder, SaleOrderItem.order_id == SaleOrder.id)
+            .filter(
+                SaleOrder.is_deleted == False,
+                SaleOrder.status == OrderStatus.COMPLETED,
+            )
+            .group_by(SaleOrderItem.product_id, SaleOrderItem.product_name)
+            .all()
+        )
+
+        # Ürün bilgilerini de ekle
+        product_analysis = []
+        for result in results:
+            product = (
+                self.db.query(ProductModel)
+                .filter(
+                    ProductModel.id == result.product_id,
+                    ProductModel.is_deleted == False,
+                )
+                .first()
+            )
+
+            if product:
+                category = (
+                    self.db.query(Category)
+                    .filter(Category.id == product.category_id)
+                    .first()
+                )
+
+                product_analysis.append(
+                    {
+                        "id": product.id,
+                        "name": product.name,
+                        "brand": product.brand or "Belirtilmemiş",
+                        "category": category.name if category else "Kategori Yok",
+                        "salesCount": int(result.total_quantity or 0),
+                        "totalRevenue": round_money(result.total_revenue),
+                        "totalCost": round_money(result.total_cost),
+                        "profit": round_money(result.total_profit),
+                        "stock": product.stock_quantity,
+                        "stockStatus": "critical"
+                        if product.stock_quantity <= product.critical_level
+                        else "low"
+                        if product.stock_quantity
+                        <= product.critical_level * 2
+                        else "ok",
+                        "trend": "stable",  # TODO: Trend hesaplama eklenebilir
+                        "trendPercent": 0.0,  # TODO: Trend yüzdesi hesaplama eklenebilir
+                    }
+                )
+
+        return product_analysis
+

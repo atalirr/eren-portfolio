@@ -1,0 +1,23 @@
+export { InventoryPage } from './InventoryPage';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

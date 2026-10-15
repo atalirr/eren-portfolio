@@ -1,0 +1,488 @@
+"""
+Finance Routers
+Finansal Veri Analitiği FastAPI Routes
+"""
+
+from typing import Optional
+from datetime import datetime
+from fastapi import APIRouter, Depends, Query
+from sqlalchemy.orm import Session
+
+from src.shared.database.session import get_db
+from src.features.finance import schemas
+from src.features.finance.services import FinanceService
+
+
+router = APIRouter()
+
+
+@router.get("/dashboard", response_model=schemas.FinanceDashboardResponse)
+async def get_finance_dashboard(
+    start_date: Optional[str] = Query(None, description="Başlangıç tarihi (YYYY-MM-DD)"),
+    end_date: Optional[str] = Query(None, description="Bitiş tarihi (YYYY-MM-DD)"),
+    days: int = Query(30, ge=1, le=365, description="Son N gün (start_date ve end_date verilmezse kullanılır)"),
+    db: Session = Depends(get_db)
+):
+    """
+    Dashboard için finansal verileri getir
+    
+    - Gelir Kaynakları (Donut Chart): Perakende, E-Ticaret, Kurumsal/Diğer
+    - Kâr ve Ciro Makası (Area Chart): Günlük ciro, maliyet, giderler, net kâr
+    - Gider Analizi (Top 5 Liste): Kategori bazında giderler
+    """
+    service = FinanceService(db)
+    
+    # Tarih dönüşümü
+    start_dt = None
+    end_dt = None
+    
+    if start_date:
+        try:
+            start_dt = datetime.strptime(start_date, "%Y-%m-%d")
+        except ValueError:
+            start_dt = None
+    
+    if end_date:
+        try:
+            end_dt = datetime.strptime(end_date, "%Y-%m-%d")
+        except ValueError:
+            end_dt = None
+    
+    data = service.get_finance_dashboard_data(
+        start_date=start_dt,
+        end_date=end_dt,
+        days=days
+    )
+    
+    return data
+
+
+@router.get("/dashboard-stats")
+async def get_dashboard_stats(
+    db: Session = Depends(get_db)
+):
+    """
+    Dashboard için finansal özet verileri:
+    - Nakit ve Banka Dağılımı (cash_bank_distribution)
+    """
+    service = FinanceService(db)
+    data = service.get_dashboard_stats()
+    return data
+
+
+@router.get("/payment-methods-distribution")
+async def get_payment_methods_distribution(
+    scope: str = Query('general', description="'local' veya 'general'"),
+    start_date: Optional[str] = Query(None, description="Başlangıç tarihi (ISO format: YYYY-MM-DDTHH:MM:SS) - Bu tarihten sonraki verileri getirir"),
+    db: Session = Depends(get_db)
+):
+    """
+    Ödeme Yöntemleri Dağılımı
+    
+    - scope='local': Sadece satış sayfasından gelen ödeme yöntemleri (POS/LOCAL)
+    - scope='general': Tüm kaynaklar (E-ticaret + Satış + Manuel gelirler)
+    - start_date: Bu tarihten sonraki verileri getirir (sıfırlama zamanı için)
+    
+    NOT: Şu anda bu endpoint'te hata oluşsa bile 500 dönmek yerine
+    boş bir liste döndürerek frontend'i kırmıyoruz.
+    """
+    try:
+        service = FinanceService(db)
+        data = service.get_payment_methods_distribution(scope=scope, start_date=start_date)
+        return {"payment_methods_distribution": data}
+    except Exception as e:
+        import traceback
+        error_trace = traceback.format_exc()
+        print(f"[ERROR] Payment methods distribution hatası: {e}")
+        print(f"[ERROR] Traceback: {error_trace}")
+        # Hata durumunda bile 200 dön ve boş liste ver
+        return {"payment_methods_distribution": []}
+
+
+@router.get("/health-metrics", response_model=schemas.FinancialHealthMetricsResponse)
+async def get_financial_health_metrics(
+    db: Session = Depends(get_db)
+):
+    """
+    Finansal Sağlık Göstergeleri
+    
+    - Varlık/Borç Dengesi: Varlıklar ve yükümlülüklerin karşılaştırması
+    - Nakit Ömrü: Hiç satış olmadan kaç gün dayanabilir
+    """
+    service = FinanceService(db)
+    data = service.get_financial_health_metrics()
+    return data
+
+
+# ============================================
+# MODÜL 1: GERÇEK KARLILIK (NET PROFITABILITY)
+# ============================================
+
+@router.get("/net-profitability", response_model=schemas.NetProfitabilityResponse)
+async def get_net_profitability(
+    start_date: Optional[str] = Query(None, description="Başlangıç tarihi (YYYY-MM-DD)"),
+    end_date: Optional[str] = Query(None, description="Bitiş tarihi (YYYY-MM-DD)"),
+    days: int = Query(30, ge=1, le=365, description="Son N gün (start_date ve end_date verilmezse kullanılır)"),
+    db: Session = Depends(get_db)
+):
+    """
+    Gerçek Karlılık Analizi
+    
+    - Brüt Kar (Gross Profit): Her satış için (Satış Fiyatı - Ürün Maliyeti)
+    - Net Kar (Net Profit): Toplam Brüt Kar - Operasyonel Giderler
+    - Brüt Kar Marjı % (Gross Margin): Eğer %20'den düşükse uyarı verir
+    
+    Bu modül, sadece "Gelir - Gider" değil, ürün bazlı kar marjını hesaplar.
+    """
+    service = FinanceService(db)
+    
+    # Tarih dönüşümü
+    start_dt = None
+    end_dt = None
+    
+    if start_date:
+        try:
+            start_dt = datetime.strptime(start_date, "%Y-%m-%d")
+        except ValueError:
+            start_dt = None
+    
+    if end_date:
+        try:
+            end_dt = datetime.strptime(end_date, "%Y-%m-%d")
+        except ValueError:
+            end_dt = None
+    
+    data = service.get_net_profitability(
+        start_date=start_dt,
+        end_date=end_dt,
+        days=days
+    )
+    
+    return data
+
+
+# ============================================
+# MODÜL 2: AKILLI GİDER ANALİZİ (EXPENSE BREAKDOWN)
+# ============================================
+
+@router.get("/expense-breakdown", response_model=schemas.ExpenseBreakdownResponse)
+async def get_expense_breakdown(
+    start_date: Optional[str] = Query(None, description="Başlangıç tarihi (YYYY-MM-DD)"),
+    end_date: Optional[str] = Query(None, description="Bitiş tarihi (YYYY-MM-DD)"),
+    days: int = Query(30, ge=1, le=365, description="Son N gün (start_date ve end_date verilmezse kullanılır)"),
+    db: Session = Depends(get_db)
+):
+    """
+    Akıllı Gider Analizi
+    
+    - Giderleri kategorize eder (Personel, Tedarik, Kira, Pazarlama vb.)
+    - Her gider kaleminin toplam ciro içindeki payını (%) hesaplar
+    - Anomaly Detection: Eğer bir gider kalemi, son 3 ayın ortalamasından %20 fazlaysa "Anormal Yüksek Gider" flag'i döndürür
+    
+    Bu modül, giderleri sadece liste olarak değil, ciroya oranla analiz eder.
+    """
+    service = FinanceService(db)
+    
+    # Tarih dönüşümü
+    start_dt = None
+    end_dt = None
+    
+    if start_date:
+        try:
+            start_dt = datetime.strptime(start_date, "%Y-%m-%d")
+        except ValueError:
+            start_dt = None
+    
+    if end_date:
+        try:
+            end_dt = datetime.strptime(end_date, "%Y-%m-%d")
+        except ValueError:
+            end_dt = None
+    
+    data = service.get_expense_breakdown(
+        start_date=start_dt,
+        end_date=end_dt,
+        days=days
+    )
+    
+    return data
+
+
+# ============================================
+# MODÜL 3: GELİŞMİŞ TREND VE PROJEKSİYON
+# ============================================
+
+@router.get("/advanced-projection", response_model=schemas.AdvancedProjectionResponse)
+async def get_advanced_projection(
+    target_month: Optional[int] = Query(None, ge=1, le=12, description="Hedef ay (1-12). None ise mevcut ay."),
+    target_year: Optional[int] = Query(None, description="Hedef yıl. None ise mevcut yıl."),
+    db: Session = Depends(get_db)
+):
+    """
+    Gelişmiş Trend ve Projeksiyon Analizi
+    
+    **Pace (Hız) Analizi:**
+    - Bugünün şu anki saati (örn: 14:30) ile geçen ayın aynı günlerinin (tüm Salı günleri) saat 14:30'daki kümülatif cirosunu kıyaslar
+    - Çıktı: "Bugün düne göre yavaş başladı (%-10)" veya "Geçen haftaya göre %15 daha hızlı gidiyoruz."
+    
+    **Ay Sonu Tahmini (Run Rate Prediction):**
+    - Ayın tamamlanmış günlerinin ortalamasını alarak değil, "Ağırlıklı Ortalama" (Son günler daha önemli) kullanarak ayın geri kalanı için tahmini ciro hesaplar
+    - Formül: `(Mevcut Ciro) + (Kalan Gün Sayısı * Son 7 Günlük Hareketli Ortalama)`
+    
+    **Mevsimsellik (Seasonality):**
+    - Hafta sonu çarpanını hesaba katarak tahmini düzeltir
+    """
+    service = FinanceService(db)
+    data = service.get_advanced_projection(
+        target_month=target_month,
+        target_year=target_year
+    )
+    return data
+
+
+# ============================================
+# MODÜL 4: SATIŞ ISI HARİTASI (WEEKLY HEATMAP)
+# ============================================
+
+@router.get("/sales-heatmap/weekly", response_model=schemas.WeeklySalesHeatmapResponse)
+async def get_weekly_sales_heatmap(
+    start_date: Optional[str] = Query(
+        None,
+        description="Opsiyonel başlangıç (ISO). Verilmezse mevcut haftanın Pazartesi 00:00 alınır.",
+    ),
+    db: Session = Depends(get_db),
+):
+    service = FinanceService(db)
+
+    start_dt = None
+    if start_date:
+        try:
+            start_dt = datetime.fromisoformat(start_date.replace("Z", "+00:00"))
+        except Exception:
+            start_dt = None
+
+    return service.get_weekly_sales_heatmap(start_date=start_dt)
+
+
+# ============================================
+# MODÜL 5: CİRO & KÂR TRENDİ (CASHFLOW/PROFIT TREND)
+# ============================================
+
+@router.get("/cashflow-trend", response_model=schemas.CashflowTrendResponse)
+async def get_cashflow_trend(
+    period: str = Query("daily", description="daily | weekly | monthly"),
+    start_date: Optional[str] = Query(None, description="Başlangıç tarihi (YYYY-MM-DD)"),
+    end_date: Optional[str] = Query(None, description="Bitiş tarihi (YYYY-MM-DD)"),
+    points: int = Query(0, ge=0, le=365, description="Kaç nokta (0 ise period'e göre varsayılan)"),
+    db: Session = Depends(get_db),
+):
+    service = FinanceService(db)
+
+    start_dt = None
+    end_dt = None
+
+    if start_date:
+        try:
+            start_dt = datetime.strptime(start_date, "%Y-%m-%d")
+        except ValueError:
+            start_dt = None
+
+    if end_date:
+        try:
+            end_dt = datetime.strptime(end_date, "%Y-%m-%d")
+        except ValueError:
+            end_dt = None
+
+    return service.get_cashflow_trend(period=period, start_date=start_dt, end_date=end_dt, points=points)
+
+
+@router.post("/reset-data", response_model=schemas.ResetFinanceResponse)
+async def reset_finance_data(db: Session = Depends(get_db)):
+    """
+    Finance (Kasa & Giderler) sayfasını besleyen verileri DB'den sıfırlar.
+
+    Bu işlem şunları temizler:
+    - transactions (gelir/gider/transfer)
+    - sale_orders (+ items)
+    - orders (+ items)
+    - customers.balance -> 0 (müşterilerin bakiyesi sıfırlanır; müşteri kayıtları silinmez)
+    """
+    service = FinanceService(db)
+    return service.reset_finance_data()
+
+
+@router.get("/kdv-report")
+async def get_kdv_report(
+    days: int = Query(30, ge=1, le=365, description="Son N gun"),
+    db: Session = Depends(get_db)
+):
+    """
+    KDV Raporu - Toplanan ve Odenen KDV ozeti
+    Parasut KDV Raporu benzeri
+    """
+    from sqlalchemy import func
+    from src.features.sales.models import SaleOrder, SaleOrderItem, OrderStatus as SaleOrderStatus
+    from src.features.invoices.models import Invoice, InvoiceItem, InvoiceType
+
+    try:
+        cutoff = datetime.utcnow() - __import__('datetime').timedelta(days=days)
+
+        # Satis faturalari uzerinden toplanan KDV (İndirim düşülmüş matrah, iadeler hariç - Issue C2)
+        collected_vat = {}
+        try:
+            net_line_expr = SaleOrderItem.unit_price * SaleOrderItem.quantity - func.coalesce(SaleOrderItem.discount, 0.0)
+            sale_items = db.query(
+                SaleOrderItem.tax_rate,
+                func.sum(net_line_expr).label("base"),
+            ).join(SaleOrder, SaleOrder.id == SaleOrderItem.order_id).filter(
+                SaleOrder.is_deleted == False,
+                SaleOrder.status == SaleOrderStatus.COMPLETED,
+                SaleOrder.created_at >= cutoff
+            ).group_by(SaleOrderItem.tax_rate).all()
+
+            for rate, base in sale_items:
+                r_val = float(rate or 18)
+                b = float(base or 0)
+                vat = b * (r_val / (100 + r_val))  # KDV dahil fiyattan KDV'yi cikart
+                rate_key = str(int(r_val)) if r_val == int(r_val) else str(r_val)
+                collected_vat[rate_key] = round(vat, 2)
+        except Exception:
+            pass
+
+        # Alis faturalari uzerinden odenen KDV
+        paid_vat = {}
+        try:
+            purchase_items = db.query(
+                InvoiceItem.vat_rate,
+                func.sum(InvoiceItem.vat_amount).label("vat_total"),
+            ).join(Invoice, Invoice.id == InvoiceItem.invoice_id).filter(
+                Invoice.is_deleted == False,
+                Invoice.invoice_type == InvoiceType.PURCHASE,
+                Invoice.created_at >= cutoff
+            ).group_by(InvoiceItem.vat_rate).all()
+
+            for rate, vat_total in purchase_items:
+                r_val = float(rate or 20)
+                rate_key = str(int(r_val)) if r_val == int(r_val) else str(r_val)
+                paid_vat[rate_key] = round(float(vat_total or 0), 2)
+        except Exception:
+            pass
+
+        total_collected = sum(collected_vat.values())
+        total_paid = sum(paid_vat.values())
+        net_vat = total_collected - total_paid
+
+        return {
+            "period_days": days,
+            "collected_vat": collected_vat,
+            "paid_vat": paid_vat,
+            "total_collected": round(total_collected, 2),
+            "total_paid": round(total_paid, 2),
+            "net_vat_payable": round(net_vat, 2),
+            "summary": "Odenecek KDV" if net_vat > 0 else "Devreden KDV",
+        }
+    except Exception as e:
+        return {"error": str(e), "total_collected": 0, "total_paid": 0, "net_vat_payable": 0}
+
+
+@router.get("/cash-flow-projection")
+async def get_cash_flow_projection(
+    months: int = Query(3, ge=1, le=12, description="Kac aylik projeksiyon"),
+    db: Session = Depends(get_db)
+):
+    """
+    Nakit Akisi Projeksiyonu - Parasut Nakit Akisi Raporu benzeri
+    Gecmis verilerden gelecek projeksiyon
+    """
+    from sqlalchemy import func
+    from src.features.transactions.models import Transaction, TransactionType
+    from src.features.customers.models import Customer
+    from src.features.suppliers.models import Supplier
+
+    try:
+        now = datetime.utcnow()
+        thirty_days_ago = now - __import__('datetime').timedelta(days=30)
+
+        # Son 30 gun gelir ortalamalari
+        monthly_income = 0.0
+        try:
+            result = db.query(func.coalesce(func.sum(Transaction.amount), 0.0)).filter(
+                Transaction.type == TransactionType.INCOME,
+                Transaction.is_deleted == False,
+                Transaction.created_at >= thirty_days_ago
+            ).scalar()
+            monthly_income = float(result or 0)
+        except Exception:
+            pass
+
+        # Son 30 gun gider ortalamalari
+        monthly_expense = 0.0
+        try:
+            result = db.query(func.coalesce(func.sum(Transaction.amount), 0.0)).filter(
+                Transaction.type == TransactionType.EXPENSE,
+                Transaction.is_deleted == False,
+                Transaction.created_at >= thirty_days_ago
+            ).scalar()
+            monthly_expense = float(result or 0)
+        except Exception:
+            pass
+
+        # Mevcut kasa bakiyesi
+        current_cash = 0.0
+        try:
+            inc = db.query(func.coalesce(func.sum(Transaction.amount), 0.0)).filter(
+                Transaction.type == TransactionType.INCOME, Transaction.is_deleted == False, Transaction.payment_source == "CASH"
+            ).scalar() or 0
+            exp = db.query(func.coalesce(func.sum(Transaction.amount), 0.0)).filter(
+                Transaction.type == TransactionType.EXPENSE, Transaction.is_deleted == False, Transaction.payment_source == "CASH"
+            ).scalar() or 0
+            current_cash = float(inc) - float(exp)
+        except Exception:
+            pass
+
+        # Beklenen alacaklar (musteri borclari)
+        receivables = 0.0
+        try:
+            result = db.query(func.coalesce(func.sum(Customer.balance), 0.0)).filter(
+                Customer.is_deleted == False, Customer.balance > 0
+            ).scalar()
+            receivables = float(result or 0)
+        except Exception:
+            pass
+
+        # Beklenen borclar (tedarikci borclari)
+        payables = 0.0
+        try:
+            result = db.query(func.coalesce(func.sum(Supplier.balance), 0.0)).filter(
+                Supplier.is_deleted == False, Supplier.balance > 0
+            ).scalar()
+            payables = float(result or 0)
+        except Exception:
+            pass
+
+        # Aylik projeksiyon
+        net_monthly = monthly_income - monthly_expense
+        projection = []
+        running_balance = current_cash
+        for i in range(1, months + 1):
+            running_balance += net_monthly
+            month_date = now + __import__('datetime').timedelta(days=30 * i)
+            projection.append({
+                "month": month_date.strftime("%Y-%m"),
+                "month_label": month_date.strftime("%B %Y"),
+                "projected_income": round(monthly_income, 2),
+                "projected_expense": round(monthly_expense, 2),
+                "projected_balance": round(running_balance, 2),
+            })
+
+        return {
+            "current_cash": round(current_cash, 2),
+            "monthly_income_avg": round(monthly_income, 2),
+            "monthly_expense_avg": round(monthly_expense, 2),
+            "net_monthly": round(net_monthly, 2),
+            "receivables": round(receivables, 2),
+            "payables": round(payables, 2),
+            "projection": projection,
+        }
+    except Exception as e:
+        return {"error": str(e), "current_cash": 0, "projection": []}

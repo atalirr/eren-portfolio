@@ -1,53 +1,66 @@
 {
-  "name": "atli-medikal-pos",
+  "name": "pos-6",
   "version": "1.0.0",
-  "description": "ATLI Medikal POS Sistemi - Modern Point of Sale Uygulaması",
-  "main": "main.js",
+  "description": "Offline-First Desktop POS System with Electron, React, and FastAPI",
+  "main": "electron/main.js",
   "scripts": {
-    "start": "electron .",
-    "dev": "electron . --dev",
-    "build": "electron-builder",
-    "pack": "electron-builder --dir",
-    "dist": "electron-builder"
+    "install:all": "npm install && cd frontend && npm install",
+    "start": "python launcher.py",
+    "start:windows": "baslat.bat",
+    "dev": "concurrently \"npm run frontend:dev\" \"npm run electron:dev\"",
+    "electron:dev": "electron .",
+    "electron:build": "electron-builder",
+    "frontend:dev": "cd frontend && npm run dev",
+    "frontend:build": "cd frontend && npm run build",
+    "backend:dev": "cd backend && python main.py --reload",
+    "backend:build:binary": "backend\\venv\\Scripts\\python backend/build_binary.py",
+    "build": "npm run frontend:build && npm run backend:build:binary && npm run electron:build",
+    "postinstall": "electron-builder install-app-deps"
   },
   "keywords": [
     "pos",
     "electron",
-    "medikal",
-    "stok",
-    "satış",
-    "türkçe"
+    "react",
+    "fastapi",
+    "offline-first"
   ],
-  "author": "ATLI Medikal",
+  "author": "",
   "license": "MIT",
   "devDependencies": {
+    "concurrently": "^8.2.2",
     "electron": "^28.0.0",
     "electron-builder": "^24.9.1"
   },
   "dependencies": {
-    "sqlite3": "^5.1.7",
-    "chart.js": "^4.5.0"
+    "electron-updater": "^6.1.7",
+    "puppeteer": "^25.3.0",
+    "puppeteer-screen-recorder": "^3.0.6"
   },
   "build": {
-    "appId": "com.atlimedikal.pos",
-    "productName": "ATLI Medikal POS",
+    "appId": "com.medikalpos.app",
+    "productName": "Medikal POS",
     "directories": {
       "output": "dist"
     },
     "files": [
-      "**/*",
-      "!node_modules/**/*",
-      "!dist/**/*",
-      "!*.log"
+      "electron/**/*",
+      "frontend/dist/**/*",
+      "!**/node_modules/**/*",
+      "!**/.git/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "backend/dist/pos6-backend",
+        "to": "backend/dist/pos6-backend"
+      }
     ],
     "win": {
       "target": "nsis",
-      "icon": "assets/icon.ico"
+      "icon": "build/icon.ico"
     },
     "nsis": {
       "oneClick": false,
-      "allowToChangeInstallationDirectory": true,
-      "createDesktopShortcut": true
+      "allowToChangeInstallationDirectory": true
     }
   }
 }

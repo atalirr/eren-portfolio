@@ -8,7 +8,7 @@ Bu depo, masaüstü uygulamaları, algoritmik ticaret sistemleri, modern web ara
 
 | # | Proje | Alan / Kapsam | Kullanılan Teknolojiler | Durum |
 |---|---|---|---|---|
-| 1 | **[ATLI Medikal POS](./pos-sistemi)** | Masaüstü Satış & Stok Yönetimi | Electron, Node.js, SQLite, Chart.js | 🟢 `Kararlı (v1.0)` |
+| 1 | **[ATLI Medikal POS 6](./pos-sistemi)** | Masaüstü Satış & AI Fatura | React (TS), Python FastAPI, Electron, Gemini AI | 🟢 `Kararlı (v6.0)` |
 | 2 | **[VocabFlow](./vocabflow-kelime)** | AI Destekli İngilizce Okuma & Kelime | JavaScript (SPA), Gemini 2.5 AI API, Responsive UI | 🟡 `Beta / Aktif Geliştirme` |
 | 3 | **[Antigravity Trade Bot](./kripto-trade-bot)** | Kripto Algoritmik Ticaret & Sinyal | Python 3, Pandas, Technical Indicators, Telegram Bot | 🔵 `Algoritmik Prototip` |
 | 4 | **[HabitPulse](./aliskanlik-takip)** | Alışkanlık & Rutin Takip Uygulaması | React 19, Vite, Tailwind CSS, Framer Motion | 🟡 `Ön Yüz / Aktif Geliştirme` |
@@ -17,20 +17,21 @@ Bu depo, masaüstü uygulamaları, algoritmik ticaret sistemleri, modern web ara
 
 ## 🛠️ Projeler Hakkında Detaylar
 
-### 1. 🛒 ATLI Medikal POS Sistemi (`/pos-sistemi`)
-Masaüstü ortamında hızlı ve kesintisiz perakende satış, stok yönetimi ve ciro takibi sağlayan POS uygulaması.
+### 1. 🛒 ATLI Medikal POS 6 (`/pos-sistemi`)
+Modern, offline-first masaüstü satış, stok ve yapay zeka destekli fatura işleme sistemi (Electron + React TypeScript + Python FastAPI).
 * **Öne Çıkanlar:**
-  * Güvenli Electron mimarisi (`contextIsolation: true`, `nodeIntegration: false`, IPC Bridge).
-  * Yerel SQLite3 veritabanı ile offline çalışabilme kabiliyeti.
-  * Dinamik dashboard, haftalık ciro grafikleri, kritik stok uyarıları.
-  * Barkod okuyucu ve fiş/fatura entegrasyonu hazırlığı.
+  * **Frontend:** React 18, TypeScript, Tailwind CSS, Vite ile ultra hızlı kullanıcı arayüzü.
+  * **Backend:** Python FastAPI mimarisi, SQLite ve Alembic veri tabanı yönetimi.
+  * **Yapay Zeka & OCR:** Google Gemini Vision AI ile kamera veya görselden otomatik fatura okuma ve stok eşleme.
+  * **Finansal Analiz:** Tedarikçi borç/alacak yönetimi, kâr/zarar ve ciro raporlaması.
 * **Hızlı Başlatma:**
-  * **Kolay Yol (Windows):** Klasördeki `baslat.bat` dosyasına çift tıklayın (bağımlılıkları otomatik kurar ve başlatır).
+  * **Kolay Yol (Windows):** Klasördeki `baslat.bat` dosyasına çift tıklayın (gerekli Python ve Frontend kurulumlarını otomatik yapar, tarayıcıyı ve servisleri açar).
   * **Manuel Yol:**
     ```bash
     cd pos-sistemi
-    npm install
-    npm start
+    pip install -r backend/requirements.txt
+    cd frontend && npm install && npm run build
+    python launcher.py
     ```
 
 ---

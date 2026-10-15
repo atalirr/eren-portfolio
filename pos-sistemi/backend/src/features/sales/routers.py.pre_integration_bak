@@ -1,0 +1,324 @@
+"""
+Sales Routers
+Satış Modülü - FastAPI Routes
+"""
+
+from typing import List
+from datetime import datetime, timedelta
+from fastapi import APIRouter, Depends, HTTPException, status, Query
+from sqlalchemy.orm import Session
+from sqlalchemy import func
+
+from src.shared.database.session import get_db
+from src.features.sales import schemas
+from src.features.sales.models import SaleOrder, SaleOrderItem, OrderStatus
+from src.features.sales.services import SalesService
+from src.features.inventory.models import Product
+
+
+router = APIRouter()
+
+
+@router.post("/sales", response_model=schemas.OrderResponse, status_code=status.HTTP_201_CREATED)
+async def create_sale(
+    order_data: schemas.OrderCreateSchema,
+    user_id: str = Query(default="default-user-id", description="Kullanıcı ID"),  # TODO: Gerçek uygulamada JWT token'dan alınmalı
+    db: Session = Depends(get_db)
+):
+    """
+    Yeni satış oluştur
+    
+    Atomik transaction içinde:
+    - Stok ve maliyet kontrolü
+    - Sipariş kaydı (total_profit hesaplama ile)
+    - Stok düşümü
+    - Finansal yansıma (Transaction veya Customer balance)
+    """
+    try:
+        service = SalesService(db)
+        sale_order = service.process_sale(order_data, user_id)
+        
+        # Response için items'ı da ekle
+        sale_order_dict = {
+            "id": sale_order.id,
+            "order_number": sale_order.order_number,
+            "customer_id": sale_order.customer_id,
+            "total_amount": sale_order.total_amount,
+            "total_profit": sale_order.total_profit,
+            "payment_method": sale_order.payment_method.value,
+            "platform": sale_order.platform.value,
+            "status": sale_order.status.value,
+            "created_at": sale_order.created_at.isoformat(),
+            "discount_type": sale_order.discount_type,
+            "discount_value": sale_order.discount_value,
+            "discount_amount": sale_order.discount_amount,
+            "final_amount": sale_order.final_amount,
+            "items": [
+                {
+                    "id": item.id,
+                    "order_id": item.order_id,
+                    "product_id": item.product_id,
+                    "product_name": item.product_name,
+                    "quantity": item.quantity,
+                    "unit_price": item.unit_price,
+                    "unit_cost": item.unit_cost,
+                    "discount": item.discount or 0.0,
+                }
+                for item in sale_order.items
+            ]
+        }
+        
+        return sale_order_dict
+        
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e)
+        )
+    except Exception as e:
+        import traceback
+        print(f"[ERROR] Satis islemi hatasi: {str(e)}")
+        print(traceback.format_exc())
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Satış işlemi sırasında hata oluştu: {str(e)}"
+        )
+
+
+@router.get("/products/search", response_model=List[dict])
+async def search_products(
+    q: str = Query(..., description="Barkod veya ürün adı"),
+    db: Session = Depends(get_db)
+):
+    """
+    Ürün arama
+    
+    - Barkod tam eşleşirse tek ürün dön
+    - İsimse benzerleri dön
+    
+    Hızlı satış ekranı için kullanılır.
+    """
+    try:
+        service = SalesService(db)
+        products = service.search_products(q)
+        
+        # Response formatı
+        return [
+            {
+                "id": product.id,
+                "name": product.name,
+                "barcode": product.barcode,
+                "sku": product.sku,
+                "sell_price": product.sell_price,
+                "buy_price": product.buy_price,
+                "stock_quantity": product.stock_quantity,
+                "unit": product.unit,
+                "category_id": product.category_id,
+            }
+            for product in products
+        ]
+        
+    except Exception as e:
+        import traceback
+        print(f"[ERROR] Urun arama hatasi: {str(e)}")
+        print(traceback.format_exc())
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Ürün arama sırasında hata oluştu: {str(e)}"
+        )
+
+
+@router.get("/sales/refund-stats")
+async def get_refund_stats(
+    days: int = Query(30, ge=1, le=365, description="Son kaç gün"),
+    db: Session = Depends(get_db)
+):
+    """İade oranı ve istatistikleri (kasa sayfası kartı için)"""
+    try:
+        cutoff = datetime.utcnow() - timedelta(days=days)
+
+        completed = db.query(
+            func.count(SaleOrder.id).label("cnt"),
+            func.sum(SaleOrder.total_amount).label("total"),
+        ).filter(
+            SaleOrder.status == OrderStatus.COMPLETED,
+            SaleOrder.is_deleted == False,
+            SaleOrder.created_at >= cutoff,
+        ).first()
+
+        refunded = db.query(
+            func.count(SaleOrder.id).label("cnt"),
+            func.sum(SaleOrder.total_amount).label("total"),
+        ).filter(
+            SaleOrder.status == OrderStatus.REFUNDED,
+            SaleOrder.created_at >= cutoff,
+        ).first()
+
+        completed_count = int(completed.cnt or 0)
+        refunded_count  = int(refunded.cnt or 0)
+        total_count     = completed_count + refunded_count
+
+        return {
+            "total_sales":       total_count,
+            "completed_sales":   completed_count,
+            "refunded_sales":    refunded_count,
+            "refund_rate":       round((refunded_count / total_count * 100), 2) if total_count > 0 else 0.0,
+            "completed_amount":  float(completed.total or 0),
+            "refunded_amount":   float(refunded.total or 0),
+            "period_days":       days,
+        }
+    except Exception as e:
+        import traceback
+        print(f"[ERROR] Refund stats hatasi: {str(e)}")
+        print(traceback.format_exc())
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"İade istatistikleri alınamadı: {str(e)}"
+        )
+
+
+@router.get("/sales/{order_id}", response_model=schemas.OrderResponse)
+async def get_sale(
+    order_id: str,
+    db: Session = Depends(get_db)
+):
+    """ID'ye göre satış getir"""
+    try:
+        service = SalesService(db)
+        sale_order = service.get_order_by_id(order_id)
+        
+        if not sale_order:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Satış bulunamadı: {order_id}"
+            )
+        
+        # Response formatı
+        return {
+            "id": sale_order.id,
+            "order_number": sale_order.order_number,
+            "customer_id": sale_order.customer_id,
+            "total_amount": sale_order.total_amount,
+            "total_profit": sale_order.total_profit,
+            "payment_method": sale_order.payment_method.value,
+            "platform": sale_order.platform.value,
+            "status": sale_order.status.value,
+            "created_at": sale_order.created_at.isoformat(),
+            "discount_type": sale_order.discount_type,
+            "discount_value": sale_order.discount_value,
+            "discount_amount": sale_order.discount_amount,
+            "final_amount": sale_order.final_amount,
+            "items": [
+                {
+                    "id": item.id,
+                    "order_id": item.order_id,
+                    "product_id": item.product_id,
+                    "product_name": item.product_name,
+                    "quantity": item.quantity,
+                    "unit_price": item.unit_price,
+                    "unit_cost": item.unit_cost,
+                    "discount": item.discount or 0.0,
+                }
+                for item in sale_order.items
+            ]
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        import traceback
+        print(f"[ERROR] Satis getirme hatasi: {str(e)}")
+        print(traceback.format_exc())
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Satış getirme sırasında hata oluştu: {str(e)}"
+        )
+
+
+@router.get("/sales/analysis/products")
+async def get_product_sales_analysis(
+    db: Session = Depends(get_db)
+):
+    """
+    Ürün bazlı satış analizi
+    Raporlar sayfası için ürün bazlı satış istatistikleri
+    """
+    try:
+        service = SalesService(db)
+        analysis = service.get_product_sales_analysis()
+        return analysis
+    except Exception as e:
+        import traceback
+        print(f"[ERROR] Urun satis analizi hatasi: {str(e)}")
+        print(traceback.format_exc())
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Ürün satış analizi sırasında hata oluştu: {str(e)}"
+        )
+
+
+@router.get("/sales/analysis/products/{product_id}/weekly")
+async def get_product_weekly_sales(
+    product_id: str,
+    db: Session = Depends(get_db)
+):
+    """
+    Ürün haftalık satış analizi (son 7 gün)
+    Stok kartı arka yüzü için günlük satış grafik verileri
+    """
+    try:
+        today = datetime.utcnow().date()
+        seven_days_ago = today - timedelta(days=6)
+
+        results = (
+            db.query(
+                func.date(SaleOrder.created_at).label("sale_date"),
+                func.sum(SaleOrderItem.quantity).label("total_qty"),
+                func.sum(SaleOrderItem.quantity * SaleOrderItem.unit_price).label("total_revenue"),
+            )
+            .join(SaleOrderItem, SaleOrder.id == SaleOrderItem.order_id)
+            .filter(
+                SaleOrderItem.product_id == product_id,
+                SaleOrder.is_deleted == False,
+                SaleOrder.status == OrderStatus.COMPLETED,
+                func.date(SaleOrder.created_at) >= str(seven_days_ago),
+            )
+            .group_by(func.date(SaleOrder.created_at))
+            .all()
+        )
+
+        results_by_date = {str(r.sale_date): r for r in results}
+
+        day_labels = ['Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt', 'Paz']
+        days = []
+        total_qty = 0
+        total_revenue = 0.0
+
+        for i in range(7):
+            d = seven_days_ago + timedelta(days=i)
+            date_str = str(d)
+            day_label = day_labels[d.weekday()]
+
+            if date_str in results_by_date:
+                r = results_by_date[date_str]
+                qty = int(r.total_qty or 0)
+                revenue = float(r.total_revenue or 0)
+            else:
+                qty = 0
+                revenue = 0.0
+
+            total_qty += qty
+            total_revenue += revenue
+            days.append({"date": date_str, "label": day_label, "qty": qty, "revenue": revenue})
+
+        return {"product_id": product_id, "days": days, "total_qty": total_qty, "total_revenue": total_revenue}
+
+    except Exception as e:
+        import traceback
+        print(f"[ERROR] Urun haftalik satis hatasi: {str(e)}")
+        print(traceback.format_exc())
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Haftalık satış verisi alınamadı: {str(e)}"
+        )
+
