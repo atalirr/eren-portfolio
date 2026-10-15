@@ -13,8 +13,19 @@ if not exist "launcher.py" (
     exit /b
 )
 
-where python >nul 2>nul
-if %errorlevel% neq 0 (
+set "PY_CMD="
+if exist "backend\venv\Scripts\python.exe" (
+    set "PY_CMD=backend\venv\Scripts\python.exe"
+)
+if "%PY_CMD%"=="" (
+    py -3.12 -c "import sys" >nul 2>nul
+    if %errorlevel% equ 0 set "PY_CMD=py -3.12"
+)
+if "%PY_CMD%"=="" (
+    where python >nul 2>nul
+    if %errorlevel% equ 0 set "PY_CMD=python"
+)
+if "%PY_CMD%"=="" (
     echo [HATA] Sistemde Python bulunamadi! Lutfen python.org adresinden kurun.
     pause
     exit /b
@@ -27,12 +38,12 @@ if not exist "backend\.env" (
 )
 
 echo [1/3] Backend paketleri kontrol ediliyor...
-python -c "import fastapi, uvicorn, sqlalchemy, alembic, pydantic" >nul 2>nul
+%PY_CMD% -c "import fastapi, uvicorn, sqlalchemy, alembic, pydantic" >nul 2>nul
 if %errorlevel% neq 0 (
-    echo Gerekli Python paketleri kuruluyor, lutfen bekleyin...
-    pip install -r backend\requirements.txt
+    echo Backend paketleri kuruluyor, lutfen bekleyin...
+    %PY_CMD% -m pip install -r backend\requirements.txt
 ) else (
-    echo Backend gereksinimleri hazir.
+    echo Backend paketleri hazir.
 )
 
 echo.
@@ -40,14 +51,14 @@ echo [2/3] Frontend paketleri kontrol ediliyor...
 if not exist "frontend\node_modules\" (
     echo Frontend paketleri kuruluyor, lutfen bekleyin...
     cd frontend
-    call npm install
+    call npm install --legacy-peer-deps
     cd ..
 ) else (
-    echo Frontend gereksinimleri hazir.
+    echo Frontend paketleri hazir.
 )
 
 echo.
 echo [3/3] POS 6 Sistemi Baslatiliyor...
 echo.
-python launcher.py
+%PY_CMD% launcher.py
 pause
