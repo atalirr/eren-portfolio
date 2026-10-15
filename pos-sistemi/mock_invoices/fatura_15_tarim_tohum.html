@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8"/>
+<title>Tarım & Tohum Faturası</title>
+<style>
+  @page { size: A4; margin: 15mm; }
+  body { font-family: Arial, sans-serif; font-size: 10pt; color: #222; width: 210mm; margin: 0 auto; }
+  table { border-collapse: collapse; width: 100%; }
+  th, td { padding: 4px 6px; }
+  .bold { font-weight: bold; }
+  .right { text-align: right; }
+  .center { text-align: center; }
+  .border-table th, .border-table td { border: 1px solid #aaa; }
+  .header { margin-bottom: 10px; }
+  .totals td { padding: 3px 6px; }
+  .note { font-size: 8pt; color: #666; margin-top: 12px; }
+  .blue-band { background: #003e8c; color: white; padding: 8px 12px; }
+  .lite-band { background: #e8f0fb; padding: 6px 12px; }
+  h1, h2, h3 { margin: 0; }
+</style>
+</head>
+<body>
+
+<div style="background:#27ae60;color:#fff;padding:10px;display:flex;justify-content:space-between">
+  <div><h2>🌱 TOPRAK ZİRAİ TARIM LTD. ŞTİ.</h2><small>VKN: 5620620071 | Antalya Organize Sanayi</small></div>
+  <div class="right"><h3>Zirai Satış Faturası</h3><small>TAR2026129533 / 30.06.2026</small></div>
+</div>
+<p style="background:#eafaf1;padding:6px;margin:6px 0"><b>Alıcı:</b> Bereketli Çiftlik Kooperatifi – VKN: 5766994377</p>
+
+<table class="border-table" style="margin-top:12px">
+  <thead>
+    <tr style="background:#27ae60;color:white;">
+      <th class="center" width="30">Sıra</th>
+      <th>Mal / Hizmet Cinsi</th>
+      <th class="center" width="45">Miktar</th>
+      <th class="center" width="40">Birim</th>
+      <th class="right" width="80">Birim Fiyat</th>
+      <th class="center" width="50">KDV %</th>
+      <th class="right" width="80">KDV Tutarı</th>
+      <th class="right" width="90">Tutar</th>
+    </tr>
+  </thead>
+  <tbody><tr style=''><td class='center'>1</td><td>Seminis Domates Tohumu F1 Hibrit 500 Adet</td><td class='center'>10</td><td class='center'>Adet</td><td class='right'>285,00 ₺</td><td class='center'>%10</td><td class='right'>285,00 ₺</td><td class='right bold'>3.135,00 ₺</td></tr><tr style='background:#f9f9fb;'><td class='center'>2</td><td>Syngenta Biber Tohumu 100 Adet Paket</td><td class='center'>8</td><td class='center'>Adet</td><td class='right'>195,00 ₺</td><td class='center'>%10</td><td class='right'>156,00 ₺</td><td class='right bold'>1.716,00 ₺</td></tr><tr style=''><td class='center'>3</td><td>Yara-Mila Granül NPK 15-15-15 Gübre 50kg<br/><small style='color:#888'>8690700001234</small></td><td class='center'>20</td><td class='center'>Adet</td><td class='right'>320,00 ₺</td><td class='center'>%10</td><td class='right'>640,00 ₺</td><td class='right bold'>7.040,00 ₺</td></tr><tr style='background:#f9f9fb;'><td class='center'>4</td><td>Basudin Zirai İlaç 500ml (Böcek İlacı)</td><td class='center'>15</td><td class='center'>Adet</td><td class='right'>185,00 ₺</td><td class='center'>%20</td><td class='right'>555,00 ₺</td><td class='right bold'>3.330,00 ₺</td></tr><tr style=''><td class='center'>5</td><td>Tarnet Mantar İlacı 100g</td><td class='center'>12</td><td class='center'>Adet</td><td class='right'>95,00 ₺</td><td class='center'>%20</td><td class='right'>228,00 ₺</td><td class='right bold'>1.368,00 ₺</td></tr><tr style='background:#f9f9fb;'><td class='center'>6</td><td>Damla Sulama Borusu Ø16 (Rulo 100m)</td><td class='center'>5</td><td class='center'>Adet</td><td class='right'>450,00 ₺</td><td class='center'>%20</td><td class='right'>450,00 ₺</td><td class='right bold'>2.700,00 ₺</td></tr><tr style=''><td class='center'>7</td><td>Siyah Toprak Örtü Malçı 1.2m × 100m Rulo</td><td class='center'>3</td><td class='center'>Adet</td><td class='right'>850,00 ₺</td><td class='center'>%20</td><td class='right'>510,00 ₺</td><td class='right bold'>3.060,00 ₺</td></tr></tbody>
+</table>
+<table class="totals" style="margin-top:8px;margin-left:auto;width:260px">
+  <tr><td>Ara Toplam</td><td class="right bold">19.525,00 ₺</td></tr>
+  <tr><td>Toplam KDV</td><td class="right bold">2.824,00 ₺</td></tr>
+  <tr style="background:#003e8c;color:white;">
+    <td class="bold">Ödenecek Tutar</td>
+    <td class="right bold">22.349,00 ₺</td>
+  </tr>
+</table>
+<p class="note">Zirai ilaçlar Tarım Bakanlığı ruhsatlıdır. Kullanım talimatına uyunuz.</p>
+</body>
+</html>

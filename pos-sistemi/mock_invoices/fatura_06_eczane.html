@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8"/>
+<title>Eczane Faturası</title>
+<style>
+  @page { size: A4; margin: 15mm; }
+  body { font-family: Arial, sans-serif; font-size: 10pt; color: #222; width: 210mm; margin: 0 auto; }
+  table { border-collapse: collapse; width: 100%; }
+  th, td { padding: 4px 6px; }
+  .bold { font-weight: bold; }
+  .right { text-align: right; }
+  .center { text-align: center; }
+  .border-table th, .border-table td { border: 1px solid #aaa; }
+  .header { margin-bottom: 10px; }
+  .totals td { padding: 3px 6px; }
+  .note { font-size: 8pt; color: #666; margin-top: 12px; }
+  .blue-band { background: #003e8c; color: white; padding: 8px 12px; }
+  .lite-band { background: #e8f0fb; padding: 6px 12px; }
+  h1, h2, h3 { margin: 0; }
+</style>
+</head>
+<body>
+
+<div style="background:#006633;color:#fff;padding:10px;display:flex;justify-content:space-between">
+  <div><h2>SAĞLIK ECZANESİ</h2><small>VKN: 4135504070 | Cumhuriyet Cad. 88, Şişli/İST</small></div>
+  <div class="right"><h3>İrsaliyeli Fatura</h3><small>ECZ2026670078 / 25.06.2026</small></div>
+</div>
+<div style="background:#e8f5e9;padding:6px;margin:6px 0">
+  <b>Alıcı:</b> Yeşilay Sağlık Koop. – VKN: 8339477912
+</div>
+
+<table class="border-table" style="margin-top:12px">
+  <thead>
+    <tr style="background:#006633;color:white;">
+      <th class="center" width="30">Sıra</th>
+      <th>Mal / Hizmet Cinsi</th>
+      <th class="center" width="45">Miktar</th>
+      <th class="center" width="40">Birim</th>
+      <th class="right" width="80">Birim Fiyat</th>
+      <th class="center" width="50">KDV %</th>
+      <th class="right" width="80">KDV Tutarı</th>
+      <th class="right" width="90">Tutar</th>
+    </tr>
+  </thead>
+  <tbody><tr style=''><td class='center'>1</td><td>Parol 500mg Tablet (Blister 24'lü)<br/><small style='color:#888'>8699514020012</small></td><td class='center'>50</td><td class='center'>Adet</td><td class='right'>42,50 ₺</td><td class='center'>%10</td><td class='right'>212,50 ₺</td><td class='right bold'>2.337,50 ₺</td></tr><tr style='background:#f9f9fb;'><td class='center'>2</td><td>Voltaren Emulgel 150g<br/><small style='color:#888'>8699514031223</small></td><td class='center'>20</td><td class='center'>Adet</td><td class='right'>185,00 ₺</td><td class='center'>%10</td><td class='right'>370,00 ₺</td><td class='right bold'>4.070,00 ₺</td></tr><tr style=''><td class='center'>3</td><td>Strepsil Portakal&C Tablet 24'lü<br/><small style='color:#888'>8699514005897</small></td><td class='center'>30</td><td class='center'>Adet</td><td class='right'>98,50 ₺</td><td class='center'>%10</td><td class='right'>295,50 ₺</td><td class='right bold'>3.250,50 ₺</td></tr><tr style='background:#f9f9fb;'><td class='center'>4</td><td>Bepanthen Yara Pansuman Krem 30g<br/><small style='color:#888'>8699514040651</small></td><td class='center'>15</td><td class='center'>Adet</td><td class='right'>145,00 ₺</td><td class='center'>%10</td><td class='right'>217,50 ₺</td><td class='right bold'>2.392,50 ₺</td></tr><tr style=''><td class='center'>5</td><td>Omeprazol 20mg Kapsül (28'li)<br/><small style='color:#888'>8699514012345</small></td><td class='center'>40</td><td class='center'>Adet</td><td class='right'>65,00 ₺</td><td class='center'>%10</td><td class='right'>260,00 ₺</td><td class='right bold'>2.860,00 ₺</td></tr><tr style='background:#f9f9fb;'><td class='center'>6</td><td>Cetirizin 10mg Tablet (20'li)<br/><small style='color:#888'>8699514011111</small></td><td class='center'>25</td><td class='center'>Adet</td><td class='right'>48,00 ₺</td><td class='center'>%10</td><td class='right'>120,00 ₺</td><td class='right bold'>1.320,00 ₺</td></tr><tr style=''><td class='center'>7</td><td>Bepanthol Losyon 400ml<br/><small style='color:#888'>8699514022222</small></td><td class='center'>10</td><td class='center'>Adet</td><td class='right'>220,00 ₺</td><td class='center'>%10</td><td class='right'>220,00 ₺</td><td class='right bold'>2.420,00 ₺</td></tr></tbody>
+</table>
+<table class="totals" style="margin-top:8px;margin-left:auto;width:260px">
+  <tr><td>Ara Toplam</td><td class="right bold">16.955,00 ₺</td></tr>
+  <tr><td>Toplam KDV</td><td class="right bold">1.695,50 ₺</td></tr>
+  <tr style="background:#003e8c;color:white;">
+    <td class="bold">Ödenecek Tutar</td>
+    <td class="right bold">18.650,50 ₺</td>
+  </tr>
+</table>
+<p class="note">⚕ Reçeteli ilaçlar hekimin tavsiyesi dışında kullanılmamalıdır.</p>
+</body>
+</html>

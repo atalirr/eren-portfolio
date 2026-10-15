@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8"/>
+<title>Kahve & Pastane Hammadde Faturası</title>
+<style>
+  @page { size: A4; margin: 15mm; }
+  body { font-family: Arial, sans-serif; font-size: 10pt; color: #222; width: 210mm; margin: 0 auto; }
+  table { border-collapse: collapse; width: 100%; }
+  th, td { padding: 4px 6px; }
+  .bold { font-weight: bold; }
+  .right { text-align: right; }
+  .center { text-align: center; }
+  .border-table th, .border-table td { border: 1px solid #aaa; }
+  .header { margin-bottom: 10px; }
+  .totals td { padding: 3px 6px; }
+  .note { font-size: 8pt; color: #666; margin-top: 12px; }
+  .blue-band { background: #003e8c; color: white; padding: 8px 12px; }
+  .lite-band { background: #e8f0fb; padding: 6px 12px; }
+  h1, h2, h3 { margin: 0; }
+</style>
+</head>
+<body>
+
+<div style="background:#5d3a00;color:#fff;padding:10px;display:flex;justify-content:space-between">
+  <div><h2>☕ AROMALAND KAHVE & GIDA TOPTANCILIK</h2><small>VKN: 9751152191 | Bostancı, İstanbul</small></div>
+  <div class="right"><h3>Tedarik Faturası</h3><small>KHV2026928072 / 01.06.2026</small></div>
+</div>
+<p style="background:#fdf3e4;padding:6px;margin:6px 0"><b>Alıcı:</b> Bonbon Pastane Ltd. – VKN: 0609596409</p>
+
+<table class="border-table" style="margin-top:12px">
+  <thead>
+    <tr style="background:#5d3a00;color:white;">
+      <th class="center" width="30">Sıra</th>
+      <th>Mal / Hizmet Cinsi</th>
+      <th class="center" width="45">Miktar</th>
+      <th class="center" width="40">Birim</th>
+      <th class="right" width="80">Birim Fiyat</th>
+      <th class="center" width="50">KDV %</th>
+      <th class="right" width="80">KDV Tutarı</th>
+      <th class="right" width="90">Tutar</th>
+    </tr>
+  </thead>
+  <tbody><tr style=''><td class='center'>1</td><td>Lavazza Qualita Rossa Espresso Çekirdeği 1kg<br/><small style='color:#888'>8000070018258</small></td><td class='center'>10</td><td class='center'>Adet</td><td class='right'>485,00 ₺</td><td class='center'>%20</td><td class='right'>970,00 ₺</td><td class='right bold'>5.820,00 ₺</td></tr><tr style='background:#f9f9fb;'><td class='center'>2</td><td>İtalyan Tam Buğday Unu 25kg Çuval</td><td class='center'>5</td><td class='center'>Adet</td><td class='right'>325,00 ₺</td><td class='center'>%10</td><td class='right'>162,50 ₺</td><td class='right bold'>1.787,50 ₺</td></tr><tr style=''><td class='center'>3</td><td>Valrhona Noir Extra Brut Bitter Çikolata 1kg<br/><small style='color:#888'>3346840000228</small></td><td class='center'>4</td><td class='center'>Adet</td><td class='right'>650,00 ₺</td><td class='center'>%20</td><td class='right'>520,00 ₺</td><td class='right bold'>3.120,00 ₺</td></tr><tr style='background:#f9f9fb;'><td class='center'>4</td><td>Lurpak Tuzlu Tereyağı 200g (Koli 10 Adet)<br/><small style='color:#888'>5740900484481</small></td><td class='center'>6</td><td class='center'>Adet</td><td class='right'>520,00 ₺</td><td class='center'>%10</td><td class='right'>312,00 ₺</td><td class='right bold'>3.432,00 ₺</td></tr><tr style=''><td class='center'>5</td><td>Philadelphia Krem Peynir 1kg<br/><small style='color:#888'>0021000005475</small></td><td class='center'>8</td><td class='center'>Adet</td><td class='right'>280,00 ₺</td><td class='center'>%10</td><td class='right'>224,00 ₺</td><td class='right bold'>2.464,00 ₺</td></tr><tr style='background:#f9f9fb;'><td class='center'>6</td><td>Silikomart Muffin Kalıbı (12'li Seti)</td><td class='center'>5</td><td class='center'>Adet</td><td class='right'>185,00 ₺</td><td class='center'>%20</td><td class='right'>185,00 ₺</td><td class='right bold'>1.110,00 ₺</td></tr><tr style=''><td class='center'>7</td><td>Bambu Dondurma Çubuğu 1000 Adet</td><td class='center'>3</td><td class='center'>Adet</td><td class='right'>75,00 ₺</td><td class='center'>%20</td><td class='right'>45,00 ₺</td><td class='right bold'>270,00 ₺</td></tr></tbody>
+</table>
+<table class="totals" style="margin-top:8px;margin-left:auto;width:260px">
+  <tr><td>Ara Toplam</td><td class="right bold">15.585,00 ₺</td></tr>
+  <tr><td>Toplam KDV</td><td class="right bold">2.418,50 ₺</td></tr>
+  <tr style="background:#003e8c;color:white;">
+    <td class="bold">Ödenecek Tutar</td>
+    <td class="right bold">18.003,50 ₺</td>
+  </tr>
+</table>
+</body>
+</html>

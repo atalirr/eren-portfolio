@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8"/>
+<title>Pet Shop Faturası</title>
+<style>
+  @page { size: A4; margin: 15mm; }
+  body { font-family: Arial, sans-serif; font-size: 10pt; color: #222; width: 210mm; margin: 0 auto; }
+  table { border-collapse: collapse; width: 100%; }
+  th, td { padding: 4px 6px; }
+  .bold { font-weight: bold; }
+  .right { text-align: right; }
+  .center { text-align: center; }
+  .border-table th, .border-table td { border: 1px solid #aaa; }
+  .header { margin-bottom: 10px; }
+  .totals td { padding: 3px 6px; }
+  .note { font-size: 8pt; color: #666; margin-top: 12px; }
+  .blue-band { background: #003e8c; color: white; padding: 8px 12px; }
+  .lite-band { background: #e8f0fb; padding: 6px 12px; }
+  h1, h2, h3 { margin: 0; }
+</style>
+</head>
+<body>
+
+<div style="background:#2ecc71;color:#fff;padding:10px;display:flex;justify-content:space-between">
+  <div><h2>🐾 PATILIM PET TOPTANCILIK</h2><small>VKN: 6337608406 | Çerkezköy, Tekirdağ</small></div>
+  <div class="right"><h3>Toptan Fatura</h3><small>PET2026246980 / 02.07.2026</small></div>
+</div>
+<p style="background:#eafaf1;padding:6px;margin:6px 0"><b>Alıcı:</b> Hayvan Severlerin Pet Shop – VKN: 4990919676</p>
+
+<table class="border-table" style="margin-top:12px">
+  <thead>
+    <tr style="background:#2ecc71;color:white;">
+      <th class="center" width="30">Sıra</th>
+      <th>Mal / Hizmet Cinsi</th>
+      <th class="center" width="45">Miktar</th>
+      <th class="center" width="40">Birim</th>
+      <th class="right" width="80">Birim Fiyat</th>
+      <th class="center" width="50">KDV %</th>
+      <th class="right" width="80">KDV Tutarı</th>
+      <th class="right" width="90">Tutar</th>
+    </tr>
+  </thead>
+  <tbody><tr style=''><td class='center'>1</td><td>Royal Canin Medium Adult Köpek Maması 15kg<br/><small style='color:#888'>3182550402521</small></td><td class='center'>5</td><td class='center'>Adet</td><td class='right'>1.250,00 ₺</td><td class='center'>%20</td><td class='right'>1.250,00 ₺</td><td class='right bold'>7.500,00 ₺</td></tr><tr style='background:#f9f9fb;'><td class='center'>2</td><td>Whiskas Tavuklu Kedi Maması 300g (24'lü Koli)<br/><small style='color:#888'>5900951261497</small></td><td class='center'>4</td><td class='center'>Adet</td><td class='right'>580,00 ₺</td><td class='center'>%20</td><td class='right'>464,00 ₺</td><td class='right bold'>2.784,00 ₺</td></tr><tr style=''><td class='center'>3</td><td>Purina Pro Plan Kedi İnce Kıyma Poşet 85g ×20<br/><small style='color:#888'>7613034578709</small></td><td class='center'>6</td><td class='center'>Adet</td><td class='right'>320,00 ₺</td><td class='center'>%20</td><td class='right'>384,00 ₺</td><td class='right bold'>2.304,00 ₺</td></tr><tr style='background:#f9f9fb;'><td class='center'>4</td><td>Vitakraft Hamster Granül Mama 600g<br/><small style='color:#888'>4008239048202</small></td><td class='center'>10</td><td class='center'>Adet</td><td class='right'>85,00 ₺</td><td class='center'>%20</td><td class='right'>170,00 ₺</td><td class='right bold'>1.020,00 ₺</td></tr><tr style=''><td class='center'>5</td><td>Trixie Kedi Tırmalama Sütunu 60cm<br/><small style='color:#888'>4011905430980</small></td><td class='center'>8</td><td class='center'>Adet</td><td class='right'>280,00 ₺</td><td class='center'>%20</td><td class='right'>448,00 ₺</td><td class='right bold'>2.688,00 ₺</td></tr><tr style='background:#f9f9fb;'><td class='center'>6</td><td>Biossi Köpek Pati Temizleme Eldiveni</td><td class='center'>15</td><td class='center'>Adet</td><td class='right'>55,00 ₺</td><td class='center'>%20</td><td class='right'>165,00 ₺</td><td class='right bold'>990,00 ₺</td></tr><tr style=''><td class='center'>7</td><td>Versele-Laga Muhabbet Kuşu Yemi 1kg<br/><small style='color:#888'>5410340600954</small></td><td class='center'>12</td><td class='center'>Adet</td><td class='right'>65,00 ₺</td><td class='center'>%20</td><td class='right'>156,00 ₺</td><td class='right bold'>936,00 ₺</td></tr></tbody>
+</table>
+<table class="totals" style="margin-top:8px;margin-left:auto;width:260px">
+  <tr><td>Ara Toplam</td><td class="right bold">15.185,00 ₺</td></tr>
+  <tr><td>Toplam KDV</td><td class="right bold">3.037,00 ₺</td></tr>
+  <tr style="background:#003e8c;color:white;">
+    <td class="bold">Ödenecek Tutar</td>
+    <td class="right bold">18.222,00 ₺</td>
+  </tr>
+</table>
+</body>
+</html>

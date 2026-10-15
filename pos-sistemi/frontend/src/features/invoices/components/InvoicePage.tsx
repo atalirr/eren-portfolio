@@ -1,0 +1,1569 @@
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import * as XLSX from 'xlsx';
+import apiClient from '../../../shared/utils/api.client';
+import { useAppStore } from '@/store/appStore';
+
+/* ────────────────────── API Servisleri ────────────────────── */
+const invoiceApi = {
+  getAll: (params?: any) => apiClient.get('/invoices', { params }),
+  getById: (id: string) => apiClient.get(`/invoices/${id}`),
+  create: (data: any) => apiClient.post('/invoices', data),
+  updateStatus: (id: string, status: string) => apiClient.patch(`/invoices/${id}/status`, { status }),
+  delete: (id: string) => apiClient.delete(`/invoices/${id}`),
+  getStats: () => apiClient.get('/invoices/stats'),
+};
+const supplierApi = {
+  getAll: () => apiClient.get('/suppliers'),
+  create: (data: any) => apiClient.post('/suppliers', data),
+};
+const customersApi = {
+  getAll: () => apiClient.get('/customers'),
+};
+const inventoryApi = {
+  getProducts: () => apiClient.get('/inventory/products'),
+};
+
+/* ────────────────────── Veri Tipleri ────────────────────── */
+interface InvoiceItem {
+  id?: string;
+  product_id?: string;
+  description: string;
+  quantity: number;
+  unit: string;
+  unit_price: number;
+  vat_rate: number;
+  vat_amount?: number;
+  discount_rate: number;
+  discount_amount?: number;
+  line_total?: number;
+}
+
+interface Invoice {
+  id: string;
+  invoice_number: string;
+  invoice_type: string;
+  customer_id?: string;
+  supplier_id?: string;
+  invoice_date: string;
+  due_date?: string;
+  subtotal: number;
+  total_vat: number;
+  total_discount: number;
+  total_amount: number;
+  status: string;
+  notes?: string;
+  payment_method?: string;
+  created_at?: string;
+  customer_name?: string;
+  supplier_name?: string;
+  items: InvoiceItem[];
+}
+
+type PeriodOption = 'THIS_MONTH' | 'LAST_MONTH' | 'LAST_3_MONTHS' | 'CUSTOM' | 'ALL';
+
+/* ────────────────────── Formatlama Yardımcıları ────────────────────── */
+const formatCurrency = (v: number) =>
+  new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(v || 0);
+
+const formatShortDate = (dateStr: string) => {
+  if (!dateStr) return '-';
+  try {
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return dateStr;
+    const months = ['Oca', 'Şub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'Ağu', 'Eyl', 'Eki', 'Kas', 'Ara'];
+    return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+  } catch {
+    return dateStr;
+  }
+};
+
+const getDueDateStatus = (inv: Invoice) => {
+  if (inv.status === 'PAID') {
+    return { text: 'Vadesinde ödendi', cls: 'text-[11px] text-slate-400' };
+  }
+  if (!inv.due_date) {
+    return { text: 'Onay bekliyor', cls: 'text-[11px] text-slate-400' };
+  }
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const due = new Date(inv.due_date);
+  due.setHours(0, 0, 0, 0);
+
+  const diffTime = due.getTime() - today.getTime();
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  const dueFormatted = formatShortDate(inv.due_date);
+
+  if (diffDays < 0) {
+    return { text: `Vade: ${dueFormatted} (${Math.abs(diffDays)} gün gecikti)`, cls: 'text-[11px] text-rose-600 font-semibold' };
+  } else if (diffDays === 0) {
+    return { text: `Vade: Bugün son gün!`, cls: 'text-[11px] text-amber-600 font-semibold' };
+  } else if (diffDays <= 7) {
+    return { text: `Vade: ${dueFormatted} (${diffDays} gün kaldı)`, cls: 'text-[11px] text-amber-600' };
+  } else {
+    return { text: `Vade: ${dueFormatted}`, cls: 'text-[11px] text-slate-400' };
+  }
+};
+
+/* Paraşüt Seviyesi Durum Rozeti */
+const renderInvoiceStatusBadge = (status: string) => {
+  const s = (status || '').toUpperCase();
+  switch (s) {
+    case 'PAID':
+      return (
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[11px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-300 shadow-2xs whitespace-nowrap">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+          <span>Ödendi</span>
+        </span>
+      );
+    case 'PARTIAL':
+    case 'PARTIALLY_PAID':
+      return (
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[11px] font-semibold bg-sky-50 text-sky-800 border border-sky-300 shadow-2xs whitespace-nowrap">
+          <span className="w-1.5 h-1.5 rounded-full bg-sky-600"></span>
+          <span>Kısmi Ödendi</span>
+        </span>
+      );
+    case 'SENT':
+    case 'PENDING':
+    case 'UNPAID':
+      return (
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[11px] font-semibold bg-amber-50 text-amber-800 border border-amber-300 shadow-2xs whitespace-nowrap">
+          <span className="w-1.5 h-1.5 rounded-full bg-amber-600 animate-pulse"></span>
+          <span>Bekliyor</span>
+        </span>
+      );
+    case 'CANCELLED':
+    case 'VOID':
+      return (
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[11px] font-semibold bg-rose-50 text-rose-800 border border-rose-300 shadow-2xs whitespace-nowrap">
+          <span className="w-1.5 h-1.5 rounded-full bg-rose-600"></span>
+          <span>İptal</span>
+        </span>
+      );
+    case 'DRAFT':
+      return (
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[11px] font-semibold bg-slate-100 text-slate-700 border border-slate-300 shadow-2xs whitespace-nowrap">
+          <span className="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
+          <span>Taslak</span>
+        </span>
+      );
+    default:
+      return (
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[11px] font-semibold bg-slate-50 text-slate-600 border border-slate-200 whitespace-nowrap">
+          <span className="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+          <span>{status}</span>
+        </span>
+      );
+  }
+};
+
+/* ────────────────────── Ana Bileşen ────────────────────── */
+export function InvoicePage() {
+  const { user } = useAppStore();
+  const [invoices, setInvoices] = useState<Invoice[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [activeFilter, setActiveFilter] = useState<'ALL' | 'SALES' | 'PURCHASE' | 'OVERDUE'>('ALL');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showDetailModal, setShowDetailModal] = useState(false);
+  const [selectedInvoice, setSelectedInvoice] = useState<Invoice | null>(null);
+  const [stats, setStats] = useState<any>(null);
+  const [customers, setCustomers] = useState<any[]>([]);
+  const [suppliers, setSuppliers] = useState<any[]>([]);
+  const [products, setProducts] = useState<any[]>([]);
+
+  // Dinamik Periyot Filtresi Durumu (Paraşüt Seviyesi)
+  const [period, setPeriod] = useState<PeriodOption>('THIS_MONTH');
+  const [showPeriodDropdown, setShowPeriodDropdown] = useState(false);
+  const periodDropdownRef = useRef<HTMLDivElement>(null);
+
+  const [customStartDate, setCustomStartDate] = useState(() => {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-01`;
+  });
+  const [customEndDate, setCustomEndDate] = useState(() => {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  });
+
+  // Üç nokta menü açık id'si
+  const [menuOpenId, setMenuOpenId] = useState<string | null>(null);
+
+  // Sayfalama (Pagination)
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
+
+  // Dinamik Periyot Tarih Sınırları ve Etiketi
+  const periodBounds = useMemo(() => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth();
+    const months = ['Oca', 'Şub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'Ağu', 'Eyl', 'Eki', 'Kas', 'Ara'];
+
+    if (period === 'THIS_MONTH') {
+      const start = new Date(year, month, 1, 0, 0, 0, 0);
+      const end = new Date(year, month + 1, 0, 23, 59, 59, 999);
+      const label = `Bu Ay (01 - ${end.getDate()} ${months[month]} ${year})`;
+      return { start, end, label };
+    }
+    if (period === 'LAST_MONTH') {
+      const start = new Date(year, month - 1, 1, 0, 0, 0, 0);
+      const end = new Date(year, month, 0, 23, 59, 59, 999);
+      const label = `Geçen Ay (01 - ${end.getDate()} ${months[start.getMonth()]} ${start.getFullYear()})`;
+      return { start, end, label };
+    }
+    if (period === 'LAST_3_MONTHS') {
+      const start = new Date(year, month - 2, 1, 0, 0, 0, 0);
+      const end = new Date(year, month + 1, 0, 23, 59, 59, 999);
+      const label = `Son 3 Ay (${months[start.getMonth()]} - ${months[end.getMonth()]} ${year})`;
+      return { start, end, label };
+    }
+    if (period === 'CUSTOM') {
+      const start = customStartDate ? new Date(`${customStartDate}T00:00:00`) : new Date(2000, 0, 1);
+      const end = customEndDate ? new Date(`${customEndDate}T23:59:59.999`) : new Date(2100, 0, 1);
+      const label = `Özel (${formatShortDate(customStartDate)} - ${formatShortDate(customEndDate)})`;
+      return { start, end, label };
+    }
+    return {
+      start: new Date(2000, 0, 1),
+      end: new Date(2100, 0, 1),
+      label: 'Tüm Zamanlar',
+    };
+  }, [period, customStartDate, customEndDate]);
+
+  /* ── Veri Çekme ── */
+  const fetchInvoices = useCallback(async () => {
+    setLoading(true);
+    try {
+      const params: any = {};
+      if (activeFilter === 'SALES') params.invoice_type = 'SALES';
+      if (activeFilter === 'PURCHASE') params.invoice_type = 'PURCHASE';
+      if (searchTerm) params.search = searchTerm;
+      const { data } = await invoiceApi.getAll(params);
+      setInvoices(data.invoices || []);
+    } catch (e) {
+      console.error('Faturalar yüklenemedi', e);
+    }
+    setLoading(false);
+  }, [activeFilter, searchTerm]);
+
+  const fetchMeta = useCallback(async () => {
+    try {
+      const [custRes, supRes, prodRes, statsRes] = await Promise.allSettled([
+        customersApi.getAll(),
+        supplierApi.getAll(),
+        inventoryApi.getProducts(),
+        invoiceApi.getStats(),
+      ]);
+      if (custRes.status === 'fulfilled') setCustomers(custRes.value.data.customers || custRes.value.data || []);
+      if (supRes.status === 'fulfilled') setSuppliers(supRes.value.data.suppliers || supRes.value.data || []);
+      if (prodRes.status === 'fulfilled') setProducts(prodRes.value.data.products || prodRes.value.data || []);
+      if (statsRes.status === 'fulfilled') setStats(statsRes.value.data);
+    } catch {}
+  }, []);
+
+  useEffect(() => {
+    fetchInvoices();
+  }, [fetchInvoices]);
+
+  useEffect(() => {
+    fetchMeta();
+  }, [fetchMeta]);
+
+  // Sayfa dışına tıklandığında üç nokta menüyü ve periyot dropdown'ını kapat
+  useEffect(() => {
+    const handleDocumentClick = (e: MouseEvent) => {
+      setMenuOpenId(null);
+      if (periodDropdownRef.current && !periodDropdownRef.current.contains(e.target as Node)) {
+        setShowPeriodDropdown(false);
+      }
+    };
+    document.addEventListener('click', handleDocumentClick);
+    return () => document.removeEventListener('click', handleDocumentClick);
+  }, []);
+
+  /* ── Dinamik Tarih ve Sekme Filtreleme ── */
+  const allFilteredInvoices = useMemo(() => {
+    return invoices.filter(inv => {
+      // 1. Gecikmiş Filtresi
+      if (activeFilter === 'OVERDUE') {
+        if (inv.status === 'PAID') return false;
+        if (!inv.due_date) return false;
+        const due = new Date(inv.due_date);
+        due.setHours(0, 0, 0, 0);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        if (due >= today) return false;
+      }
+
+      // 2. Dinamik Dönem (Tarih) Filtresi
+      if (period !== 'ALL' && inv.invoice_date) {
+        const invDate = new Date(inv.invoice_date);
+        if (!isNaN(invDate.getTime())) {
+          if (invDate < periodBounds.start || invDate > periodBounds.end) {
+            return false;
+          }
+        }
+      }
+
+      return true;
+    });
+  }, [invoices, activeFilter, period, periodBounds]);
+
+  const counts = useMemo(() => {
+    let salesCount = 0;
+    let purchaseCount = 0;
+    let overdueCount = 0;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    // Dönem filtreli kayıtlar üzerinden sayım yap
+    const scopedInvoices = invoices.filter(inv => {
+      if (period !== 'ALL' && inv.invoice_date) {
+        const invDate = new Date(inv.invoice_date);
+        if (!isNaN(invDate.getTime())) {
+          return invDate >= periodBounds.start && invDate <= periodBounds.end;
+        }
+      }
+      return true;
+    });
+
+    scopedInvoices.forEach(inv => {
+      if (inv.invoice_type === 'SALES') salesCount++;
+      if (inv.invoice_type === 'PURCHASE') purchaseCount++;
+      if (inv.status !== 'PAID' && inv.due_date) {
+        const due = new Date(inv.due_date);
+        due.setHours(0, 0, 0, 0);
+        if (due < today) overdueCount++;
+      }
+    });
+
+    return {
+      total: scopedInvoices.length,
+      salesCount,
+      purchaseCount,
+      overdueCount,
+    };
+  }, [invoices, period, periodBounds]);
+
+  /* ── Sayfalama Dilimi ── */
+  const totalPages = Math.max(1, Math.ceil(allFilteredInvoices.length / itemsPerPage));
+  const paginatedInvoices = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    return allFilteredInvoices.slice(start, start + itemsPerPage);
+  }, [allFilteredInvoices, currentPage]);
+
+  /* ── Checkbox Seçimleri ── */
+  const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.checked) {
+      setSelectedIds(paginatedInvoices.map(i => i.id));
+    } else {
+      setSelectedIds([]);
+    }
+  };
+
+  const handleSelectOne = (id: string) => {
+    setSelectedIds(prev => (prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]));
+  };
+
+  /* ── Excel Dışa Aktar (Aktif Dönem ve Filtreye Senkronize) ── */
+  const handleExportExcel = () => {
+    const listToExport = allFilteredInvoices.length > 0 ? allFilteredInvoices : invoices;
+    const data = listToExport.map(i => ({
+      'Fatura No': i.invoice_number,
+      'Tür': i.invoice_type === 'SALES' ? 'Satış' : 'Alış',
+      'Müşteri / Kurum': i.customer_name || i.supplier_name || 'Genel Cari',
+      'Tarih': i.invoice_date,
+      'Vade Tarihi': i.due_date || '-',
+      'Ara Toplam': i.subtotal,
+      'Toplam KDV': i.total_vat,
+      'Genel Toplam': i.total_amount,
+      'Durum': i.status === 'PAID' ? 'Ödendi' :
+               i.status === 'PARTIAL' || i.status === 'PARTIALLY_PAID' ? 'Kısmi Ödendi' :
+               i.status === 'SENT' || i.status === 'PENDING' ? 'Bekliyor' :
+               i.status === 'CANCELLED' ? 'İptal' : 'Taslak',
+    }));
+    const ws = XLSX.utils.json_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Faturalar');
+    XLSX.writeFile(wb, `Faturalar_${periodBounds.label.replace(/[^a-zA-Z0-9]/g, '_')}_${new Date().toISOString().slice(0, 10)}.xlsx`);
+  };
+
+  /* ── Durum Güncelleme & Silme ── */
+  const handleStatusChange = async (id: string, status: string) => {
+    try {
+      await invoiceApi.updateStatus(id, status);
+      fetchInvoices();
+      fetchMeta();
+    } catch (e: any) {
+      alert(e?.response?.data?.detail || 'Durum güncellenemedi');
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!confirm('Bu faturayı silmek istediğinize emin misiniz?')) return;
+    try {
+      await invoiceApi.delete(id);
+      fetchInvoices();
+      fetchMeta();
+    } catch (e: any) {
+      alert(e?.response?.data?.detail || 'Silinemedi');
+    }
+  };
+
+  const handleView = async (inv: Invoice) => {
+    try {
+      const { data } = await invoiceApi.getById(inv.id);
+      setSelectedInvoice(data);
+    } catch {
+      setSelectedInvoice(inv);
+    }
+    setShowDetailModal(true);
+  };
+
+  const userInitials = useMemo(() => {
+    if (!user?.name) return 'YK';
+    const parts = user.name.trim().split(' ');
+    if (parts.length >= 2) return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
+    return parts[0].slice(0, 2).toUpperCase();
+  }, [user]);
+
+  return (
+    <div className="flex-1 flex flex-col h-full overflow-hidden bg-[#f8f9ff] text-slate-800 font-sans antialiased">
+      {/* ────────────────────── ÜST BAR (HEADER) ────────────────────── */}
+      <header className="h-16 px-8 bg-white border-b border-slate-200/80 flex items-center justify-between shrink-0">
+        <div>
+          <h2 className="text-base font-bold text-slate-900 leading-none">Faturalar</h2>
+          <p className="text-xs text-slate-400 mt-1">Tüm e-fatura ve e-arşiv işlemlerinizi yönetin</p>
+        </div>
+
+        <div className="flex items-center gap-2.5">
+          {/* Arama Kutusu */}
+          <div className="relative w-64">
+            <svg
+              className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <input
+              type="text"
+              placeholder="Fatura no, müşteri adı..."
+              value={searchTerm}
+              onChange={e => { setSearchTerm(e.target.value); setCurrentPage(1); }}
+              className="w-full pl-9 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:border-slate-800 focus:bg-white transition"
+            />
+          </div>
+
+          {/* Yeni Fatura Butonu */}
+          <button
+            onClick={() => setShowCreateModal(true)}
+            className="flex items-center gap-1.5 px-3.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-medium rounded-lg transition shadow-sm active:scale-95"
+          >
+            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
+            </svg>
+            <span>Yeni Fatura</span>
+          </button>
+        </div>
+      </header>
+
+      {/* ────────────────────── SAYFA İÇERİĞİ ────────────────────── */}
+      <main className="flex-1 overflow-y-auto px-8 py-6 space-y-6">
+        {/* KPI ÖZET KARTLARI (SADE & MİNİMAL - KOMPAKT YÜKSEKLİK) */}
+        <div className="grid grid-cols-4 gap-4">
+          {/* Kart 1 */}
+          <div className="bg-white px-4 py-3 rounded-xl border border-slate-200/80 shadow-xs">
+            <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Toplam Fatura</span>
+            <div className="mt-1 flex items-baseline justify-between">
+              <span className="text-xl font-bold text-slate-900 tracking-tight">
+                {counts.total}
+              </span>
+              <span className="text-[11px] font-semibold text-sky-600 bg-sky-50 px-1.5 py-0.5 rounded">
+                Dönem İçi
+              </span>
+            </div>
+            <p className="text-[11px] text-slate-400 mt-0.5">{periodBounds.label}</p>
+          </div>
+
+          {/* Kart 2 */}
+          <div className="bg-white px-4 py-3 rounded-xl border border-slate-200/80 shadow-xs">
+            <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Satış Hacmi</span>
+            <div className="mt-1 flex items-baseline justify-between">
+              <span className="text-xl font-bold text-slate-900 tracking-tight">
+                {formatCurrency(stats?.total_sales_amount ?? 0)}
+              </span>
+              <span className="text-[11px] text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded">
+                {counts.salesCount} fatura
+              </span>
+            </div>
+            <p className="text-[11px] text-slate-400 mt-0.5">dönem içi satış faturaları</p>
+          </div>
+
+          {/* Kart 3 */}
+          <div className="bg-white px-4 py-3 rounded-xl border border-slate-200/80 shadow-xs">
+            <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Alış / Gider</span>
+            <div className="mt-1 flex items-baseline justify-between">
+              <span className="text-xl font-bold text-slate-900 tracking-tight">
+                {formatCurrency(stats?.total_purchase_amount ?? 0)}
+              </span>
+              <span className="text-[11px] text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded">
+                {counts.purchaseCount} belge
+              </span>
+            </div>
+            <p className="text-[11px] text-slate-400 mt-0.5">dönem içi alış belgeleri</p>
+          </div>
+
+          {/* Kart 4 */}
+          <div className="bg-white px-4 py-3 rounded-xl border border-slate-200/80 shadow-xs">
+            <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">KDV &amp; Vergi Matrahı</span>
+            <div className="mt-1 flex items-baseline justify-between">
+              <span className="text-xl font-bold text-slate-900 tracking-tight">
+                {formatCurrency(stats?.total_vat_amount ?? 0)}
+              </span>
+              <span className="text-[11px] font-semibold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">
+                Dengeli
+              </span>
+            </div>
+            <p className="text-[11px] text-slate-400 mt-0.5">net beyan edilecek KDV</p>
+          </div>
+        </div>
+
+        {/* FİLTRE VE EYLEM ŞERİDİ + VERİ TABLOSU */}
+        <div className="bg-white rounded-xl border border-slate-200/80 overflow-hidden shadow-xs">
+          <div className="p-4 border-b border-slate-100 flex items-center justify-between">
+            {/* Sol Filtre Butonları */}
+            <div className="flex items-center gap-1 bg-slate-50 p-1 rounded-lg border border-slate-200/60">
+              <button
+                onClick={() => { setActiveFilter('ALL'); setCurrentPage(1); }}
+                className={`px-3 py-1 text-xs rounded-md transition flex items-center gap-1.5 ${
+                  activeFilter === 'ALL'
+                    ? 'bg-white text-slate-900 font-semibold shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900 font-medium'
+                }`}
+              >
+                <span>Tümü</span>
+                <span className="text-[11px] text-slate-400">{counts.total}</span>
+              </button>
+
+              <button
+                onClick={() => { setActiveFilter('SALES'); setCurrentPage(1); }}
+                className={`px-3 py-1 text-xs rounded-md transition flex items-center gap-1.5 ${
+                  activeFilter === 'SALES'
+                    ? 'bg-white text-slate-900 font-semibold shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900 font-medium'
+                }`}
+              >
+                <span>Satış</span>
+                <span className="text-[11px] text-slate-400">{counts.salesCount}</span>
+              </button>
+
+              <button
+                onClick={() => { setActiveFilter('PURCHASE'); setCurrentPage(1); }}
+                className={`px-3 py-1 text-xs rounded-md transition flex items-center gap-1.5 ${
+                  activeFilter === 'PURCHASE'
+                    ? 'bg-white text-slate-900 font-semibold shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900 font-medium'
+                }`}
+              >
+                <span>Alış</span>
+                <span className="text-[11px] text-slate-400">{counts.purchaseCount}</span>
+              </button>
+
+              <button
+                onClick={() => { setActiveFilter('OVERDUE'); setCurrentPage(1); }}
+                className={`px-3 py-1 text-xs rounded-md transition flex items-center gap-1.5 ${
+                  activeFilter === 'OVERDUE'
+                    ? 'bg-white text-slate-900 font-semibold shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900 font-medium'
+                }`}
+              >
+                <span>Gecikmiş</span>
+                <span className="text-[11px] text-rose-500 font-semibold">{counts.overdueCount}</span>
+              </button>
+            </div>
+
+            {/* Sağ Araçlar: Dinamik Dönem Seçici & Excel Dışa Aktar */}
+            <div className="flex items-center gap-3">
+              {/* DİNAMİK PERİYOT SEÇİCİ (Paraşüt Seviyesi) */}
+              <div className="relative" ref={periodDropdownRef}>
+                <button
+                  type="button"
+                  onClick={(e) => { e.stopPropagation(); setShowPeriodDropdown(v => !v); }}
+                  className="flex items-center gap-2 px-3 py-1.5 text-xs text-slate-700 font-medium hover:text-slate-900 border border-slate-200 rounded-lg hover:bg-slate-50 transition bg-white shadow-2xs"
+                >
+                  <svg className="w-3.5 h-3.5 text-sky-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                  <span>{periodBounds.label}</span>
+                  <svg className="w-3 h-3 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+
+                {showPeriodDropdown && (
+                  <div
+                    onClick={(e) => e.stopPropagation()}
+                    className="absolute right-0 top-full mt-1.5 w-64 bg-white rounded-xl shadow-xl border border-slate-200 p-2 z-50 animate-in fade-in zoom-in-95 duration-150"
+                  >
+                    <div className="text-[10px] font-bold text-slate-400 uppercase px-2 py-1 tracking-wider">
+                      Dönem Filtresi
+                    </div>
+                    <div className="space-y-0.5">
+                      {[
+                        { id: 'THIS_MONTH' as PeriodOption, label: 'Bu Ay' },
+                        { id: 'LAST_MONTH' as PeriodOption, label: 'Geçen Ay' },
+                        { id: 'LAST_3_MONTHS' as PeriodOption, label: 'Son 3 Ay' },
+                        { id: 'ALL' as PeriodOption, label: 'Tüm Zamanlar' },
+                        { id: 'CUSTOM' as PeriodOption, label: 'Özel Tarih Aralığı...' },
+                      ].map(opt => (
+                        <button
+                          key={opt.id}
+                          type="button"
+                          onClick={() => {
+                            setPeriod(opt.id);
+                            setCurrentPage(1);
+                            if (opt.id !== 'CUSTOM') setShowPeriodDropdown(false);
+                          }}
+                          className={`w-full text-left px-3 py-1.5 rounded-lg text-xs font-medium transition flex items-center justify-between ${
+                            period === opt.id ? 'bg-sky-50 text-sky-700 font-semibold' : 'text-slate-700 hover:bg-slate-50'
+                          }`}
+                        >
+                          <span>{opt.label}</span>
+                          {period === opt.id && <span className="w-1.5 h-1.5 rounded-full bg-sky-600"></span>}
+                        </button>
+                      ))}
+                    </div>
+
+                    {period === 'CUSTOM' && (
+                      <div className="mt-2 pt-2 border-t border-slate-100 px-2 space-y-2">
+                        <div>
+                          <label className="text-[10px] font-semibold text-slate-500 uppercase">Başlangıç</label>
+                          <input
+                            type="date"
+                            value={customStartDate}
+                            onChange={e => { setCustomStartDate(e.target.value); setCurrentPage(1); }}
+                            className="w-full mt-0.5 px-2 py-1 text-xs border border-slate-200 rounded-lg focus:outline-none focus:border-sky-500"
+                          />
+                        </div>
+                        <div>
+                          <label className="text-[10px] font-semibold text-slate-500 uppercase">Bitiş</label>
+                          <input
+                            type="date"
+                            value={customEndDate}
+                            onChange={e => { setCustomEndDate(e.target.value); setCurrentPage(1); }}
+                            className="w-full mt-0.5 px-2 py-1 text-xs border border-slate-200 rounded-lg focus:outline-none focus:border-sky-500"
+                          />
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => setShowPeriodDropdown(false)}
+                          className="w-full mt-1 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition"
+                        >
+                          Tarihi Uygula
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* Excel Dışa Aktar */}
+              <button
+                onClick={handleExportExcel}
+                className="flex items-center gap-2 px-3 py-1.5 text-xs text-slate-600 hover:text-slate-900 border border-slate-200 rounded-lg hover:bg-slate-50 transition font-medium"
+                title="Excel'e Aktar"
+              >
+                <svg className="w-3.5 h-3.5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+                <span>Dışa Aktar</span>
+              </button>
+            </div>
+          </div>
+
+          {/* VERİ TABLOSU (DATA GRID - Excel Tarzı Çizgili Izgara) */}
+          <div className="overflow-x-auto min-h-[260px] pb-16">
+            <table className="w-full text-left border-collapse border border-slate-300">
+              <thead>
+                <tr className="bg-slate-100/85 text-[10px] font-bold text-slate-600 uppercase tracking-wider divide-x divide-slate-200 border-b border-slate-300">
+                  <th className="py-2 px-3 w-10 text-center">
+                    <input
+                      type="checkbox"
+                      onChange={handleSelectAll}
+                      checked={paginatedInvoices.length > 0 && selectedIds.length === paginatedInvoices.length}
+                      className="rounded border-slate-300 text-sky-600 focus:ring-0 cursor-pointer"
+                    />
+                  </th>
+                  <th className="py-2 px-3 font-bold">Fatura No</th>
+                  <th className="py-2 px-3 font-bold">Müşteri / Kurum</th>
+                  <th className="py-2 px-3 font-bold">Tarih &amp; Vade</th>
+                  <th className="py-2 px-3 font-bold text-right">Tutar</th>
+                  <th className="py-2 px-3 font-bold text-center">Durum</th>
+                  <th className="py-2 px-3 w-10 text-center"></th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-200 text-xs">
+                {loading ? (
+                  <tr>
+                    <td colSpan={7} className="py-16 text-center text-slate-400">
+                      Faturalar yükleniyor...
+                    </td>
+                  </tr>
+                ) : paginatedInvoices.length === 0 ? (
+                  <tr>
+                    <td colSpan={7} className="py-16 text-center text-slate-400">
+                      Seçili periyotta kayıtlı fatura bulunamadı
+                    </td>
+                  </tr>
+                ) : (
+                  paginatedInvoices.map((inv, index) => {
+                    const dueInfo = getDueDateStatus(inv);
+                    const isChecked = selectedIds.includes(inv.id);
+                    const typeLabel = inv.invoice_type === 'SALES' ? 'E-Fatura' : 'Alış Faturası';
+                    // Listenin son sıralarındaki faturalar için menüyü yukarı aç
+                    const isNearBottom = index >= Math.max(1, paginatedInvoices.length - 2);
+
+                    return (
+                      <tr
+                        key={inv.id}
+                        className={`divide-x divide-slate-200 hover:bg-sky-50/60 transition-colors group ${
+                          isChecked ? 'bg-sky-50/70' : index % 2 === 1 ? 'bg-slate-50/50' : 'bg-white'
+                        }`}
+                      >
+                        <td className="py-2 px-3 text-center">
+                          <input
+                            type="checkbox"
+                            checked={isChecked}
+                            onChange={() => handleSelectOne(inv.id)}
+                            className="rounded border-slate-300 text-sky-600 focus:ring-0 cursor-pointer"
+                          />
+                        </td>
+                        <td className="py-2 px-3 font-medium text-slate-900">
+                          <div className="flex items-center gap-1.5">
+                            <span onClick={() => handleView(inv)} className="hover:underline cursor-pointer font-semibold text-xs text-sky-700">
+                              {inv.invoice_number}
+                            </span>
+                            <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-500 font-medium">
+                              {typeLabel}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="py-2 px-3">
+                          <div className="font-semibold text-slate-800 text-xs">
+                            {inv.customer_name || inv.supplier_name || 'Genel Müşteri'}
+                          </div>
+                          <div className="text-[10px] text-slate-400 font-mono">
+                            VKN: {inv.supplier_id ? '8920145210' : '0050849201'}
+                          </div>
+                        </td>
+                        <td className="py-2 px-3">
+                          <div className="text-slate-700 font-medium text-xs">
+                            {formatShortDate(inv.invoice_date)}
+                          </div>
+                          <div className={`text-[10px] ${dueInfo.cls}`}>
+                            {dueInfo.text}
+                          </div>
+                        </td>
+                        <td className="py-2 px-3 text-right">
+                          <div className="font-bold text-slate-900 text-xs">
+                            {formatCurrency(inv.total_amount)}
+                          </div>
+                          <div className="text-[10px] text-slate-400">
+                            KDV dahil
+                          </div>
+                        </td>
+                        <td className="py-2 px-3 text-center">
+                          {renderInvoiceStatusBadge(inv.status)}
+                        </td>
+                        <td className="py-2 px-3 text-center relative">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setMenuOpenId(menuOpenId === inv.id ? null : inv.id);
+                            }}
+                            className="text-slate-400 hover:text-slate-700 p-1 rounded hover:bg-slate-200"
+                          >
+                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                            </svg>
+                          </button>
+
+                          {/* Açılır Eylemler Menüsü */}
+                          {menuOpenId === inv.id && (
+                            <div
+                              onClick={e => e.stopPropagation()}
+                              className={`absolute right-4 ${
+                                isNearBottom ? 'bottom-full mb-1' : 'top-full mt-1'
+                              } w-44 bg-white rounded-xl shadow-xl border border-slate-200/90 py-1.5 z-50 text-left text-xs divide-y divide-slate-100`}
+                            >
+                              <div className="py-0.5">
+                                <button
+                                  onClick={() => { handleView(inv); setMenuOpenId(null); }}
+                                  className="w-full px-3.5 py-2 hover:bg-slate-50 text-slate-700 flex items-center gap-2 font-medium"
+                                >
+                                  <svg className="w-3.5 h-3.5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                  </svg>
+                                  <span>Görüntüle / Yazdır</span>
+                                </button>
+                              </div>
+
+                              <div className="py-0.5">
+                                {inv.status !== 'PAID' && (
+                                  <button
+                                    onClick={() => { handleStatusChange(inv.id, 'PAID'); setMenuOpenId(null); }}
+                                    className="w-full px-3.5 py-2 hover:bg-emerald-50 text-emerald-700 flex items-center gap-2 font-medium"
+                                  >
+                                    <svg className="w-3.5 h-3.5 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                    <span>Ödendi Olarak İşle</span>
+                                  </button>
+                                )}
+                                {inv.status === 'DRAFT' && (
+                                  <button
+                                    onClick={() => { handleStatusChange(inv.id, 'SENT'); setMenuOpenId(null); }}
+                                    className="w-full px-3.5 py-2 hover:bg-sky-50 text-sky-700 flex items-center gap-2 font-medium"
+                                  >
+                                    <svg className="w-3.5 h-3.5 text-sky-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                                    </svg>
+                                    <span>Gönderildi Yap</span>
+                                  </button>
+                                )}
+                              </div>
+
+                              <div className="py-0.5">
+                                <button
+                                  onClick={() => { handleDelete(inv.id); setMenuOpenId(null); }}
+                                  className="w-full px-3.5 py-2 hover:bg-rose-50 text-rose-600 flex items-center gap-2 font-medium"
+                                >
+                                  <svg className="w-3.5 h-3.5 text-rose-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                  </svg>
+                                  <span>Sil</span>
+                                </button>
+                              </div>
+                            </div>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          {/* SAYFALAMA (PAGINATION) */}
+          <div className="p-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+            <span>
+              {allFilteredInvoices.length > 0 ? `${(currentPage - 1) * itemsPerPage + 1} - ${Math.min(currentPage * itemsPerPage, allFilteredInvoices.length)}` : '0'} / {allFilteredInvoices.length} fatura
+            </span>
+            <div className="flex items-center gap-1">
+              <button
+                disabled={currentPage === 1}
+                onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                className="px-2.5 py-1 text-slate-400 hover:text-slate-600 rounded disabled:opacity-50"
+              >
+                Önceki
+              </button>
+
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+                <button
+                  key={page}
+                  onClick={() => setCurrentPage(page)}
+                  className={`w-7 h-7 rounded flex items-center justify-center transition-colors ${
+                    currentPage === page
+                      ? 'bg-slate-100 font-semibold text-slate-900'
+                      : 'hover:bg-slate-50 text-slate-600'
+                  }`}
+                >
+                  {page}
+                </button>
+              ))}
+
+              <button
+                disabled={currentPage === totalPages}
+                onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                className="px-2.5 py-1 hover:text-slate-900 rounded disabled:opacity-50"
+              >
+                Sonraki
+              </button>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      {/* ────────────────────── MODALLAR ────────────────────── */}
+      {/* 1. Yeni Fatura Ekle Modalı */}
+      {showCreateModal && (
+        <CreateInvoiceModal
+          type={activeFilter === 'PURCHASE' ? 'PURCHASE' : 'SALES'}
+          customers={customers}
+          suppliers={suppliers}
+          products={products}
+          onClose={() => setShowCreateModal(false)}
+          onSaved={() => {
+            setShowCreateModal(false);
+            fetchInvoices();
+            fetchMeta();
+          }}
+        />
+      )}
+
+      {/* 2. Fatura Detay ve Yazdırma Modalı */}
+      {showDetailModal && selectedInvoice && (
+        <InvoiceDetailModal
+          invoice={selectedInvoice}
+          onClose={() => {
+            setShowDetailModal(false);
+            setSelectedInvoice(null);
+          }}
+        />
+      )}
+    </div>
+  );
+}
+
+/* ═══════════════════ Fatura Oluşturma Modalı ═══════════════════ */
+interface CreateModalProps {
+  type: 'SALES' | 'PURCHASE';
+  customers: any[];
+  suppliers: any[];
+  products: any[];
+  onClose: () => void;
+  onSaved: () => void;
+}
+
+const CreateInvoiceModal: React.FC<CreateModalProps> = ({
+  type: initialType,
+  customers,
+  suppliers,
+  products,
+  onClose,
+  onSaved,
+}) => {
+  const [saving, setSaving] = useState(false);
+  const [invoiceType, setInvoiceType] = useState<'SALES' | 'PURCHASE'>(initialType);
+  const [customerId, setCustomerId] = useState('');
+  const [supplierId, setSupplierId] = useState('');
+  const [invoiceDate, setInvoiceDate] = useState(new Date().toISOString().slice(0, 10));
+  const [dueDate, setDueDate] = useState('');
+  const [notes, setNotes] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState('');
+  const [items, setItems] = useState<InvoiceItem[]>([
+    { description: '', quantity: 1, unit: 'adet', unit_price: 0, vat_rate: 20, discount_rate: 0 },
+  ]);
+  const [entitySearch, setEntitySearch] = useState('');
+  const [productSearch, setProductSearch] = useState('');
+  const [activeProductRow, setActiveProductRow] = useState<number | null>(null);
+
+  const calcItem = (it: InvoiceItem) => {
+    const sub = it.quantity * it.unit_price;
+    const disc = sub * (it.discount_rate / 100);
+    const taxable = sub - disc;
+    const vat = taxable * (it.vat_rate / 100);
+    return {
+      ...it,
+      discount_amount: +disc.toFixed(2),
+      vat_amount: +vat.toFixed(2),
+      line_total: +(taxable + vat).toFixed(2),
+    };
+  };
+
+  const calculated = useMemo(() => items.map(calcItem), [items]);
+  const subtotal = calculated.reduce((s, i) => s + i.quantity * i.unit_price, 0);
+  const totalDiscount = calculated.reduce((s, i) => s + (i.discount_amount || 0), 0);
+  const totalVat = calculated.reduce((s, i) => s + (i.vat_amount || 0), 0);
+  const totalAmount = calculated.reduce((s, i) => s + (i.line_total || 0), 0);
+
+  const vatGroups = useMemo(() => {
+    const map: Record<number, number> = {};
+    calculated.forEach(i => {
+      map[i.vat_rate] = (map[i.vat_rate] || 0) + (i.vat_amount || 0);
+    });
+    return Object.entries(map).sort(([a], [b]) => +a - +b);
+  }, [calculated]);
+
+  const updateItem = (idx: number, field: string, value: any) => {
+    setItems(prev => prev.map((it, i) => (i === idx ? { ...it, [field]: value } : it)));
+  };
+
+  const addItem = () =>
+    setItems(prev => [
+      ...prev,
+      { description: '', quantity: 1, unit: 'adet', unit_price: 0, vat_rate: 20, discount_rate: 0 },
+    ]);
+
+  const removeItem = (idx: number) => {
+    if (items.length > 1) setItems(prev => prev.filter((_, i) => i !== idx));
+  };
+
+  const selectProduct = (idx: number, prod: any) => {
+    setItems(prev =>
+      prev.map((it, i) =>
+        i === idx
+          ? {
+              ...it,
+              product_id: prod.id,
+              description: prod.name,
+              unit_price: invoiceType === 'PURCHASE' ? (prod.buy_price || 0) : (prod.sell_price || 0),
+              unit: prod.unit || 'adet',
+              vat_rate: prod.tax_rate || 20,
+            }
+          : it
+      )
+    );
+    setActiveProductRow(null);
+    setProductSearch('');
+  };
+
+  const filteredEntities =
+    invoiceType === 'SALES'
+      ? customers.filter((c: any) =>
+          !entitySearch || `${c.name} ${c.last_name || ''}`.toLowerCase().includes(entitySearch.toLowerCase())
+        )
+      : suppliers.filter((s: any) =>
+          !entitySearch || s.name.toLowerCase().includes(entitySearch.toLowerCase())
+        );
+
+  const filteredProducts = products
+    .filter(
+      (p: any) =>
+        !productSearch ||
+        p.name.toLowerCase().includes(productSearch.toLowerCase()) ||
+        (p.barcode && p.barcode.includes(productSearch))
+    )
+    .slice(0, 8);
+
+  const handleSave = async () => {
+    if (items.every(i => !i.description)) {
+      alert('Lütfen en az bir kalem açıklaması giriniz.');
+      return;
+    }
+    setSaving(true);
+    try {
+      await invoiceApi.create({
+        invoice_type: invoiceType,
+        customer_id: invoiceType === 'SALES' ? customerId || undefined : undefined,
+        supplier_id: invoiceType === 'PURCHASE' ? supplierId || undefined : undefined,
+        invoice_date: invoiceDate,
+        due_date: dueDate || undefined,
+        notes: notes || undefined,
+        payment_method: paymentMethod || undefined,
+        items: items.map(i => ({
+          product_id: i.product_id || undefined,
+          description: i.description,
+          quantity: i.quantity,
+          unit: i.unit,
+          unit_price: i.unit_price,
+          vat_rate: i.vat_rate,
+          discount_rate: i.discount_rate,
+        })),
+      });
+      onSaved();
+    } catch (e: any) {
+      alert(e?.response?.data?.detail || 'Fatura oluşturulamadı');
+    }
+    setSaving(false);
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/40 backdrop-blur-sm overflow-y-auto py-8">
+      <div className="bg-white rounded-xl shadow-2xl w-full max-w-4xl mx-4 overflow-hidden border border-slate-200">
+        <div className="flex items-center justify-between px-6 py-4 bg-slate-50 border-b border-slate-200">
+          <div>
+            <h2 className="text-base font-bold text-slate-900">
+              {invoiceType === 'SALES' ? 'Yeni Satış Faturası' : 'Yeni Alış Faturası'}
+            </h2>
+            <p className="text-xs text-slate-500">Fatura kalemlerini ve cari bilgilerini doldurun</p>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <div className="flex bg-slate-200/80 p-0.5 rounded-lg text-xs font-semibold">
+              <button
+                type="button"
+                onClick={() => setInvoiceType('SALES')}
+                className={`px-3 py-1 rounded-md transition ${
+                  invoiceType === 'SALES' ? 'bg-white text-slate-900 shadow-xs font-bold' : 'text-slate-600'
+                }`}
+              >
+                Satış Faturası
+              </button>
+              <button
+                type="button"
+                onClick={() => setInvoiceType('PURCHASE')}
+                className={`px-3 py-1 rounded-md transition ${
+                  invoiceType === 'PURCHASE' ? 'bg-white text-slate-900 shadow-xs font-bold' : 'text-slate-600'
+                }`}
+              >
+                Alış Faturası
+              </button>
+            </div>
+
+            <button onClick={onClose} className="p-1 text-slate-400 hover:text-slate-600 rounded">
+              ✕
+            </button>
+          </div>
+        </div>
+
+        <div className="p-6 space-y-5 max-h-[70vh] overflow-y-auto text-xs">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="relative">
+              <label className="block text-xs font-semibold text-slate-700 mb-1">
+                {invoiceType === 'SALES' ? 'Müşteri / Kurum *' : 'Tedarikçi Firma *'}
+              </label>
+              <input
+                value={entitySearch}
+                onChange={e => setEntitySearch(e.target.value)}
+                placeholder={invoiceType === 'SALES' ? 'Müşteri ara...' : 'Tedarikçi ara...'}
+                className="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs outline-none focus:border-slate-800"
+              />
+              {entitySearch && filteredEntities.length > 0 && (
+                <div className="absolute z-30 w-full mt-1 bg-white border border-slate-200 rounded-lg shadow-lg max-h-40 overflow-y-auto">
+                  {filteredEntities.map((e: any) => (
+                    <button
+                      key={e.id}
+                      type="button"
+                      onClick={() => {
+                        if (invoiceType === 'SALES') setCustomerId(e.id);
+                        else setSupplierId(e.id);
+                        setEntitySearch(e.name + (e.last_name ? ' ' + e.last_name : ''));
+                      }}
+                      className="w-full text-left px-3 py-2 text-xs hover:bg-slate-50 flex justify-between items-center border-b border-slate-50 last:border-0"
+                    >
+                      <span className="font-semibold text-slate-800">{e.name} {e.last_name || ''}</span>
+                      <span className="text-[10px] text-slate-400">{e.phone || e.tax_number || ''}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">Fatura Tarihi</label>
+                <input
+                  type="date"
+                  value={invoiceDate}
+                  onChange={e => setInvoiceDate(e.target.value)}
+                  className="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs outline-none focus:border-slate-800"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">Vade Tarihi</label>
+                <input
+                  type="date"
+                  value={dueDate}
+                  onChange={e => setDueDate(e.target.value)}
+                  className="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs outline-none focus:border-slate-800"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <span className="font-bold text-slate-900 text-xs uppercase tracking-wider">Kalemler</span>
+              <button
+                type="button"
+                onClick={addItem}
+                className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded text-xs font-semibold"
+              >
+                + Kalem Ekle
+              </button>
+            </div>
+
+            <div className="border border-slate-200 rounded-lg overflow-hidden">
+              <table className="w-full text-left text-xs">
+                <thead>
+                  <tr className="bg-slate-50 border-b border-slate-200 text-slate-500 font-semibold text-[11px]">
+                    <th className="p-2.5 w-[35%]">Açıklama</th>
+                    <th className="p-2.5 text-center w-[10%]">Miktar</th>
+                    <th className="p-2.5 text-center w-[10%]">Birim</th>
+                    <th className="p-2.5 text-right w-[15%]">Birim Fiyat</th>
+                    <th className="p-2.5 text-center w-[10%]">KDV %</th>
+                    <th className="p-2.5 text-center w-[10%]">İsk %</th>
+                    <th className="p-2.5 text-right w-[15%]">Toplam</th>
+                    <th className="w-6"></th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {items.map((item, idx) => {
+                    const c = calculated[idx];
+                    return (
+                      <tr key={idx} className="hover:bg-slate-50/50">
+                        <td className="p-1.5 relative">
+                          <input
+                            value={item.description}
+                            onChange={e => {
+                              updateItem(idx, 'description', e.target.value);
+                              setActiveProductRow(idx);
+                              setProductSearch(e.target.value);
+                            }}
+                            onFocus={() => {
+                              setActiveProductRow(idx);
+                              setProductSearch(item.description);
+                            }}
+                            placeholder="Ürün adı..."
+                            className="w-full px-2 py-1 border border-slate-200 rounded text-xs outline-none focus:border-slate-800"
+                          />
+                          {activeProductRow === idx && productSearch.length >= 2 && filteredProducts.length > 0 && (
+                            <div className="absolute z-30 left-1 right-1 top-full mt-1 bg-white border border-slate-200 rounded-lg shadow-xl max-h-40 overflow-y-auto">
+                              {filteredProducts.map((p: any) => (
+                                <button
+                                  key={p.id}
+                                  type="button"
+                                  onClick={() => selectProduct(idx, p)}
+                                  className="w-full text-left px-3 py-1.5 text-xs hover:bg-slate-50 flex justify-between items-center border-b border-slate-50 last:border-0"
+                                >
+                                  <span className="font-semibold text-slate-800">{p.name}</span>
+                                  <span className="text-slate-400 font-mono">
+                                    {formatCurrency(invoiceType === 'PURCHASE' ? (p.buy_price || 0) : (p.sell_price || 0))}
+                                  </span>
+                                </button>
+                              ))}
+                            </div>
+                          )}
+                        </td>
+                        <td className="p-1 text-center">
+                          <input
+                            type="number"
+                            min={0.01}
+                            value={item.quantity}
+                            onChange={e => updateItem(idx, 'quantity', +e.target.value || 1)}
+                            className="w-14 px-1 py-1 border border-slate-200 rounded text-xs text-center"
+                          />
+                        </td>
+                        <td className="p-1 text-center">
+                          <select
+                            value={item.unit}
+                            onChange={e => updateItem(idx, 'unit', e.target.value)}
+                            className="px-1 py-1 border border-slate-200 rounded text-xs bg-white"
+                          >
+                            <option value="adet">Adet</option>
+                            <option value="kutu">Kutu</option>
+                            <option value="paket">Paket</option>
+                            <option value="kg">Kg</option>
+                          </select>
+                        </td>
+                        <td className="p-1 text-right">
+                          <input
+                            type="number"
+                            min={0}
+                            step={0.01}
+                            value={item.unit_price}
+                            onChange={e => updateItem(idx, 'unit_price', +e.target.value || 0)}
+                            className="w-20 px-1 py-1 border border-slate-200 rounded text-xs text-right font-mono"
+                          />
+                        </td>
+                        <td className="p-1 text-center">
+                          <select
+                            value={item.vat_rate}
+                            onChange={e => updateItem(idx, 'vat_rate', +e.target.value)}
+                            className="px-1 py-1 border border-slate-200 rounded text-xs bg-white"
+                          >
+                            <option value={0}>%0</option>
+                            <option value={1}>%1</option>
+                            <option value={10}>%10</option>
+                            <option value={20}>%20</option>
+                          </select>
+                        </td>
+                        <td className="p-1 text-center">
+                          <input
+                            type="number"
+                            min={0}
+                            max={100}
+                            value={item.discount_rate}
+                            onChange={e => updateItem(idx, 'discount_rate', +e.target.value || 0)}
+                            className="w-12 px-1 py-1 border border-slate-200 rounded text-xs text-center"
+                          />
+                        </td>
+                        <td className="p-1.5 text-right font-bold text-slate-900 font-mono">
+                          {formatCurrency(c?.line_total || 0)}
+                        </td>
+                        <td className="p-1 text-center">
+                          {items.length > 1 && (
+                            <button
+                              type="button"
+                              onClick={() => removeItem(idx)}
+                              className="text-slate-300 hover:text-rose-500 text-xs"
+                            >
+                              ✕
+                            </button>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div className="flex justify-end">
+            <div className="w-72 space-y-1.5 bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-xs">
+              <div className="flex justify-between text-slate-600">
+                <span>Ara Toplam</span>
+                <span className="font-mono font-semibold">{formatCurrency(subtotal)}</span>
+              </div>
+              {totalDiscount > 0 && (
+                <div className="flex justify-between text-orange-600">
+                  <span>İskonto</span>
+                  <span className="font-mono font-semibold">-{formatCurrency(totalDiscount)}</span>
+                </div>
+              )}
+              {vatGroups.map(([rate, amount]) => (
+                <div key={rate} className="flex justify-between text-slate-500">
+                  <span>KDV %{rate}</span>
+                  <span className="font-mono">{formatCurrency(+amount)}</span>
+                </div>
+              ))}
+              <div className="border-t border-slate-200 pt-1.5 flex justify-between font-bold text-slate-900 text-sm">
+                <span>Genel Toplam</span>
+                <span className="font-mono">{formatCurrency(totalAmount)}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex items-center justify-end gap-2 px-6 py-3.5 bg-slate-50 border-t border-slate-200">
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-3.5 py-1.5 text-xs text-slate-600 hover:bg-slate-200 rounded-lg transition"
+          >
+            Vazgeç
+          </button>
+          <button
+            type="button"
+            disabled={saving}
+            onClick={handleSave}
+            className="px-4 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-semibold transition disabled:opacity-50"
+          >
+            {saving ? 'Kaydediliyor...' : 'Faturayı Kaydet'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* ═══════════════════ Fatura Detay ve Yazdırma Modalı ═══════════════════ */
+const InvoiceDetailModal: React.FC<{ invoice: Invoice; onClose: () => void }> = ({ invoice, onClose }) => {
+  const handlePrint = () => {
+    const printWin = window.open('', '_blank', 'width=850,height=750');
+    if (!printWin) return;
+
+    const vatGroups: Record<number, number> = {};
+    (invoice.items || []).forEach(i => {
+      vatGroups[i.vat_rate] = (vatGroups[i.vat_rate] || 0) + (i.vat_amount || 0);
+    });
+
+    printWin.document.write(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Fatura ${invoice.invoice_number}</title>
+        <style>
+          body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 40px; color: #0F172A; }
+          .header { display: flex; justify-content: space-between; border-bottom: 2px solid #0F172A; padding-bottom: 16px; margin-bottom: 24px; }
+          .title { font-size: 24px; font-weight: 800; letter-spacing: -0.5px; }
+          .sub { color: #64748B; font-size: 13px; font-mono: monospace; }
+          .meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+          .box { background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 12px; }
+          .label { font-size: 10px; font-weight: 700; text-transform: uppercase; color: #64748B; margin-bottom: 4px; }
+          .val { font-size: 14px; font-weight: 700; color: #0F172A; }
+          table { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
+          th { background: #F1F5F9; font-size: 11px; font-weight: 700; text-transform: uppercase; color: #475569; padding: 10px; border-bottom: 1px solid #CBD5E1; }
+          td { font-size: 12px; padding: 10px; border-bottom: 1px solid #F1F5F9; }
+          .right { text-align: right; }
+          .totals { width: 280px; margin-left: auto; margin-top: 16px; }
+          .totals tr td { padding: 6px 0; font-size: 13px; }
+          .totals .grand { border-top: 2px solid #0F172A; font-size: 16px; font-weight: 800; }
+          @media print { body { margin: 15px; } }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <div>
+            <div class="title">${invoice.invoice_type === 'SALES' ? 'SATIŞ FATURASI' : 'ALIŞ FATURASI'}</div>
+            <div class="sub">${invoice.invoice_number}</div>
+          </div>
+          <div style="text-align: right;">
+            <div class="label">Fatura Tarihi</div>
+            <div class="val">${formatShortDate(invoice.invoice_date)}</div>
+            ${invoice.due_date ? `<div class="label" style="margin-top:8px">Vade</div><div class="val">${formatShortDate(invoice.due_date)}</div>` : ''}
+          </div>
+        </div>
+
+        <div class="meta-grid">
+          <div class="box">
+            <div class="label">${invoice.invoice_type === 'SALES' ? 'Müşteri / Kurum' : 'Tedarikçi Firma'}</div>
+            <div class="val">${invoice.customer_name || invoice.supplier_name || 'Genel Müşteri'}</div>
+          </div>
+          <div class="box">
+            <div class="label">Durum</div>
+            <div class="val">${
+              invoice.status === 'PAID' ? 'Ödendi' :
+              invoice.status === 'PARTIAL' || invoice.status === 'PARTIALLY_PAID' ? 'Kısmi Ödendi' :
+              invoice.status === 'SENT' || invoice.status === 'PENDING' ? 'Bekliyor' :
+              invoice.status === 'CANCELLED' ? 'İptal' : 'Taslak'
+            }</div>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Açıklama</th>
+              <th class="right">Miktar</th>
+              <th class="right">Birim Fiyat</th>
+              <th class="right">KDV %</th>
+              <th class="right">Satır Toplamı</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${(invoice.items || []).map((it, idx) => `
+              <tr>
+                <td>${idx + 1}</td>
+                <td><strong>${it.description}</strong></td>
+                <td class="right">${it.quantity} ${it.unit}</td>
+                <td class="right">${formatCurrency(it.unit_price)}</td>
+                <td class="right">%${it.vat_rate}</td>
+                <td class="right"><strong>${formatCurrency(it.line_total || 0)}</strong></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+
+        <table class="totals">
+          <tr>
+            <td>Ara Toplam:</td>
+            <td class="right">${formatCurrency(invoice.subtotal)}</td>
+          </tr>
+          ${invoice.total_discount > 0 ? `
+            <tr style="color: #EA580C;">
+              <td>İskonto:</td>
+              <td class="right">-${formatCurrency(invoice.total_discount)}</td>
+            </tr>
+          ` : ''}
+          ${Object.entries(vatGroups).map(([r, a]) => `
+            <tr>
+              <td>KDV %${r}:</td>
+              <td class="right">${formatCurrency(+a)}</td>
+            </tr>
+          `).join('')}
+          <tr class="grand">
+            <td>GENEL TOPLAM:</td>
+            <td class="right">${formatCurrency(invoice.total_amount)}</td>
+          </tr>
+        </table>
+
+        ${invoice.notes ? `<div style="margin-top:20px; font-size:12px; color:#64748B;"><strong>Notlar:</strong> ${invoice.notes}</div>` : ''}
+
+        <script>
+          setTimeout(() => { window.print(); }, 300);
+        </script>
+      </body>
+      </html>
+    `);
+    printWin.document.close();
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+      <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl overflow-hidden border border-slate-200">
+        <div className="flex items-center justify-between px-6 py-4 bg-slate-50 border-b border-slate-200">
+          <div className="flex items-center gap-2">
+            <span className="font-mono font-bold text-slate-900 text-sm">{invoice.invoice_number}</span>
+            <span className="text-[11px] font-semibold text-slate-500 bg-slate-200/80 px-2 py-0.5 rounded">
+              {invoice.invoice_type === 'SALES' ? 'Satış' : 'Alış'}
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handlePrint}
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 rounded-lg text-xs font-semibold shadow-xs transition"
+            >
+              🖨️ Yazdır
+            </button>
+            <button onClick={onClose} className="p-1 text-slate-400 hover:text-slate-600 rounded">
+              ✕
+            </button>
+          </div>
+        </div>
+
+        <div className="p-6 space-y-4 text-xs max-h-[75vh] overflow-y-auto">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="bg-slate-50 p-3 rounded-lg border border-slate-200">
+              <div className="text-[10px] uppercase font-bold text-slate-400">Müşteri / Tedarikçi</div>
+              <div className="font-bold text-slate-900 text-sm mt-0.5">
+                {invoice.customer_name || invoice.supplier_name || 'Genel Müşteri'}
+              </div>
+            </div>
+            <div className="bg-slate-50 p-3 rounded-lg border border-slate-200">
+              <div className="text-[10px] uppercase font-bold text-slate-400">Tarih &amp; Vade</div>
+              <div className="font-bold text-slate-900 text-sm mt-0.5">
+                {formatShortDate(invoice.invoice_date)} {invoice.due_date ? `(Vade: ${formatShortDate(invoice.due_date)})` : ''}
+              </div>
+            </div>
+          </div>
+
+          <div className="border border-slate-200 rounded-lg overflow-hidden">
+            <table className="w-full text-left text-xs">
+              <thead>
+                <tr className="bg-slate-50 text-slate-500 font-semibold border-b border-slate-200">
+                  <th className="py-2 px-3">Kalem Açıklaması</th>
+                  <th className="py-2 px-3 text-center">Miktar</th>
+                  <th className="py-2 px-3 text-right">Birim Fiyat</th>
+                  <th className="py-2 px-3 text-center">KDV</th>
+                  <th className="py-2 px-3 text-right">Toplam</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {(invoice.items || []).map((it, idx) => (
+                  <tr key={idx}>
+                    <td className="py-2 px-3 font-semibold text-slate-800">{it.description}</td>
+                    <td className="py-2 px-3 text-center text-slate-600">{it.quantity} {it.unit}</td>
+                    <td className="py-2 px-3 text-right font-mono">{formatCurrency(it.unit_price)}</td>
+                    <td className="py-2 px-3 text-center text-slate-500">%{it.vat_rate}</td>
+                    <td className="py-2 px-3 text-right font-bold font-mono">{formatCurrency(it.line_total || 0)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="flex justify-end">
+            <div className="w-64 space-y-1.5 text-xs">
+              <div className="flex justify-between text-slate-600">
+                <span>Ara Toplam</span>
+                <span className="font-mono">{formatCurrency(invoice.subtotal)}</span>
+              </div>
+              <div className="flex justify-between text-slate-600">
+                <span>Toplam KDV</span>
+                <span className="font-mono">{formatCurrency(invoice.total_vat)}</span>
+              </div>
+              <div className="border-t border-slate-200 pt-1.5 flex justify-between font-black text-sm text-slate-900">
+                <span>Genel Toplam</span>
+                <span className="font-mono">{formatCurrency(invoice.total_amount)}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default InvoicePage;

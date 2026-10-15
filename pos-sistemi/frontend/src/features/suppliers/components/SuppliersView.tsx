@@ -1,0 +1,893 @@
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import {
+  Scale, AlertTriangle, Clock, Building2, Landmark, Plus, Search,
+  FileSpreadsheet, FileText, MessageCircle, Mail, Banknote, CheckCircle2,
+  X, Edit, Trash2, Phone, ChevronDown, Download, Users,
+  DollarSign, CreditCard, Wallet, Check, CircleDot, ArrowUpFromLine
+} from 'lucide-react';
+import * as XLSX from 'xlsx';
+import apiClient from '@/shared/utils/api.client';
+
+interface Supplier {
+  id: string;
+  name: string;
+  short_code?: string;
+  contact_name?: string;
+  phone?: string;
+  email?: string;
+  tax_office?: string;
+  tax_number?: string;
+  address?: string;
+  category?: string;
+  iban?: string;
+  bank_name?: string;
+  default_due_days?: number;
+  e_invoice_registered?: boolean;
+  balance: number;
+  notes?: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
+interface SupplierTransaction {
+  id: string;
+  supplier_id: string;
+  type: string;
+  document_no?: string;
+  description?: string;
+  debit: number;
+  credit: number;
+  running_balance: number;
+  due_date?: string;
+  payment_method?: string;
+  transaction_date: string;
+  created_at?: string;
+}
+
+interface SummaryData {
+  total_debt: number;
+  overdue_debt: number;
+  overdue_supplier_count: number;
+  upcoming_payments: number;
+  upcoming_invoice_count: number;
+  total_suppliers: number;
+  zero_balance_count: number;
+  debt_supplier_count: number;
+}
+
+const fmt = (n: number) =>
+  new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(n || 0);
+
+const fmtDate = (d: string) => {
+  if (!d) return '-';
+  return new Date(d).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short', year: 'numeric' });
+};
+
+const getAvatarColors = (name: string) => {
+  const first = name.charAt(0).toUpperCase();
+  if (/[A-E]/.test(first)) return 'bg-sky-100 text-sky-700';
+  if (/[F-J]/.test(first)) return 'bg-emerald-100 text-emerald-700';
+  if (/[K-O]/.test(first)) return 'bg-purple-100 text-purple-700';
+  if (/[P-T]/.test(first)) return 'bg-amber-100 text-amber-700';
+  if (/[U-Z]/.test(first)) return 'bg-blue-100 text-blue-700';
+  return 'bg-slate-100 text-slate-700';
+};
+
+const getInitials = (name: string) => {
+  const parts = name.split(' ');
+  if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
+  return name.substring(0, 2).toUpperCase();
+};
+
+export const SuppliersView: React.FC = () => {
+  const [suppliers, setSuppliers] = useState<Supplier[]>([]);
+  const [summary, setSummary] = useState<SummaryData | null>(null);
+  const [loading, setLoading] = useState(true);
+  
+  const [search, setSearch] = useState('');
+  const [category, setCategory] = useState('');
+  const [tabFilter, setTabFilter] = useState<'ALL' | 'DEBT' | 'OVERDUE' | 'ZERO'>('ALL');
+  const [onlyEInvoice, setOnlyEInvoice] = useState(false);
+  
+  const [selectedSupplier, setSelectedSupplier] = useState<Supplier | null>(null);
+  const [transactions, setTransactions] = useState<SupplierTransaction[]>([]);
+  
+  const [showSupplierModal, setShowSupplierModal] = useState(false);
+  const [editingSupplier, setEditingSupplier] = useState<Supplier | null>(null);
+  
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 10;
+
+  const fetchSummary = async () => {
+    try {
+      const res = await apiClient.get('/suppliers/summary');
+      setSummary(res.data);
+    } catch (e) {
+      console.error('Failed to fetch summary', e);
+    }
+  };
+
+  const fetchSuppliers = useCallback(async () => {
+    setLoading(true);
+    try {
+      const params: any = {};
+      if (search) params.search = search;
+      if (category) params.category = category;
+      
+      const res = await apiClient.get('/suppliers', { params });
+      let data = res.data.suppliers || res.data || [];
+      
+      if (tabFilter === 'DEBT') data = data.filter((s: Supplier) => s.balance > 0);
+      if (tabFilter === 'ZERO') data = data.filter((s: Supplier) => s.balance === 0);
+      if (tabFilter === 'OVERDUE') data = data.filter((s: Supplier) => s.balance > 0);
+      if (onlyEInvoice) data = data.filter((s: Supplier) => s.e_invoice_registered);
+      
+      setSuppliers(data);
+    } catch (e) {
+      console.error('Failed to fetch suppliers', e);
+    }
+    setLoading(false);
+  }, [search, category, tabFilter, onlyEInvoice]);
+
+  useEffect(() => {
+    fetchSummary();
+  }, []);
+
+  useEffect(() => {
+    fetchSuppliers();
+  }, [fetchSuppliers]);
+
+  useEffect(() => {
+    if (selectedSupplier) {
+      apiClient.get(`/suppliers/${selectedSupplier.id}/transactions`)
+        .then(res => setTransactions(res.data.transactions || res.data || []))
+        .catch(console.error);
+    }
+  }, [selectedSupplier]);
+
+  const handleExport = async () => {
+    try {
+      const res = await apiClient.get('/suppliers/export', { responseType: 'blob' });
+      const url = window.URL.createObjectURL(new Blob([res.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'tedarikciler.csv');
+      document.body.appendChild(link);
+      link.click();
+    } catch (e) {
+      console.error('Export failed', e);
+    }
+  };
+
+  // SheetJS ile Excel Dışa Aktarma
+  const handleExportExcel = () => {
+    const data = suppliers.map(s => ({
+      'Tedarikçi Adı': s.name,
+      'Yetkili Kişi': s.contact_name || '-',
+      'Telefon': s.phone || '-',
+      'E-posta': s.email || '-',
+      'Vergi Dairesi / No': s.tax_office && s.tax_number ? `${s.tax_office} / ${s.tax_number}` : (s.tax_office || s.tax_number || '-'),
+      'Kategori': s.category || 'Genel',
+      'Güncel Bakiye (TL)': s.balance || 0,
+    }));
+    const ws = XLSX.utils.json_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Tedarikçiler');
+    XLSX.writeFile(wb, `Tedarikciler_${new Date().toISOString().slice(0, 10)}.xlsx`);
+  };
+
+  // Avatar renkleri görseldeki gibi
+  const getAvatarStyle = (index: number) => {
+    const styles = [
+      'bg-slate-900 text-white',
+      'bg-amber-50 text-amber-700 border border-amber-200',
+      'bg-slate-100 text-slate-700 border border-slate-200',
+      'bg-blue-50 text-blue-600 border border-blue-200',
+      'bg-emerald-50 text-emerald-600 border border-emerald-200'
+    ];
+    return styles[index % styles.length];
+  };
+
+  const paginatedSuppliers = useMemo(() => {
+    const start = (currentPage - 1) * pageSize;
+    return suppliers.slice(start, start + pageSize);
+  }, [suppliers, currentPage, pageSize]);
+
+  return (
+    <div className="flex-1 flex flex-col h-full overflow-hidden bg-[#f8f9ff] text-slate-800 font-sans antialiased">
+      
+      {/* ────────────────────── ÜST BAR (HEADER) - Faturalar Sayfası Tarzı ────────────────────── */}
+      <header className="h-16 px-8 bg-white border-b border-slate-200/80 flex items-center justify-between shrink-0">
+        <div className="flex items-center gap-2.5">
+          <h2 className="text-base font-bold text-slate-900 leading-none">Tedarikçi & Alış Carileri</h2>
+          <span className="px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[11px] font-semibold">
+            {summary?.total_suppliers || suppliers.length} Cari
+          </span>
+        </div>
+
+        <div className="flex items-center gap-2.5">
+          {/* Arama Alanı */}
+          <div className="relative w-64">
+            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+            <input
+              type="text"
+              value={search}
+              onChange={e => { setSearch(e.target.value); setCurrentPage(1); }}
+              placeholder="Tedarikçi ara..."
+              className="w-full pl-9 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:border-sky-500 focus:bg-white"
+            />
+          </div>
+
+          {/* Excel Dışa Aktar Butonu */}
+          <button
+            onClick={handleExportExcel}
+            className="flex items-center gap-1.5 px-3 py-1.5 border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium rounded-lg shadow-xs transition active:scale-95"
+            title="Excel'e Aktar"
+          >
+            <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600" />
+            <span>Excel'e Aktar</span>
+          </button>
+
+          {/* Yeni Cari Butonu - Faturalar ile aynı */}
+          <button
+            onClick={() => { setEditingSupplier(null); setShowSupplierModal(true); }}
+            className="flex items-center gap-1.5 px-3.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-medium rounded-lg shadow-xs"
+          >
+            <Plus className="w-3.5 h-3.5" />
+            <span>Yeni Cari</span>
+          </button>
+        </div>
+      </header>
+
+      {/* ────────────────────── SAYFA İÇERİĞİ ────────────────────── */}
+      <main className="flex-1 overflow-y-auto px-8 py-5 space-y-4">
+        
+        {/* 1. KPI KARTLARI (Kompakt Yükseklik, Sade Resmi Tipografi, Rozetler Çerçevesiz Sağ Üstte) */}
+        <div className="grid grid-cols-4 gap-4">
+          {/* Kart 1: Toplam Açık Bakiye */}
+          <div className="bg-white px-3.5 py-2.5 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between">
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider truncate">Toplam Açık Borç</span>
+              <span className="text-[11px] font-medium text-slate-400 whitespace-nowrap shrink-0">
+                {summary?.debt_supplier_count || 0} firma
+              </span>
+            </div>
+            <div className="mt-1">
+              <span className="text-xl font-bold text-slate-900 tracking-tight">
+                {fmt(summary?.total_debt || 0)}
+              </span>
+            </div>
+            <p className="text-[11px] text-slate-400 mt-0.5">vadesi bekleyen toplam bakiye</p>
+          </div>
+
+          {/* Kart 2: Günü Gelen / Geciken Borç */}
+          <div className="bg-white px-3.5 py-2.5 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between">
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider truncate">Geciken Borç</span>
+              <span className="text-[11px] font-medium text-slate-400 whitespace-nowrap shrink-0">
+                {summary?.overdue_supplier_count || 0} firma
+              </span>
+            </div>
+            <div className="mt-1">
+              <span className="text-xl font-bold text-slate-900 tracking-tight">
+                {fmt(summary?.overdue_debt || 0)}
+              </span>
+            </div>
+            <p className="text-[11px] text-slate-400 mt-0.5">vadesi aşılmış borç tutarı</p>
+          </div>
+
+          {/* Kart 3: Gelecek Ödemeler */}
+          <div className="bg-white px-3.5 py-2.5 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between">
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider truncate">Gelecek Ödemeler (Bu Ay)</span>
+              <span className="text-[11px] font-medium text-slate-400 whitespace-nowrap shrink-0">
+                {summary?.upcoming_invoice_count || 0} fatura
+              </span>
+            </div>
+            <div className="mt-1">
+              <span className="text-xl font-bold text-slate-900 tracking-tight">
+                {fmt(summary?.upcoming_payments || 0)}
+              </span>
+            </div>
+            <p className="text-[11px] text-slate-400 mt-0.5">30 gün içinde vadesi dolacak</p>
+          </div>
+
+          {/* Kart 4: Portföy Durumu */}
+          <div className="bg-white px-3.5 py-2.5 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between">
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider truncate">Kayıtlı Portföy</span>
+              <span className="text-[11px] font-medium text-slate-400 whitespace-nowrap shrink-0">
+                {summary?.zero_balance_count || 0} kapalı
+              </span>
+            </div>
+            <div className="mt-1">
+              <span className="text-xl font-bold text-slate-900 tracking-tight">
+                {summary?.total_suppliers || suppliers.length} Firma
+              </span>
+            </div>
+            <p className="text-[11px] text-slate-400 mt-0.5">{summary?.debt_supplier_count || 0} aktif borçlu firma</p>
+          </div>
+        </div>
+
+        {/* FİLTRE VE EYLEM ŞERİDİ + VERİ TABLOSU (Faturalar Sayfası Tarzı) */}
+        <div className="bg-white rounded-xl border border-slate-200/80 overflow-hidden shadow-xs">
+          <div className="p-4 border-b border-slate-100 flex items-center justify-between">
+            {/* Sol Sekmeler */}
+            <div className="flex items-center gap-1 bg-slate-50 p-1 rounded-lg border border-slate-200/60">
+              <button
+                onClick={() => { setTabFilter('ALL'); setCurrentPage(1); }}
+                className={`px-3 py-1 text-xs rounded-md transition flex items-center gap-1.5 ${
+                  tabFilter === 'ALL'
+                    ? 'bg-white text-slate-900 font-semibold shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900 font-medium'
+                }`}
+              >
+                <span>Tümü</span>
+                <span className="text-[11px] text-slate-400">{summary?.total_suppliers || suppliers.length}</span>
+              </button>
+
+              <button
+                onClick={() => { setTabFilter('DEBT'); setCurrentPage(1); }}
+                className={`px-3 py-1 text-xs rounded-md transition flex items-center gap-1.5 ${
+                  tabFilter === 'DEBT'
+                    ? 'bg-white text-slate-900 font-semibold shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900 font-medium'
+                }`}
+              >
+                <span>Borçlu</span>
+                <span className="text-[11px] text-rose-500 font-semibold">{summary?.debt_supplier_count || 0}</span>
+              </button>
+
+              <button
+                onClick={() => { setTabFilter('OVERDUE'); setCurrentPage(1); }}
+                className={`px-3 py-1 text-xs rounded-md transition flex items-center gap-1.5 ${
+                  tabFilter === 'OVERDUE'
+                    ? 'bg-white text-slate-900 font-semibold shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900 font-medium'
+                }`}
+              >
+                <span>Gecikmiş</span>
+                <span className="text-[11px] text-rose-600 font-bold">{summary?.overdue_supplier_count || 0}</span>
+              </button>
+
+              <button
+                onClick={() => { setTabFilter('ZERO'); setCurrentPage(1); }}
+                className={`px-3 py-1 text-xs rounded-md transition flex items-center gap-1.5 ${
+                  tabFilter === 'ZERO'
+                    ? 'bg-white text-slate-900 font-semibold shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900 font-medium'
+                }`}
+              >
+                <span>Sıfır Bakiye</span>
+                <span className="text-[11px] text-slate-400">{summary?.zero_balance_count || 0}</span>
+              </button>
+            </div>
+
+            {/* Sağ Filtreler & Excel Butonu */}
+            <div className="flex items-center gap-2">
+              <div className="relative">
+                <select
+                  value={category}
+                  onChange={e => { setCategory(e.target.value); setCurrentPage(1); }}
+                  className="appearance-none bg-white border border-slate-200 rounded-lg pl-3 pr-7 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50 transition focus:outline-none"
+                >
+                  <option value="">Tüm Kategoriler</option>
+                  <option value="Tıbbi Sarf">Tıbbi Sarf</option>
+                  <option value="İlaç & Serum">İlaç & Serum</option>
+                  <option value="Cihaz & Ekipman">Cihaz & Ekipman</option>
+                  <option value="Genel Gider">Genel Gider</option>
+                </select>
+                <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none" />
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setOnlyEInvoice(!onlyEInvoice)}
+                className={`flex items-center gap-1.5 px-3 py-1.5 border rounded-lg text-xs font-medium transition ${
+                  onlyEInvoice
+                    ? 'bg-emerald-50 border-emerald-300 text-emerald-700 font-semibold'
+                    : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
+                }`}
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                <span>e-Fatura</span>
+              </button>
+
+              {/* Toolbar İçi Excel'e Aktar Butonu */}
+              <button
+                type="button"
+                onClick={handleExportExcel}
+                className="flex items-center gap-1.5 px-3 py-1.5 border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium rounded-lg shadow-xs transition active:scale-95"
+                title="Excel'e Aktar"
+              >
+                <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600" />
+                <span>Excel'e Aktar</span>
+              </button>
+            </div>
+          </div>
+
+          {/* VERİ TABLOSU (Excel Tarzı Çizgili Izgara Grid - Faturalar Sayfası ile Birebir) */}
+          <div className="overflow-x-auto min-h-[260px]">
+            <table className="w-full text-left border-collapse border border-slate-300">
+              <thead>
+                <tr className="bg-slate-100/85 text-[10px] font-bold text-slate-600 uppercase tracking-wider divide-x divide-slate-200 border-b border-slate-300">
+                  <th className="py-2 px-3 font-bold text-center">FİRMA / TEDARİKÇİ</th>
+                  <th className="py-2 px-3 font-bold text-center">YETKİLİ & İLETİŞİM</th>
+                  <th className="py-2 px-3 font-bold text-center">VERGİ BİLGİSİ / E-FATURA</th>
+                  <th className="py-2 px-3 font-bold text-center">GÜNCEL BAKİYE</th>
+                  <th className="py-2 px-3 font-bold text-center">VADE DURUMU</th>
+                  <th className="py-2 px-3 font-bold text-center w-28">İŞLEMLER</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-200 text-xs">
+                {loading ? (
+                  <tr>
+                    <td colSpan={6} className="py-16 text-center text-slate-400">Yükleniyor...</td>
+                  </tr>
+                ) : paginatedSuppliers.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} className="py-16 text-center text-slate-400">Kayıtlı tedarikçi bulunamadı.</td>
+                  </tr>
+                ) : (
+                  paginatedSuppliers.map((s, idx) => {
+                    const isSelected = selectedSupplier?.id === s.id;
+                    return (
+                      <tr
+                        key={s.id}
+                        onClick={() => setSelectedSupplier(s)}
+                        className={`divide-x divide-slate-200 hover:bg-sky-50/60 transition-colors group cursor-pointer ${
+                          isSelected ? 'bg-sky-50/70' : idx % 2 === 1 ? 'bg-slate-50/50' : 'bg-white'
+                        }`}
+                      >
+                        {/* Firma / Tedarikçi */}
+                        <td className="py-2 px-3">
+                          <div className="flex items-center justify-center gap-2.5">
+                            <div className={`w-7 h-7 rounded flex items-center justify-center font-bold text-[11px] shrink-0 ${getAvatarStyle(idx)}`}>
+                              {getInitials(s.name)}
+                            </div>
+                            <div className="text-center">
+                              <div className="font-semibold text-slate-900 text-xs leading-tight hover:underline text-sky-700">{s.name}</div>
+                              <div className="flex items-center justify-center gap-1.5 mt-0.5 text-[10px] text-slate-400">
+                                <span className="font-mono text-slate-500">{s.short_code || `TED-${1000 + idx}`}</span>
+                                {s.category && (
+                                  <>
+                                    <span>•</span>
+                                    <span className="text-slate-600 font-medium">{s.category}</span>
+                                  </>
+                                )}
+                                <span>•</span>
+                                <span>{s.default_due_days ? `${s.default_due_days} Gün Vade` : 'Peşin'}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+
+                        {/* Yetkili & İletişim */}
+                        <td className="py-2 px-3 text-center">
+                          <div className="font-medium text-slate-800 text-xs">{s.contact_name || '-'}</div>
+                          <div className="text-[10px] text-slate-400 mt-0.5 font-mono">{s.phone || '-'}</div>
+                        </td>
+
+                        {/* Vergi Bilgisi / e-Fatura */}
+                        <td className="py-2 px-3 text-center">
+                          <div className="font-mono text-slate-700 text-xs">{s.tax_number || '-'}</div>
+                          <div className="mt-0.5 flex justify-center">
+                            {s.e_invoice_registered ? (
+                              <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-600">
+                                <CheckCircle2 className="w-3 h-3" /> e-Fatura
+                              </span>
+                            ) : (
+                              <span className="text-[10px] text-slate-400">{s.tax_office ? `${s.tax_office} V.D.` : 'e-Arşiv'}</span>
+                            )}
+                          </div>
+                        </td>
+
+                        {/* Güncel Bakiye */}
+                        <td className="py-2 px-3 text-center">
+                          {s.balance > 0 ? (
+                            <div>
+                              <div className="font-bold text-rose-600 text-xs">
+                                {fmt(s.balance)}
+                              </div>
+                              <div className="text-[10px] text-slate-400 mt-0.5">Açık Borç</div>
+                            </div>
+                          ) : (
+                            <div>
+                              <div className="font-semibold text-slate-700 text-xs">₺0,00</div>
+                              <div className="text-[10px] text-emerald-600 font-medium mt-0.5">Mutabık</div>
+                            </div>
+                          )}
+                        </td>
+
+                        {/* Vade Durumu */}
+                        <td className="py-2 px-3 text-center">
+                          {s.balance > 0 ? (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-rose-50 text-rose-700 border border-rose-200">
+                              <span className="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
+                              <span>Vadesi Yakın</span>
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-100 text-slate-600 border border-slate-200">
+                              <span className="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+                              <span>Bekleyen Yok</span>
+                            </span>
+                          )}
+                        </td>
+
+                        {/* İşlemler */}
+                        <td className="py-2 px-3 text-center">
+                          {s.balance > 0 ? (
+                            <button
+                              type="button"
+                              onClick={(e) => { e.stopPropagation(); setSelectedSupplier(s); setShowPaymentModal(true); }}
+                              className="inline-flex items-center gap-1 px-2.5 py-1 bg-rose-600 hover:bg-rose-700 text-white text-[11px] font-medium rounded shadow-xs"
+                            >
+                              Ödeme Yap
+                            </button>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={(e) => { e.stopPropagation(); setSelectedSupplier(s); }}
+                              className="inline-flex items-center gap-1 px-2.5 py-1 border border-slate-200 hover:bg-slate-50 text-slate-700 text-[11px] font-medium rounded bg-white shadow-xs"
+                            >
+                              Ekstre
+                            </button>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          {/* SAYFALAMA (Faturalar Sayfası ile Birebir) */}
+          <div className="p-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+            <span>
+              {suppliers.length > 0 ? `${(currentPage - 1) * pageSize + 1} - ${Math.min(currentPage * pageSize, suppliers.length)}` : '0'} / {suppliers.length} tedarikçi
+            </span>
+            <div className="flex items-center gap-1">
+              <button
+                disabled={currentPage === 1}
+                onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                className="px-2.5 py-1 text-slate-400 hover:text-slate-600 rounded disabled:opacity-50"
+              >
+                Önceki
+              </button>
+
+              {Array.from({ length: Math.max(1, Math.ceil(suppliers.length / pageSize)) }, (_, i) => i + 1).map(page => (
+                <button
+                  key={page}
+                  onClick={() => setCurrentPage(page)}
+                  className={`w-7 h-7 rounded flex items-center justify-center transition-colors ${
+                    currentPage === page
+                      ? 'bg-slate-100 font-semibold text-slate-900'
+                      : 'hover:bg-slate-50 text-slate-600'
+                  }`}
+                >
+                  {page}
+                </button>
+              ))}
+
+              <button
+                disabled={currentPage === Math.max(1, Math.ceil(suppliers.length / pageSize)) || suppliers.length === 0}
+                onClick={() => setCurrentPage(prev => Math.min(Math.max(1, Math.ceil(suppliers.length / pageSize)), prev + 1))}
+                className="px-2.5 py-1 hover:text-slate-900 rounded disabled:opacity-50"
+              >
+                Sonraki
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* 4. Seçili Tedarikçi Cari Ekstre Modalı / Bölümü (Sabit Açılış - Daralma/Animasyon Yok) */}
+        {selectedSupplier && (
+          <div className="mt-4 bg-white rounded-xl border border-slate-300 shadow-xs p-5">
+            <div className="flex flex-wrap items-center justify-between pb-3 border-b border-slate-200 gap-3">
+              <div>
+                <div className="flex items-center gap-2.5">
+                  <h3 className="text-sm font-bold text-slate-900">{selectedSupplier.name} — Cari Hesap Ekstresi</h3>
+                  <span className={`px-2 py-0.5 rounded text-[11px] font-bold ${
+                    selectedSupplier.balance > 0 ? 'bg-rose-50 text-rose-700 border border-rose-200' : 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                  }`}>
+                    {selectedSupplier.balance > 0 ? `Bakiye: ${fmt(selectedSupplier.balance)}` : 'Bakiye: ₺0,00 (Kapalı)'}
+                  </span>
+                </div>
+                <p className="text-[11px] text-slate-500 mt-0.5">
+                  IBAN: <span className="font-mono text-slate-700">{selectedSupplier.iban || 'TR45 0006 2000 1122 3344 5566 77'}</span> ({selectedSupplier.bank_name || 'Garanti BBVA - Kurumsal Ticari'})
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button 
+                  onClick={() => setShowPaymentModal(true)}
+                  className="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-semibold shadow-xs flex items-center gap-1.5"
+                >
+                  <Banknote className="w-3.5 h-3.5" /> Ödeme Yap
+                </button>
+                <button 
+                  onClick={() => { setEditingSupplier(selectedSupplier); setShowSupplierModal(true); }}
+                  className="px-3 py-1.5 border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 rounded-lg text-xs font-medium flex items-center gap-1.5"
+                >
+                  <Edit className="w-3.5 h-3.5" /> Düzenle
+                </button>
+                <button 
+                  onClick={() => setSelectedSupplier(null)}
+                  className="px-3 py-1.5 border border-slate-200 bg-white hover:bg-slate-50 text-slate-500 rounded-lg text-xs font-medium"
+                >
+                  Kapat
+                </button>
+              </div>
+            </div>
+
+            {/* Hareket Tablosu - Excel Izgarası */}
+            <div className="overflow-x-auto mt-3">
+              <table className="w-full text-left text-xs border-collapse border border-slate-200">
+                <thead>
+                  <tr className="border-b border-slate-300 bg-slate-100 text-[10px] font-bold text-slate-600 uppercase tracking-wider divide-x divide-slate-200">
+                    <th className="py-2 px-3">Tarih</th>
+                    <th className="py-2 px-3">İşlem Türü</th>
+                    <th className="py-2 px-3">Evrak / Fatura No</th>
+                    <th className="py-2 px-3">Açıklama</th>
+                    <th className="py-2 px-3 text-right">Borç (Alış +)</th>
+                    <th className="py-2 px-3 text-right">Alacak (Ödeme -)</th>
+                    <th className="py-2 px-3 text-right font-bold">Yürüyen Bakiye</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-200">
+                  {transactions.length === 0 ? (
+                    <tr>
+                      <td colSpan={7} className="py-6 text-center text-slate-400">Bu cariye ait hareket kaydı bulunamadı.</td>
+                    </tr>
+                  ) : (
+                    transactions.map((t, idx) => (
+                      <tr key={t.id} className={`divide-x divide-slate-200 hover:bg-slate-50 ${idx % 2 === 1 ? 'bg-slate-50/40' : 'bg-white'}`}>
+                        <td className="py-2 px-3 text-slate-700">{fmtDate(t.transaction_date)}</td>
+                        <td className="py-2 px-3 font-semibold text-slate-800">
+                          {t.type === 'INVOICE' && <span className="text-purple-700">Alış Faturası</span>}
+                          {t.type === 'PAYMENT_BANK' && <span className="text-emerald-700">Banka Havalesi</span>}
+                          {t.type === 'PAYMENT_CASH' && <span className="text-emerald-700">Nakit Ödeme</span>}
+                          {t.type === 'PAYMENT_CHECK' && <span className="text-blue-700">Çek Ödemesi</span>}
+                          {t.type === 'OPENING_BALANCE' && <span className="text-slate-600">Açılış Bakiyesi</span>}
+                          {t.type === 'ADJUSTMENT' && <span className="text-amber-700">Düzeltme</span>}
+                        </td>
+                        <td className="py-2 px-3 font-mono text-slate-600">{t.document_no || '-'}</td>
+                        <td className="py-2 px-3 text-slate-600">{t.description || '-'}</td>
+                        <td className="py-2 px-3 text-right font-bold text-rose-600">
+                          {t.debit > 0 ? fmt(t.debit) : '-'}
+                        </td>
+                        <td className="py-2 px-3 text-right font-bold text-emerald-600">
+                          {t.credit > 0 ? fmt(t.credit) : '-'}
+                        </td>
+                        <td className="py-2 px-3 text-right font-bold text-slate-900">
+                          {fmt(t.running_balance)}
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+      </main>
+
+      {/* Supplier Modal */}
+      {showSupplierModal && (
+        <SupplierModal 
+          supplier={editingSupplier}
+          onClose={() => setShowSupplierModal(false)}
+          onSaved={() => {
+            setShowSupplierModal(false);
+            fetchSuppliers();
+            fetchSummary();
+          }}
+        />
+      )}
+
+      {/* Payment Modal */}
+      {showPaymentModal && selectedSupplier && (
+        <PaymentModal
+          supplier={selectedSupplier}
+          onClose={() => setShowPaymentModal(false)}
+          onSaved={() => {
+            setShowPaymentModal(false);
+            fetchSuppliers();
+            fetchSummary();
+            // refreshing selectedSupplier transactions
+            apiClient.get(`/suppliers/${selectedSupplier.id}/transactions`)
+              .then(res => setTransactions(res.data.transactions || res.data || []))
+              .catch(console.error);
+          }}
+        />
+      )}
+    </div>
+  );
+};
+
+const SupplierModal: React.FC<{ supplier: Supplier | null, onClose: () => void, onSaved: () => void }> = ({ supplier, onClose, onSaved }) => {
+  const [form, setForm] = useState<Partial<Supplier>>(supplier || { e_invoice_registered: false });
+  const [saving, setSaving] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSaving(true);
+    try {
+      if (supplier) {
+        await apiClient.put(`/suppliers/${supplier.id}`, form);
+      } else {
+        await apiClient.post('/suppliers', form);
+      }
+      onSaved();
+    } catch (err) {
+      alert('Kaydedilemedi');
+    }
+    setSaving(false);
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+      <div className="bg-white rounded-2xl max-w-lg w-full flex flex-col shadow-2xl max-h-[90vh] my-auto overflow-hidden">
+        {/* Modal Başlık - Sabit */}
+        <div className="px-6 py-4 border-b border-slate-200 flex justify-between items-center bg-slate-50/50 shrink-0">
+          <h2 className="text-base font-bold text-slate-900">{supplier ? 'Tedarikçi Düzenle' : 'Yeni Tedarikçi Ekle'}</h2>
+          <button onClick={onClose} className="p-1.5 hover:bg-slate-200 rounded-lg text-slate-500"><X className="w-5 h-5"/></button>
+        </div>
+
+        {/* Modal Form Alanı - Scroll edilebilir */}
+        <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0">
+          <div className="p-6 overflow-y-auto space-y-4 flex-1">
+            <div className="grid grid-cols-2 gap-3.5">
+              <div className="col-span-2">
+                <label className="block text-xs font-semibold text-slate-700 mb-1">Firma Adı *</label>
+                <input required value={form.name || ''} onChange={e => setForm({...form, name: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-sky-500" />
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">Kısa Kod</label>
+                <input value={form.short_code || ''} onChange={e => setForm({...form, short_code: e.target.value})} placeholder="TED-1001" className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-sky-500" />
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">Kategori</label>
+                <select value={form.category || ''} onChange={e => setForm({...form, category: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-sky-500 bg-white">
+                  <option value="">Seçiniz</option>
+                  <option value="Tıbbi Sarf">Tıbbi Sarf Malzeme</option>
+                  <option value="İlaç & Serum">İlaç & Serum Depoları</option>
+                  <option value="Cihaz & Ekipman">Cihaz & Ekipman</option>
+                  <option value="Genel Gider">Genel Gider Tedarikçileri</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">Yetkili Kişi</label>
+                <input value={form.contact_name || ''} onChange={e => setForm({...form, contact_name: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-sky-500" />
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">Telefon</label>
+                <input value={form.phone || ''} onChange={e => setForm({...form, phone: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-sky-500" />
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">Vergi Dairesi</label>
+                <input value={form.tax_office || ''} onChange={e => setForm({...form, tax_office: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-sky-500" />
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">Vergi No / TCKN</label>
+                <input value={form.tax_number || ''} onChange={e => setForm({...form, tax_number: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-sky-500" />
+              </div>
+              <div className="col-span-2">
+                <label className="block text-xs font-semibold text-slate-700 mb-1">E-posta</label>
+                <input type="email" value={form.email || ''} onChange={e => setForm({...form, email: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-sky-500" />
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">IBAN</label>
+                <input value={form.iban || ''} onChange={e => setForm({...form, iban: e.target.value})} placeholder="TR..." className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-sky-500" />
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">Banka Adı</label>
+                <input value={form.bank_name || ''} onChange={e => setForm({...form, bank_name: e.target.value})} placeholder="Garanti, Ziraat..." className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-sky-500" />
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">Standart Vade Günü</label>
+                <input type="number" value={form.default_due_days || ''} onChange={e => setForm({...form, default_due_days: parseInt(e.target.value) || undefined})} placeholder="30" className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-sky-500" />
+              </div>
+              <div className="flex items-center pt-5">
+                <label className="flex items-center gap-2 cursor-pointer text-xs font-medium text-slate-700">
+                  <input type="checkbox" checked={form.e_invoice_registered || false} onChange={e => setForm({...form, e_invoice_registered: e.target.checked})} className="rounded text-sky-600 border-slate-300 w-4 h-4 focus:ring-sky-500" />
+                  e-Fatura Mükellefi
+                </label>
+              </div>
+              <div className="col-span-2">
+                <label className="block text-xs font-semibold text-slate-700 mb-1">Adres</label>
+                <textarea rows={2} value={form.address || ''} onChange={e => setForm({...form, address: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-sky-500 resize-none" />
+              </div>
+              <div className="col-span-2">
+                <label className="block text-xs font-semibold text-slate-700 mb-1">Notlar</label>
+                <textarea rows={2} value={form.notes || ''} onChange={e => setForm({...form, notes: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-sky-500 resize-none" />
+              </div>
+            </div>
+          </div>
+
+          {/* Modal Butonları - Sabit Alt Bar */}
+          <div className="px-6 py-4 border-t border-slate-200 bg-slate-50/50 flex justify-end gap-2 shrink-0">
+            <button type="button" onClick={onClose} className="px-4 py-2 text-slate-600 text-sm font-medium hover:bg-slate-200/60 rounded-lg">İptal</button>
+            <button type="submit" disabled={saving} className="px-6 py-2 bg-sky-600 hover:bg-sky-700 text-white text-sm font-semibold rounded-lg shadow-sm disabled:opacity-50">{saving ? 'Kaydediliyor...' : 'Kaydet'}</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+const PaymentModal: React.FC<{ supplier: Supplier, onClose: () => void, onSaved: () => void }> = ({ supplier, onClose, onSaved }) => {
+  const [saving, setSaving] = useState(false);
+  const [tab, setTab] = useState<'PAYMENT_CASH' | 'PAYMENT_BANK' | 'PAYMENT_CHECK'>('PAYMENT_CASH');
+  const [amount, setAmount] = useState<string>('');
+  const [docNo, setDocNo] = useState('');
+  const [desc, setDesc] = useState('');
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const val = parseFloat(amount);
+    if (!val || val <= 0) return alert('Geçerli bir tutar girin');
+    setSaving(true);
+    try {
+      await apiClient.post(`/suppliers/${supplier.id}/transactions`, {
+        type: tab,
+        amount: val,
+        description: desc || 'Ödeme',
+        document_no: docNo,
+        payment_method: tab === 'PAYMENT_CASH' ? 'Nakit' : tab === 'PAYMENT_BANK' ? 'Banka' : 'Çek'
+      });
+      onSaved();
+    } catch (err) {
+      alert('Ödeme kaydedilemedi');
+    }
+    setSaving(false);
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
+      <div className="bg-white rounded-2xl w-full max-w-sm shadow-xl overflow-hidden flex flex-col">
+        <div className="p-4 border-b border-slate-200 flex justify-between items-center bg-slate-50">
+          <h2 className="text-sm font-bold text-slate-900">Ödeme Kaydı</h2>
+          <button onClick={onClose} className="p-1 hover:bg-slate-200 rounded text-slate-500"><X className="w-4 h-4"/></button>
+        </div>
+        <form onSubmit={handleSubmit} className="p-5 flex-1">
+          <div className="mb-4 text-center">
+            <h3 className="font-bold text-slate-800 text-lg">{supplier.name}</h3>
+            <p className="text-slate-500 text-sm mt-1">Güncel Borç: <span className="font-bold text-rose-600">{fmt(supplier.balance)}</span></p>
+          </div>
+          
+          <div className="flex bg-slate-100 p-1 rounded-lg mb-4">
+            <button type="button" onClick={() => setTab('PAYMENT_CASH')} className={`flex-1 py-1.5 text-xs font-bold rounded-md ${tab === 'PAYMENT_CASH' ? 'bg-white shadow-sm text-slate-800' : 'text-slate-500'}`}>Nakit</button>
+            <button type="button" onClick={() => setTab('PAYMENT_BANK')} className={`flex-1 py-1.5 text-xs font-bold rounded-md ${tab === 'PAYMENT_BANK' ? 'bg-white shadow-sm text-slate-800' : 'text-slate-500'}`}>Banka/Havale</button>
+            <button type="button" onClick={() => setTab('PAYMENT_CHECK')} className={`flex-1 py-1.5 text-xs font-bold rounded-md ${tab === 'PAYMENT_CHECK' ? 'bg-white shadow-sm text-slate-800' : 'text-slate-500'}`}>Çek</button>
+          </div>
+
+          <div className="space-y-4">
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 mb-1">Tutar (TL) *</label>
+              <input type="number" step="0.01" min="0" required value={amount} onChange={e => setAmount(e.target.value)} className="w-full px-3 py-2 border border-slate-300 rounded-lg text-lg font-bold" placeholder="0.00" />
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 mb-1">Evrak/Dekont No</label>
+              <input value={docNo} onChange={e => setDocNo(e.target.value)} className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm" />
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 mb-1">Açıklama</label>
+              <textarea rows={2} value={desc} onChange={e => setDesc(e.target.value)} className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm" placeholder="Örn: Ekim ayı fatura ödemesi" />
+            </div>
+          </div>
+          
+          <div className="mt-6 flex justify-end gap-3">
+            <button type="button" onClick={onClose} className="px-4 py-2 text-slate-600 font-medium hover:bg-slate-100 rounded-lg text-sm">İptal</button>
+            <button type="submit" disabled={saving} className="px-6 py-2 bg-rose-600 hover:bg-rose-700 text-white font-medium rounded-lg text-sm flex items-center gap-2">
+              {saving ? 'Kaydediliyor...' : <><Banknote className="w-4 h-4"/> Ödemeyi İşle</>}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};

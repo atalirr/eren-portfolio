@@ -1,42 +1,153 @@
-# Bağımlılıklar
+# ============================================
+# NODE.JS / ELECTRON
+# ============================================
 node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+lerna-debug.log*
 
-# Derleme ve Çıktı Dosyaları
+# Build outputs
 dist/
 build/
 out/
+*.exe
+*.dmg
+*.app
+*.deb
+*.rpm
+*.snap
 
-# SQLite Veritabanı ve Günlük Dosyaları
-*.db
-*.db-journal
+# Electron
+.electron-builder-cache/
+app/
+packages/
+
+# ============================================
+# PYTHON
+# ============================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv
+env.bak/
+venv.bak/
+
+# Python distribution / packaging
+*.egg-info/
+.eggs/
+dist/
+build/
+*.egg
+*.whl
+
+# PyInstaller
+*.manifest
+*.spec
+
+# ============================================
+# ENVIRONMENT & CONFIG
+# ============================================
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+*.sublime-project
+*.sublime-workspace
+
+# ============================================
+# DATABASE
+# ============================================
 *.sqlite
 *.sqlite3
+*.db
+*.db-journal
 
-# Geliştirme Sırasında Alınan Yedek ve Geçici Dosyalar
-backup/
-*_backup.*
-*_clean.*
-*_new.*
-temp_*.*
-database.backup.js
+# Alembic
+alembic/versions/*.pyc
 
-# Test / Deneme Scriptleri
-check_*.js
-add_sample_*.js
+# ============================================
+# TESTING
+# ============================================
+coverage/
+*.lcov
+.nyc_output/
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
 
-# Log Dosyaları
+# ============================================
+# LOGS
+# ============================================
+logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
 
-# Çevre Değişkenleri ve Gizli Anahtarlar
-.env
-.env.local
-.env.*.local
-
-# İşletim Sistemi ve IDE Dosyaları
-.DS_Store
+# ============================================
+# OS SPECIFIC
+# ============================================
+# Windows
 Thumbs.db
-.vscode/
-.idea/
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+
+# ============================================
+# TEMPORARY FILES
+# ============================================
+*.tmp
+*.temp
+*.bak
+*.backup
+*.old
+
+# ============================================
+# PROJECT SPECIFIC
+# ============================================
+# SQLite veritabanı (kullanıcı verileri)
+# %APPDATA%/pos6/db.sqlite klasörü ignore edilmez
+# Çünkü build klasöründe olmayacak
+
+# Python binary build outputs
+backend/dist/
+backend/build/
+*.pyz
+
+# Electron unpackaged
+app/
+
+

@@ -1,0 +1,29 @@
+# FastAPI ve ASGI Server
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+python-multipart==0.0.6
+
+# Database
+sqlalchemy==2.0.23
+alembic==1.12.1
+
+# Validation
+pydantic==2.5.0
+pydantic-settings==2.1.0
+email-validator>=2.1.1
+
+# Date/Time
+# Note: UUID desteği Python'un built-in 'uuid' modülü ile sağlanıyor, ayrı paket gerekmez
+python-dateutil==2.8.2
+
+# Environment Variables
+python-dotenv==1.0.0
+
+# CORS is built into FastAPI (via Starlette)
+
+# Utilities
+click==8.1.7
+
+# Password hashing (Seed için)
+passlib[bcrypt]==1.7.4
+
