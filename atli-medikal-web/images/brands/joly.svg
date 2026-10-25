@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 140" width="360" height="140" role="img" aria-label="Joly">
+  <rect width="360" height="140" rx="12" fill="#FFFFFF"/>
+  <g transform="translate(88, 32)">
+    <ellipse cx="92" cy="28" rx="86" ry="28" fill="#0284C7"/>
+    <text x="92" y="40" text-anchor="middle" font-family="'Plus Jakarta Sans', 'Arial Rounded MT Bold', Arial, sans-serif" font-size="40" font-weight="800" fill="#FFFFFF" letter-spacing="0.04em">JOLY</text>
+  </g>
+  <text x="180" y="114" text-anchor="middle" font-family="'Inter', Arial, sans-serif" font-size="11.5" font-weight="700" fill="#64748B" letter-spacing="0.16em">YETİŞKİN HASTA BEZİ</text>
+</svg>

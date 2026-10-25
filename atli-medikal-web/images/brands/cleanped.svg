@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 140" width="360" height="140" role="img" aria-label="Cleanped">
+  <rect width="360" height="140" rx="14" fill="#FFFFFF"/>
+  <g transform="translate(68, 28)">
+    <!-- Stylized 'Clean' in vibrant deep teal/navy -->
+    <text x="0" y="44" font-family="'Plus Jakarta Sans', 'Segoe UI', Arial, sans-serif" font-size="44" font-weight="900" fill="#0D9488" letter-spacing="-0.03em" font-style="italic">Clean</text>
+    <!-- Stylized 'ped' in cheerful lime-yellow -->
+    <text x="122" y="46" font-family="'Plus Jakarta Sans', 'Segoe UI', Arial, sans-serif" font-size="46" font-weight="900" fill="#84CC16" letter-spacing="-0.02em">ped</text>
+    <!-- Medical cross / droplet accent -->
+    <path d="M208,18 C208,18 218,30 218,36 C218,42 213,46 208,46 C203,46 198,42 198,36 C198,30 208,18 208,18 Z" fill="#0EA5E9"/>
+  </g>
+  <!-- Subtitle badge text -->
+  <text x="180" y="110" text-anchor="middle" font-family="'Plus Jakarta Sans', 'Inter', Arial, sans-serif" font-size="11" font-weight="800" fill="#64748B" letter-spacing="0.14em">MEDİKAL HASTA BEZİ &amp; EMİCİ KÜLOT</text>
+</svg>

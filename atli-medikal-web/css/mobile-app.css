@@ -1,0 +1,977 @@
+/* ==========================================================================
+   ATLI MEDİKAL - ULTRA MODERN MOBİL UYGULAMA (APP-LIKE) GÖRÜNÜMÜ
+   Masaüstü (Desktop) Görünümünü %100 Korur; Yalnızca Mobilde Devreye Girer.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. MASAÜSTÜNDE MOBİL ELEMANLARI KESİNLİKLE GİZLE (DESKTOP ISOLATION)
+   -------------------------------------------------------------------------- */
+@media (min-width: 769px) {
+  .atli-mobile-dock,
+  .atli-mobile-cat-strip,
+  .atli-mobile-banner-foot,
+  .atli-mobile-only {
+    display: none !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   2. MOBİL ÖZEL STİLLER (MAX-WIDTH: 768px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+
+  /* Sayfa Altına Sabit Bar İçin Güvenli Boşluk */
+  body {
+    padding-bottom: 74px !important;
+  }
+
+  /* ------------------------------------------------------------------------
+     A. MOBİL HEADER VE ARAMA OPTİMİZASYONU
+     ------------------------------------------------------------------------ */
+  .site-header {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 1000 !important;
+    background: #FFFFFF !important;
+    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.06) !important;
+    border-bottom: 1px solid #E2E8F0 !important;
+  }
+
+  .site-header__top {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 10px 14px 8px !important;
+    gap: 8px !important;
+  }
+
+  /* KULLANICI TALEBİ: "bunu kaldır" - Üst Başlıktaki WhatsApp ve Telefon Butonları Tamamen Gizli */
+  .site-header__actions,
+  .header-pill-btn,
+  .header-pill-btn--wa,
+  .header-pill-btn--call {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+  }
+
+  /* Eski Hamburger Butonunu Gizle (Modern theme-modern butonu aktif) */
+  .site-header__hamburger {
+    display: none !important;
+  }
+
+  .site-header__brand {
+    order: 1 !important;
+    text-decoration: none !important;
+  }
+
+  .site-header__brand-title {
+    font-size: 21px !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.02em !important;
+    color: #0B132B !important;
+  }
+
+  .site-header__brand-title span {
+    color: #00D4AA !important;
+  }
+
+  /* Hamburger Menü Butonunu Sağ Üste Al */
+  .tm-menu-btn {
+    order: 2 !important;
+    margin: 0 !important;
+    width: 38px !important;
+    height: 38px !important;
+    border-radius: 10px !important;
+    background: #F8FAFC !important;
+    border: 1px solid #E2E8F0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+  }
+
+  /* Arama Çubuğunu 2. Satıra Tam Genişlikte Oturt */
+  .site-header__search {
+    order: 3 !important;
+    width: 100% !important;
+    margin: 2px 0 0 !important;
+  }
+
+  .search-pill {
+    width: 100% !important;
+    height: 42px !important;
+    background: #F1F5F9 !important;
+    border: 1.5px solid #E2E8F0 !important;
+    border-radius: 999px !important;
+    padding: 0 5px 0 14px !important;
+    box-shadow: none !important;
+    transition: all 0.2s ease !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  .search-pill:focus-within,
+  .search-pill:focus,
+  .search-pill:active {
+    background: #FFFFFF !important;
+    border-color: #CBD5E1 !important;
+    box-shadow: none !important;
+    outline: none !important;
+  }
+
+  .search-pill__icon {
+    font-size: 14px !important;
+    color: #64748B !important;
+    margin-right: 8px !important;
+  }
+
+  .search-pill__input {
+    font-size: 16px !important;
+    color: #1E293B !important;
+    background: transparent !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    flex: 1 !important;
+  }
+
+  .search-pill__btn {
+    height: 32px !important;
+    padding: 0 16px !important;
+    font-size: 12.5px !important;
+    border-radius: 999px !important;
+    background: #0B132B !important;
+    color: #FFFFFF !important;
+    border: none !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+  }
+
+  /* Masaüstü 2. Kat Kategori Menüsünü Mobilde Gizle (Drawer & Kayan Bar Kullanılır) */
+  .site-header__bottom {
+    display: none !important;
+  }
+
+  /* ------------------------------------------------------------------------
+     B. KULLANICI TALEBİ: "mobilde kategorileri 2 satır halinde düzenle"
+     ------------------------------------------------------------------------ */
+  .atli-mobile-cat-strip {
+    display: block !important;
+    background: #FFFFFF !important;
+    border-bottom: 1px solid #F1F5F9 !important;
+    padding: 8px 10px 10px !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+  }
+
+  .atli-mobile-cat-strip::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  /* 2 Satır Halinde Şık Grid Düzeni */
+  .atli-mobile-cat-scroll {
+    display: grid !important;
+    grid-template-rows: repeat(2, 34px) !important;
+    grid-auto-flow: column !important;
+    grid-auto-columns: max-content !important;
+    gap: 6px 7px !important;
+    align-items: center !important;
+  }
+
+  .atli-cat-pill {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    padding: 6px 12px !important;
+    height: 34px !important;
+    border-radius: 999px !important;
+    font-size: 11.5px !important;
+    font-weight: 600 !important;
+    color: #334155 !important;
+    background: #F8FAFC !important;
+    border: 1px solid #E2E8F0 !important;
+    text-decoration: none !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    user-select: none !important;
+    white-space: nowrap !important;
+    box-sizing: border-box !important;
+  }
+
+  .atli-cat-pill i {
+    font-size: 12px !important;
+    color: #00D4AA !important;
+  }
+
+  .atli-cat-pill.active {
+    background: #0B132B !important;
+    color: #FFFFFF !important;
+    border-color: #0B132B !important;
+    box-shadow: 0 2px 8px rgba(11, 19, 43, 0.15) !important;
+  }
+
+  .atli-cat-pill.active i {
+    color: #00D4AA !important;
+  }
+
+  /* ------------------------------------------------------------------------
+     C. KULLANICI TALEBİ: "vitrindeki posterin yüksekliğini bir arttır daha büyük gözüksün"
+     ------------------------------------------------------------------------ */
+  .tm-deals--fullbanner {
+    padding: 12px 10px 14px !important;
+    background: #FAFAFA !important;
+  }
+
+  .tm-deals--fullbanner > .container {
+    padding: 0 !important;
+  }
+
+  .tm-full-banner-card,
+  #tmBannerCard {
+    border-radius: 16px !important;
+    border: 2px solid #00D4AA !important;
+    overflow: hidden !important;
+    box-shadow: 0 4px 18px rgba(0, 212, 170, 0.14) !important;
+    background: #FFFFFF !important;
+  }
+
+  .tm-full-banner-link,
+  #tmBannerLink {
+    display: block !important;
+    width: 100% !important;
+    height: 185px !important; /* Poster yüksekliği belirgin şekilde artırıldı */
+    overflow: hidden !important;
+  }
+
+  .tm-full-banner-img,
+  #tmBannerImg {
+    border-radius: 14px 14px 0 0 !important;
+    display: block !important;
+    width: 100% !important;
+    height: 185px !important; /* Artırılmış yükseklik */
+    object-fit: cover !important;
+    object-position: center !important;
+  }
+
+  /* Banner Altı Mobil Hızlı Sipariş ve Bilgi Paneli */
+  .atli-mobile-banner-foot {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 9px !important;
+    padding: 12px 14px 14px !important;
+    background: linear-gradient(180deg, #F8FAFC 0%, #FFFFFF 100%) !important;
+    border-top: 1px solid #E2E8F0 !important;
+  }
+
+  .atli-mobile-banner-meta {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 10px !important;
+  }
+
+  .atli-mobile-banner-title {
+    font-size: 13.5px !important;
+    font-weight: 700 !important;
+    color: #0F172A !important;
+    line-height: 1.25 !important;
+  }
+
+  .atli-mobile-banner-badge {
+    font-size: 11px !important;
+    color: #64748B !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+    margin-top: 2px !important;
+  }
+
+  .atli-mobile-banner-price {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-end !important;
+    white-space: nowrap !important;
+  }
+
+  .atli-mobile-price-now {
+    font-size: 18px !important;
+    font-weight: 800 !important;
+    color: #059669 !important;
+    letter-spacing: -0.02em !important;
+  }
+
+  .atli-mobile-price-old {
+    font-size: 11.5px !important;
+    color: #94A3B8 !important;
+    text-decoration: line-through !important;
+  }
+
+  .atli-mobile-banner-cta {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    background: #25D366 !important;
+    color: #FFFFFF !important;
+    font-size: 13.5px !important;
+    font-weight: 700 !important;
+    padding: 10px 16px !important;
+    border-radius: 10px !important;
+    text-decoration: none !important;
+    box-shadow: 0 3px 10px rgba(37, 211, 102, 0.28) !important;
+    transition: transform 0.15s ease !important;
+  }
+
+  .atli-mobile-banner-cta:active {
+    transform: scale(0.98) !important;
+  }
+
+  .atli-mobile-banner-cta i {
+    font-size: 18px !important;
+  }
+
+  /* ------------------------------------------------------------------------
+     D. KULLANICI TALEBİ: "akan markalar kısmı mobilde akmasın alt alta 3 satır şeklinde diz"
+     ------------------------------------------------------------------------ */
+  .tm-brands {
+    padding: 6px 10px 16px !important;
+  }
+
+  .tm-brands__frame {
+    padding: 10px 10px !important;
+    border-radius: 14px !important;
+    border: 1px solid #E2E8F0 !important;
+    background: #FFFFFF !important;
+  }
+
+  .tm-brands__ticker-wrap {
+    overflow: visible !important;
+    width: 100% !important;
+  }
+
+  /* Kayan animasyonu durdur, 3 Sütun x 3 Satır Sabit Izgara Yap */
+  .tm-brands__ticker-track {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 8px !important;
+    width: 100% !important;
+    animation: none !important; /* AKMASIN */
+    transform: none !important;
+  }
+
+  /* 12 markadan sonraki kopya elemanları gizle */
+  .tm-brands__ticker-track > :nth-child(n+13) {
+    display: none !important;
+  }
+
+  .tm-brand-item {
+    width: 100% !important;
+    height: 44px !important;
+    padding: 4px 8px !important;
+    margin: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: #F8FAFC !important;
+    border: 1px solid #E2E8F0 !important;
+    border-radius: 8px !important;
+    box-sizing: border-box !important;
+  }
+
+  .tm-brand-item__img {
+    max-height: 24px !important;
+    max-width: 85% !important;
+    object-fit: contain !important;
+    filter: none !important;
+    opacity: 0.85 !important;
+  }
+
+  /* ------------------------------------------------------------------------
+     E. ÖNE ÇIKAN KATEGORİLER (2x2 KOMPAKT KARE IZGARA)
+     ------------------------------------------------------------------------ */
+  #tmImportantCategories.tm-important-categories {
+    padding: 6px 10px 16px !important;
+  }
+
+  .tm-important-categories__frame {
+    padding: 14px 10px !important;
+    border-radius: 16px !important;
+    border: 1px solid #E2E8F0 !important;
+    background: #FFFFFF !important;
+    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04) !important;
+  }
+
+  .tm-important-categories__head {
+    margin-bottom: 12px !important;
+  }
+
+  .tm-important-categories__title {
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    color: #0F172A !important;
+  }
+
+  .tm-important-categories__grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+  }
+
+  .tm-cat-card {
+    border-radius: 12px !important;
+    border: 1px solid #E2E8F0 !important;
+    background: #F8FAFC !important;
+    padding: 10px 8px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    min-height: 180px !important;
+    transition: all 0.2s ease !important;
+    text-decoration: none !important;
+  }
+
+  .tm-cat-card:active {
+    transform: scale(0.97) !important;
+    border-color: #00D4AA !important;
+  }
+
+  .tm-cat-card__pose-stage {
+    height: 110px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+  }
+
+  .tm-cat-card__img {
+    max-height: 95px !important;
+    max-width: 90% !important;
+    object-fit: contain !important;
+  }
+
+  .tm-cat-card__bottom {
+    width: 100% !important;
+    text-align: center !important;
+    margin-top: 6px !important;
+  }
+
+  .tm-cat-card__title {
+    font-size: 12.5px !important;
+    font-weight: 700 !important;
+    color: #0F172A !important;
+    line-height: 1.25 !important;
+    margin-bottom: 4px !important;
+  }
+
+  .tm-cat-card__action {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    color: #00D4AA !important;
+  }
+
+  .tm-cat-card__action i {
+    font-size: 10px !important;
+  }
+
+  
+  /* ------------------------------------------------------------------------
+     F. KULLANICI TALEBİ: "kategori nin içine girince çıkan ürünleri 3 sütun 4 satır şeklinde yap"
+     ------------------------------------------------------------------------ */
+  .catalog-section {
+    padding: 16px 8px !important;
+  }
+
+  .section-header-bar {
+    margin-bottom: 12px !important;
+  }
+
+  .section-main-title {
+    font-size: 18px !important;
+    font-weight: 800 !important;
+  }
+
+  .product-filters {
+    display: flex !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    white-space: nowrap !important;
+    scrollbar-width: none !important;
+    gap: 6px !important;
+    padding-bottom: 6px !important;
+    margin-bottom: 12px !important;
+  }
+
+  .product-filters::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .filter-btn {
+    font-size: 12px !important;
+    padding: 6px 12px !important;
+    border-radius: 999px !important;
+  }
+
+  /* 3 SÜTUN DİZİLİMİ (3 SÜTUN X 4 SATIR = 12 ÜRÜN) */
+  #productsGrid,
+  body.tm-category-mode #productsGrid,
+  body.tm-searching #productsGrid {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 6px !important;
+    max-height: none !important;
+    padding: 10px 0 !important;
+    width: 100% !important;
+  }
+
+  .product-card {
+    border-radius: 10px !important;
+    border: 1px solid #E2E8F0 !important;
+    padding: 6px 4px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    background: #FFFFFF !important;
+    box-sizing: border-box !important;
+  }
+
+  .product-card__media {
+    height: 80px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin-bottom: 5px !important;
+    background: #F8FAFC !important;
+    border-radius: 6px !important;
+    position: relative !important;
+  }
+
+  .product-card__img {
+    max-height: 70px !important;
+    max-width: 88% !important;
+    object-fit: contain !important;
+  }
+
+  .product-card__badge {
+    font-size: 8px !important;
+    padding: 2px 4px !important;
+    top: 3px !important;
+    left: 3px !important;
+  }
+
+  .product-card__title {
+    font-size: 10.5px !important;
+    font-weight: 600 !important;
+    line-height: 1.25 !important;
+    color: #1E293B !important;
+    height: 27px !important;
+    overflow: hidden !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    margin-bottom: 4px !important;
+    text-align: center !important;
+  }
+
+  .product-card__price {
+    font-size: 11.5px !important;
+    font-weight: 800 !important;
+    color: #0F172A !important;
+    margin-bottom: 4px !important;
+    text-align: center !important;
+  }
+
+  .product-card__actions {
+    display: flex !important;
+    width: 100% !important;
+    margin-top: 2px !important;
+  }
+
+  .product-card__actions .card-btn,
+  .product-card__actions .card-btn--primary,
+  .product-card__actions .card-btn--wa {
+    width: 100% !important;
+    height: 26px !important;
+    font-size: 9.5px !important;
+    padding: 0 4px !important;
+    border-radius: 6px !important;
+    justify-content: center !important;
+    gap: 3px !important;
+    display: inline-flex !important;
+  }
+
+  .product-card__actions .card-btn i {
+    font-size: 10px !important;
+  }
+
+    .product-card__meta-top,
+  .product-card__desc-text,
+  .product-card__specs {
+    display: none !important;
+  }
+
+  .product-card__actions .card-btn--outline,
+  .product-card__actions .btn-quickview {
+    display: none !important;
+  }
+
+  .tm-cat-banner {
+    padding: 12px 14px !important;
+    margin: 8px 0 12px !important;
+    border-radius: 14px !important;
+  }
+
+  .tm-cat-banner__content h2 {
+    font-size: 16px !important;
+  }
+
+  .tm-cat-banner__content p {
+    font-size: 11.5px !important;
+  }
+
+  .tm-cat-banner__back {
+    width: 34px !important;
+    height: 34px !important;
+  }
+
+  /* ------------------------------------------------------------------------
+     KULLANICI TALEBİ: SAYFALANDIRMA (PAGINATION) ASLA ALT SATIRA KAYMASIN, TEK SATIR
+     ------------------------------------------------------------------------ */
+  .tm-pagination {
+    margin-top: 18px !important;
+    padding: 12px 8px !important;
+    gap: 8px !important;
+    border-radius: 14px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .tm-pagination__info {
+    font-size: 11px !important;
+    text-align: center !important;
+    color: #64748B !important;
+  }
+
+  .tm-pagination__controls {
+    display: flex !important;
+    flex-wrap: nowrap !important; /* ASLA ALT SATIRA KAYMAZ - TEK SATIRDA */
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 4px !important;
+    width: 100% !important;
+    overflow-x: auto !important;
+    padding: 2px 0 !important;
+  }
+
+  .tm-page-numbers {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    gap: 3px !important;
+    align-items: center !important;
+  }
+
+  .tm-page-btn {
+    height: 30px !important;
+    padding: 0 8px !important;
+    font-size: 11px !important;
+    border-radius: 7px !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+  }
+
+  .tm-page-btn--prev,
+  .tm-page-btn--next {
+    padding: 0 7px !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    gap: 3px !important;
+  }
+
+  .tm-page-btn--num {
+    min-width: 28px !important;
+    width: 28px !important;
+    height: 28px !important;
+    padding: 0 !important;
+    font-size: 11px !important;
+  }
+
+  .tm-page-ellipsis {
+    font-size: 11px !important;
+    padding: 0 2px !important;
+  }
+
+  /* ------------------------------------------------------------------------
+     G. KULLANICI TALEBİ: "en alttaki yol tarifi kısmını yan yana iki kart şeklinde yap
+     sağda harita solda diğerleri"
+     ------------------------------------------------------------------------ */
+  .contact-section {
+    padding: 16px 8px 36px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .contact-section .container {
+    padding: 16px 10px !important;
+    border-radius: 16px !important;
+  }
+
+  .contact-section .section-center-head {
+    margin-bottom: 14px !important;
+  }
+
+  .contact-section .section-main-title {
+    font-size: 17px !important;
+  }
+
+  /* YAN YANA İKİ KART ŞEKLİNDE DİZİLİM */
+  .contact-symmetrical-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important; /* Yan yana iki eşit kart */
+    gap: 8px !important;
+    align-items: stretch !important;
+  }
+
+  /* SOL KART: Diğerleri (Adres, Telefon, Saat, Yol Tarifi) */
+  .contact-panel {
+    order: 1 !important; /* Solda */
+    padding: 12px 10px !important;
+    border-radius: 14px !important;
+    gap: 10px !important;
+    background: #F8FAFC !important;
+    border: 1px solid #E2E8F0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    box-sizing: border-box !important;
+  }
+
+  .contact-panel__list {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+
+  .contact-row-item {
+    display: flex !important;
+    align-items: flex-start !important;
+    gap: 7px !important;
+    padding-bottom: 7px !important;
+    border-bottom: 1px solid #E2E8F0 !important;
+  }
+
+  .contact-row-item:last-child {
+    border-bottom: none !important;
+    padding-bottom: 0 !important;
+  }
+
+  .contact-row-item__icon {
+    width: 24px !important;
+    height: 24px !important;
+    font-size: 10px !important;
+    border-radius: 6px !important;
+    flex-shrink: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: #EEF2F6 !important;
+    color: #0F172A !important;
+  }
+
+  .contact-row-item h3 {
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    margin: 0 0 1px 0 !important;
+    color: #0F172A !important;
+  }
+
+  .contact-row-item p {
+    font-size: 10px !important;
+    line-height: 1.25 !important;
+    margin: 0 !important;
+    color: #475569 !important;
+  }
+
+  .contact-row-item small {
+    display: none !important; /* Mobilde yan yana kartta dikey yeri optimize et */
+  }
+
+  .contact-row-item__phone {
+    font-size: 10.5px !important;
+    font-weight: 700 !important;
+    color: #0284C7 !important;
+    text-decoration: none !important;
+  }
+
+  .contact-row-item--google {
+    display: none !important; /* Google rozeti kartın altında bağımsız kutuda zaten var */
+  }
+
+  .contact-panel__actions {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 5px !important;
+    margin-top: 6px !important;
+    width: 100% !important;
+  }
+
+  .contact-panel__actions .card-btn {
+    width: 100% !important;
+    height: 32px !important;
+    font-size: 11px !important;
+    padding: 0 6px !important;
+    border-radius: 7px !important;
+    justify-content: center !important;
+  }
+
+  /* SAĞ KART: Google Harita */
+  .contact-map-panel {
+    order: 2 !important; /* Sağda */
+    border-radius: 14px !important;
+    overflow: hidden !important;
+    border: 1px solid #E2E8F0 !important;
+    background: #FFFFFF !important;
+    min-height: 100% !important;
+    display: flex !important;
+  }
+
+  .contact-map-panel iframe {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 250px !important;
+    border: none !important;
+    display: block !important;
+  }
+
+  /* Google Yorum Kutusu Mobilde Kompakt */
+  .google-review-box {
+    margin-top: 14px !important;
+    padding: 12px !important;
+    border-radius: 12px !important;
+  }
+
+  .google-review-box__title {
+    font-size: 13px !important;
+  }
+
+  .google-review-box__sub {
+    font-size: 11px !important;
+  }
+
+  /* ------------------------------------------------------------------------
+     H. SABİT MOBİL DOCK / BOTTOM NAVIGATION BAR (APP-LIKE BOTTOM BAR)
+     ------------------------------------------------------------------------ */
+  .atli-mobile-dock {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    height: 64px !important;
+    background: rgba(255, 255, 255, 0.96) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    border-top: 1px solid #E2E8F0 !important;
+    box-shadow: 0 -4px 20px rgba(15, 23, 42, 0.08) !important;
+    z-index: 99999 !important;
+    padding: 4px 6px calc(4px + env(safe-area-inset-bottom, 0px)) !important;
+    justify-content: space-around !important;
+    align-items: center !important;
+    box-sizing: border-box !important;
+  }
+
+  .atli-dock-item {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 3px !important;
+    flex: 1 !important;
+    text-decoration: none !important;
+    color: #64748B !important;
+    font-size: 10.5px !important;
+    font-weight: 600 !important;
+    padding: 4px 2px !important;
+    border-radius: 8px !important;
+    transition: all 0.2s ease !important;
+    position: relative !important;
+  }
+
+  .atli-dock-item i {
+    font-size: 17px !important;
+    transition: transform 0.2s ease !important;
+  }
+
+  .atli-dock-item:active i {
+    transform: scale(0.88) !important;
+  }
+
+  .atli-dock-item.active,
+  .atli-dock-item:hover {
+    color: #0B132B !important;
+  }
+
+  .atli-dock-item.active i {
+    color: #00D4AA !important;
+  }
+
+  /* WhatsApp Özel Öne Çıkan Orta Buton */
+  .atli-dock-item--wa {
+    color: #059669 !important;
+  }
+
+  .atli-dock-item__wa-icon-wrap {
+    position: relative !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .atli-dock-item--wa i {
+    color: #25D366 !important;
+    font-size: 20px !important;
+  }
+
+  .atli-dock-pulse {
+    position: absolute !important;
+    top: -2px !important;
+    right: -2px !important;
+    width: 7px !important;
+    height: 7px !important;
+    background: #22C55E !important;
+    border-radius: 50% !important;
+    box-shadow: 0 0 0 2px #FFFFFF !important;
+    animation: atliPulse 1.8s infinite !important;
+  }
+
+  @keyframes atliPulse {
+    0% { transform: scale(0.9); opacity: 1; }
+    50% { transform: scale(1.3); opacity: 0.6; }
+    100% { transform: scale(0.9); opacity: 1; }
+  }
+
+  .atli-dock-item--call i {
+    color: #0284C7 !important;
+  }
+
+  /* Çerez Bildirimi Mobilde Dock'un Üstünde Kalsın */
+  #cookieConsentBanner,
+  .cookie-banner {
+    bottom: 68px !important;
+    max-width: 94% !important;
+    margin: 0 auto !important;
+    font-size: 12px !important;
+    padding: 12px !important;
+  }
+}

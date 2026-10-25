@@ -87,6 +87,13 @@ Kullanıcıların günlük hedeflerini, odaklanma sürelerini ve alışkanlık z
   * Framer Motion ile akıcı mikro etkileşimler ve Pomodoro zamanlayıcısı.
 * **Hızlı Başlatma:** Klasördeki `baslat.bat` dosyasına çift tıklayın.
 
+### 8. 🩺 Atlı Medikal - Kurumsal E-Ticaret & Dijital Vitrin (`/atli-medikal-web`)
+Ankara Aydınlıkevler merkezli Atlı Medikal (`https://atlimedikal.com`) için sıfırdan geliştirilen, yüksek dönüşüm odaklı kurumsal medikal ürün kataloğu, kampanya vitrini ve e-ticaret platformu.
+* **Öne Çıkanlar:**
+  * **Dinamik Kampanya Vitrini & Katalog:** 170+ medikal ürün, kategori bazlı anlık filtreleme, akıllı arama motoru ve süpürme (wipe) geçişli interaktif kampanya vitrini.
+  * **Çoklu Sipariş & Ödeme Altyapısı:** Sepet yönetimi (`localStorage`), Kredi Kartı / Havale / Kapıda Ödeme akışları ve tek tıkla hazır mesajlı WhatsApp sipariş entegrasyonu.
+  * **Mobil-Öncelikli Deneyim & SEO:** Mobil cihazlara özel optimize edilmiş hızlı kategori şeridi, yan yana kompakt iletişim/harita kartları, Schema.org `MedicalBusiness` yapısal verisi ve Google Analytics 4 dönüşüm takibi.
+
 ---
 
 ## 🔒 Güvenlik ve Gizlilik Notu

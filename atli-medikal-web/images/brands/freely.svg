@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 140" width="360" height="140" role="img" aria-label="Freely Medical">
+  <rect width="360" height="140" rx="12" fill="#FFFFFF"/>
+  <g transform="translate(56, 38)">
+    <rect x="0" y="7" width="36" height="36" rx="8" fill="#059669"/>
+    <path d="M18,15 L18,35 M8,25 L28,25" stroke="#FFFFFF" stroke-width="4.5" stroke-linecap="round"/>
+    <text x="50" y="39" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-size="44" font-weight="800" fill="#0F172A" letter-spacing="0.03em">FREELY</text>
+  </g>
+  <text x="180" y="112" text-anchor="middle" font-family="'Inter', Arial, sans-serif" font-size="11.5" font-weight="700" fill="#64748B" letter-spacing="0.18em">HASTA KARYOLASI &amp; BAKIM</text>
+</svg>

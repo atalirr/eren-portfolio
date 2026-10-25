@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 - Sayfa Bulunamadı | Atlı Medikal Ankara</title>
+  <meta name="robots" content="noindex, follow">
+  <meta name="theme-color" content="#0F172A">
+  <link rel="icon" type="image/png" href="images/logo-icon-transparent.png">
+  <link rel="apple-touch-icon" href="images/logo.png">
+
+  <!-- Google Analytics 4 (GA4) / Google Tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-DMTL07NL36"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-DMTL07NL36');
+  </script>
+
+  <!-- Google Fonts: Inter & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Unified Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/theme-modern.css">
+
+  <script src="js/products-data.js" defer></script>
+  <script src="js/main.js" defer></script>
+  <script src="js/theme-modern.js" defer></script>
+</head>
+<body>
+
+  <!-- ATLI MEDİKAL DİNAMİK HAREKETLİ AÇILIŞ ANİMASYONU (PURE MOTION GRAPHICS) -->
+  <div class="atli-preloader" id="atliPreloader" aria-hidden="true">
+    <div class="atli-preloader__bg-particles">
+      <span class="p-dot p-dot--1"></span>
+      <span class="p-dot p-dot--2"></span>
+      <span class="p-dot p-dot--3"></span>
+      <span class="p-dot p-dot--4"></span>
+      <span class="p-dot p-dot--5"></span>
+    </div>
+    <div class="atli-preloader__inner">
+      <!-- 1. Dönen Medikal Orbital Halka & Çapraz Artı İkonu -->
+      <div class="atli-motion-badge">
+        <div class="atli-motion-ring atli-motion-ring--outer"></div>
+        <div class="atli-motion-ring atli-motion-ring--inner"></div>
+        <div class="atli-motion-core">
+          <svg viewBox="0 0 48 48" class="atli-motion-cross-svg" aria-hidden="true">
+            <defs>
+              <linearGradient id="crossGrad" x1="4" y1="4" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#0284C7"/>
+                <stop offset="100%" stop-color="#06B6D4"/>
+              </linearGradient>
+            </defs>
+            <path d="M20 6 C20 4.9 20.9 4 22 4 L26 4 C27.1 4 28 4.9 28 6 L28 20 L42 20 C43.1 20 44 20.9 44 22 L44 26 C44 27.1 43.1 28 42 28 L28 28 L28 42 C28 43.1 27.1 44 26 44 L22 44 C20.9 44 20 43.1 20 42 L20 28 L6 28 C4.9 28 4 27.1 4 26 L4 22 C4 20.9 4.9 20 6 20 L20 20 Z" fill="url(#crossGrad)"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- 2. Hareketli EKG Kalp Atışı Monitörü -->
+      <div class="atli-ecg-monitor">
+        <svg viewBox="0 0 260 48" class="atli-ecg-svg" aria-hidden="true">
+          <path class="atli-ecg-grid" d="M 0,24 L 260,24" />
+          <path class="atli-ecg-trace" d="M 0,24 L 70,24 L 80,8 L 92,42 L 104,14 L 114,30 L 122,24 L 260,24" />
+        </svg>
+      </div>
+
+      <!-- 3. Tipografik Işıltılı Başlık (Logo Resmi Yok) -->
+      <div class="atli-motion-text">
+        <div class="atli-motion-title">ATLI <span class="atli-motion-accent">MEDİKAL</span></div>
+        <div class="atli-motion-sub">Sağlık ve Medikal Cihaz Çözümleri</div>
+      </div>
+
+      <!-- 4. Akıcı Degrade Yükleme Barı -->
+      <div class="atli-motion-bar">
+        <div class="atli-motion-progress"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1. MODERN HEADER -->
+  <header class="site-header" id="navbar">
+    <div class="site-header__top container">
+      <a href="index.html#anasayfa" class="site-header__brand" aria-label="Atlı Medikal Ana Sayfa">
+        <img src="images/logo-brand-transparent.png" alt="Atlı Medikal - Tıbbi Cihaz ve Sağlık Ürünleri" class="site-header__brand-logo-img">
+      </a>
+
+      <!-- Canlı Arama Çubuğu -->
+      <div class="site-header__search" role="search">
+        <form class="search-pill" id="productSearchForm" onsubmit="event.preventDefault(); window.location.href='index.html#urunler';">
+          <i class="fas fa-search search-pill__icon" aria-hidden="true"></i>
+          <input 
+            type="search" 
+            id="productSearchInput" 
+            class="search-pill__input" 
+            placeholder="Medikal ürün veya marka ara... (Örn: tekerlekli sandalye, korse, hasta yatağı)"
+            aria-label="Medikal ürün ara"
+          >
+          <button type="submit" id="productSearchBtn" class="search-pill__btn">Ara</button>
+        </form>
+      </div>
+
+      <!-- Kurumsal İletişim Butonları -->
+      <div class="site-header__actions">
+        <a href="https://wa.me/905363527416?text=Merhaba,%20Atlı%20Medikal%20ürünleriniz%20hakkında%20bilgi%20almak%20istiyorum." target="_blank" rel="noopener noreferrer" class="header-pill-btn header-pill-btn--wa">
+          <i class="fab fa-whatsapp" aria-hidden="true"></i>
+          <span>WhatsApp Destek</span>
+        </a>
+        <a href="tel:+905363527416" class="header-pill-btn header-pill-btn--call">
+          <i class="fas fa-phone-alt" aria-hidden="true"></i>
+          <span>0536 352 74 16</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 2. 404 HATA KARTI GÖVDESİ -->
+  <main class="error-page-wrapper">
+    <div class="container">
+      <div class="error-card">
+        <div class="error-code-badge">404</div>
+        <div class="error-icon-box" aria-hidden="true">
+          <i class="fas fa-stethoscope"></i>
+        </div>
+        <h1 class="error-title">Aradığınız Sayfa Bulunamadı</h1>
+        <p class="error-desc">
+          Ulaşmaya çalıştığınız sayfa kaldırılmış, adı değiştirilmiş veya geçici olarak taşınmış olabilir. 25 yıllık medikal tecrübemiz ve uzman ekibimizle ihtiyacınız olan tıbbi cihazı bulmanız için buradayız.
+        </p>
+
+        <div class="error-actions">
+          <a href="index.html" class="card-btn card-btn--call card-btn--lg">
+            <i class="fas fa-home" aria-hidden="true"></i> Ana Sayfaya Dön
+          </a>
+          <a href="tel:+905363527416" class="card-btn card-btn--wa card-btn--lg">
+            <i class="fas fa-phone-alt" aria-hidden="true"></i> 0536 352 74 16 — Bizi Arayın
+          </a>
+          <a href="https://wa.me/905363527416?text=Merhaba%20Atlı%20Medikal,%20aradığım%20ürünü%20web%20sitenizde%20bulamadım,%20yardımcı%20olur%20musunuz?" target="_blank" rel="noopener noreferrer" class="card-btn card-btn--outline card-btn--lg">
+            <i class="fab fa-whatsapp" aria-hidden="true"></i> WhatsApp Destek
+          </a>
+        </div>
+
+        <div class="error-categories">
+          <p class="error-categories-title">Popüler Medikal Ürün Gruplarımız</p>
+          <div class="error-pills">
+            <a href="index.html#urunler" class="error-pill"><i class="fas fa-bed"></i> Motorlu Hasta Karyolaları</a>
+            <a href="index.html#urunler" class="error-pill"><i class="fas fa-lungs"></i> Oksijen Konsantratörleri</a>
+            <a href="index.html#urunler" class="error-pill"><i class="fas fa-wheelchair"></i> Tekerlekli Sandalyeler</a>
+            <a href="index.html#urunler" class="error-pill"><i class="fas fa-heart-pulse"></i> Tansiyon ve Oksimetre</a>
+            <a href="index.html#iletisim" class="error-pill"><i class="fas fa-map-pin"></i> Aydınlıkevler Mağazamız</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- 3. SİMETRİK 4 SÜTUNLU MODERN FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__col">
+          <a href="index.html#anasayfa" class="footer__logo" aria-label="Atlı Medikal">
+            <img src="images/logo-brand-white.png" alt="Atlı Medikal" class="footer__brand-logo-img">
+          </a>
+          <p class="footer__desc">
+            Ankara Aydınlıkevler'de 25 yıllık tecrübeyle tıbbi cihaz, motorlu hasta karyolası, solunum sistemleri ve medikal ortopedi ürünleri merkezi.
+          </p>
+        </div>
+
+        <div class="footer__col">
+          <h4>Ürün Gruplarımız</h4>
+          <ul>
+            <li><a href="index.html#urunler">Motorlu Hasta Karyolaları</a></li>
+            <li><a href="index.html#urunler">Oksijen Konsantratörü</a></li>
+            <li><a href="index.html#urunler">Tekerlekli Sandalyeler</a></li>
+            <li><a href="index.html#urunler">Boru Tipi Havalı Yataklar</a></li>
+            <li><a href="index.html#urunler">Ortopedik Korse &amp; Medikal Cihazlar</a></li>
+          </ul>
+        </div>
+
+        <div class="footer__col">
+          <h4>Kurumsal Bağlantılar</h4>
+          <ul>
+            <li><a href="index.html#anasayfa">Ana Sayfa</a></li>
+            <li><a href="index.html#urunler">Ürün Kataloğumuz</a></li>
+            <li><a href="index.html#avantajlar">Hizmet Güvencemiz</a></li>
+            <li><a href="index.html#iletisim">İletişim &amp; Mağaza</a></li>
+            <li><a href="privacy.html">Gizlilik ve KVKK Politikası</a></li>
+          </ul>
+        </div>
+
+        <div class="footer__col">
+          <h4>Merkez Mağaza İletişim</h4>
+          <ul class="footer__contact">
+            <li><i class="fas fa-location-dot" aria-hidden="true"></i> Aydınlıkevler, Uzayan Sk. NO:91, Altındağ / Ankara</li>
+            <li><i class="fas fa-phone-alt" aria-hidden="true"></i> <a href="tel:+905363527416">0536 352 74 16</a></li>
+            <li><i class="far fa-clock" aria-hidden="true"></i> Pazartesi – Cumartesi: 08:30 – 19:30</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer__bottom">
+        <p>&copy; 2026 Atlı Medikal — Aydınlıkevler, Altındağ / Ankara. Tüm hakları saklıdır.</p>
+        <div class="footer__legal">
+          <a href="privacy.html">Gizlilik Politikası</a>
+          <span>•</span>
+          <a href="terms.html">Kullanım Koşulları</a>
+          <span>•</span>
+          <a href="javascript:void(0)" onclick="openCookieBanner()">Çerez Tercihleri</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- YÜZEN WHATSAPP BUTONU (MASAÜSTÜ) -->
+  <a href="https://wa.me/905363527416?text=Merhaba,%20Atlı%20Medikal%20ürünleriniz%20hakkında%20bilgi%20almak%20istiyorum." target="_blank" rel="noopener noreferrer" class="whatsapp-float" aria-label="WhatsApp Destek Hattı">
+    <i class="fab fa-whatsapp" aria-hidden="true"></i>
+    <span>WhatsApp Destek</span>
+  </a>
+
+  <!-- MOBİL SABİT ALT AKSİYON ÇUBUĞU -->
+  <div class="mobile-bar" role="region" aria-label="Hızlı İletişim">
+    <a href="tel:+905363527416" class="mobile-bar__btn mobile-bar__btn--call">
+      <i class="fas fa-phone-alt" aria-hidden="true"></i> Hemen Ara
+    </a>
+    <a href="https://wa.me/905363527416?text=Merhaba,%20Atlı%20Medikal%20ürünleriniz%20hakkında%20bilgi%20almak%20istiyorum." target="_blank" rel="noopener noreferrer" class="mobile-bar__btn mobile-bar__btn--wa">
+      <i class="fab fa-whatsapp" aria-hidden="true"></i> WhatsApp
+    </a>
+  </div>
+
+  <!-- ÇEREZ BİLDİRİMİ (KVKK & Çerez Yönetimi) -->
+  <div class="cookie-banner" id="cookieBanner" role="dialog" aria-live="polite" aria-label="Çerez Bilgilendirmesi">
+    <div class="cookie-banner__header">
+      <span class="cookie-banner__icon">🍪</span>
+      <strong class="cookie-banner__title">Çerez ve KVKK Bilgilendirmesi</strong>
+    </div>
+    <p class="cookie-banner__text">
+      Atlı Medikal olarak sitemizde güvenli alışveriş sağlamak, sepetinizi korumak ve hizmet kalitemizi artırmak amacıyla 6698 sayılı KVKK kapsamında çerezler kullanmaktayız. Detaylar için <a href="privacy.html">Gizlilik ve Çerez Politikamızı</a> inceleyebilirsiniz.
+    </p>
+    <div class="cookie-banner__actions">
+      <button type="button" class="cookie-btn cookie-btn--accept" id="cookieAccept">Tümünü Kabul Et</button>
+      <button type="button" class="cookie-btn cookie-btn--reject" id="cookieReject">Sadece Zorunlu</button>
+    </div>
+  </div>
+
+</body>
+</html>

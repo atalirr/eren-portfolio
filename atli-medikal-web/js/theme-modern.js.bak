@@ -1,0 +1,1037 @@
+﻿/**
+ * ATLI MEDİKAL — MODERN SADE TEMA (theme-modern.js)
+ * 1) ☰ Sol üst çerçevesiz menü ikonu & daraltılmış yan menü
+ * 2) Yan menü veya kategori kartından kategori seçilince tam sayfa Kategori Görünümü + "← Ana Sayfaya Dön" ve Tarayıcı Geri Tuşu desteği
+ * 3) Header'ın hemen altında kesintisiz akan hareketli güvence şeridi
+ * 4) Ana sayfada TENS & EMS Kampanya Vitrini
+ * 5) Öne Çıkan 4 Medikal Kategori Kartı (Ortopedik Korse Grubu, Dizlik & Alt Ekstremite, Varis Çorabı, Lenfödem Setleri)
+ * 6) Markalarımız şeridi
+ * 7) Tam ve eksiksiz 178 ürünlük katalog gridi
+ * 8) Hakkımızda bölümü (25+ Yıl Deneyim)
+ */
+(function () {
+  'use strict';
+
+  const MANUAL_DEALS = ['ERL-004', 'BGT-001', 'ERL-005', 'BGT-020', 'ERL-022'];
+  const DEAL_COUNT = 5;
+  const ROTATE_MS = 3500;
+  const PHONE = '+905363527416';
+  const WA = 'https://wa.me/905363527416';
+
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+
+  const products = () => window.ATLI_PRODUCTS || [];
+  const byId = (id) => products().find((p) => p.id === id || p.sku === id);
+  const tl = (n) => Number(n).toLocaleString('tr-TR') + ' ₺';
+  const offPct = (p) => (p.oldPrice && p.oldPrice > p.price ? Math.round((1 - p.price / p.oldPrice) * 100) : 0);
+  const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const norm = (s) =>
+    String(s || '')
+      .toLocaleLowerCase('tr-TR')
+      .replace(/ı/g, 'i').replace(/ğ/g, 'g').replace(/ü/g, 'u')
+      .replace(/ş/g, 's').replace(/ö/g, 'o').replace(/ç/g, 'c').replace(/İ/g, 'i');
+
+  const CATEGORIES = [
+    {
+      key: 'korse',
+      name: 'Ortopedik Korse Grubu',
+      desc: 'Abdominal karın korseleri, çelik balenli lumbosakral bel korseleri, dorsolomber ve torakolomber korseler, kifoz ve gebelik korseleri.'
+    },
+    {
+      key: 'dizlik',
+      name: 'Dizlik & Alt Ekstremite',
+      desc: 'Örme patella ve ligament destekli dizlikler, menteşeli ve açı ayarlı dizlikler, patella tendon bandı, baldırlık ve uylukluk ortezleri.'
+    },
+    {
+      key: 'el-kol-omuz',
+      name: 'El Bilek, Kol & Omuz',
+      desc: 'El bilek atelleri, başparmak destekli ateller, mallet finger ve parmak kırığı atelleri, ortopedik kol askıları, velpo bandajı ve omuzluklar.'
+    },
+    {
+      key: 'boyunluk',
+      name: 'Boyunluk Grubu',
+      desc: 'Nelson boyunluk, Philadelphia çenelikli boyunluk, Chin-up çene destekli boyunluk, sünger ve plastik ortopedik boyunluklar.'
+    },
+    {
+      key: 'ayak-bilek',
+      name: 'Ayak, Bileklik & Silikon',
+      desc: 'Örme silikon destekli ayak bilekliği, malleol destekli bileklikler, AFO, yürüme botu, halluks valgus gece ateli ve silikon topukluklar.'
+    },
+    {
+      key: 'corap',
+      name: 'Varis & Basınçlı Çorap',
+      desc: 'Diz altı, diz üstü ve külotlu basınçlı medikal varis çorapları (CCL1 / CCL2), anti-emboli çorapları ve gümüş diyabet çorapları.'
+    },
+    {
+      key: 'lenfodem-bandaj',
+      name: 'Bagiten Lenfödem Bandaj Setleri',
+      desc: 'Bagiten kısa çekişli kompresyon bandajları (6, 8, 10, 12 cm), böbrek ped, mikromasaj pedleri, bandaj altı tübüler çorap ve süngerler.'
+    },
+    {
+      key: 'lenfodem-giysi',
+      name: 'Bagiten Lenfödem Bası Giysileri',
+      desc: 'Bagiten hazır beden (XS-XXL) ve kişiye özel anatomik ölçülü düz örme (flat-knit) lenfödem bası eldiveni, kolluk, çorap ve bası şortları.'
+    }
+  ];
+
+  function openQuickView(id) {
+    const btn = $(`#productsGrid [data-quick-view][data-id="${id}"]`);
+    if (btn) btn.click();
+    else {
+      const card = $(`#productsGrid [data-id="${id}"]`);
+      if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
+
+  /* ---------------- HER KATEGORİYE ÖZEL CANLI MEDİKAL ANİMASYONLAR ---------------- */
+  function getCategoryAnimationSVG(key) {
+    if (key === 'korse') {
+      return `
+        <svg class="tm-cat-svg tm-cat-svg--korse" viewBox="0 0 280 120" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path class="tm-spine-line" d="M140 10 L140 110" stroke="#0F172A" stroke-width="2.5" stroke-dasharray="4 4" opacity="0.4"/>
+          <g class="tm-vertebrae-group">
+            <rect x="127" y="16" width="26" height="12" rx="4" fill="#0F172A" fill-opacity="0.12" stroke="#0F172A" stroke-width="1.8"/>
+            <rect x="125" y="34" width="30" height="13" rx="4" fill="#0F172A" fill-opacity="0.14" stroke="#0F172A" stroke-width="1.8"/>
+            <rect x="123" y="53" width="34" height="14" rx="4" fill="#0F172A" fill-opacity="0.16" stroke="#0F172A" stroke-width="2"/>
+            <rect x="121" y="73" width="38" height="15" rx="5" fill="#0F172A" fill-opacity="0.18" stroke="#0F172A" stroke-width="2"/>
+            <rect x="119" y="94" width="42" height="16" rx="5" fill="#0F172A" fill-opacity="0.2" stroke="#0F172A" stroke-width="2"/>
+          </g>
+          <path class="tm-balen tm-balen--left" d="M96 20 C92 50, 92 80, 96 108" stroke="#16A34A" stroke-width="3.5" stroke-linecap="round"/>
+          <path class="tm-balen tm-balen--right" d="M184 20 C188 50, 188 80, 184 108" stroke="#16A34A" stroke-width="3.5" stroke-linecap="round"/>
+        </svg>`;
+    }
+    if (key === 'dizlik') {
+      return `
+        <svg class="tm-cat-svg tm-cat-svg--dizlik" viewBox="0 0 280 120" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M120 15 C120 45, 116 70, 116 105" stroke="#0F172A" stroke-width="3.2" stroke-linecap="round"/>
+          <path d="M160 15 C160 45, 164 70, 164 105" stroke="#0F172A" stroke-width="3.2" stroke-linecap="round"/>
+          <circle cx="140" cy="60" r="18" fill="#16A34A" fill-opacity="0.15" stroke="#16A34A" stroke-width="2.6"/>
+          <circle cx="140" cy="60" r="8" fill="#16A34A" fill-opacity="0.3"/>
+        </svg>`;
+    }
+    if (key === 'corap') {
+      return `
+        <svg class="tm-cat-svg tm-cat-svg--corap" viewBox="0 0 280 120" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M130 15 C130 50, 125 75, 122 92 C120 102, 130 110, 142 110 C154 110, 168 108, 175 108 C182 108, 188 100, 184 92 C178 80, 162 70, 156 50 C152 35, 150 20, 150 15 Z" fill="#16A34A" fill-opacity="0.12" stroke="#16A34A" stroke-width="2.5"/>
+        </svg>`;
+    }
+    return `
+      <svg class="tm-cat-svg tm-cat-svg--all" viewBox="0 0 280 120" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path class="tm-ecg-line" d="M15 62 L 70 62 L 85 35 L 98 90 L 115 22 L 130 82 L 144 48 L 158 62 L 255 62" stroke="#0F172A" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <g style="transform-origin: 210px 60px;">
+          <rect x="194" y="44" width="32" height="32" rx="8" fill="#16A34A" fill-opacity="0.15" stroke="#16A34A" stroke-width="2"/>
+          <path d="M210 52 L 210 68 M202 60 L 218 60" stroke="#16A34A" stroke-width="3" stroke-linecap="round"/>
+        </g>
+      </svg>`;
+  }
+
+  /* ---------------- TAM SAYFA KATEGORİ GÖRÜNÜMÜ & GERİ TUŞU DESTEĞİ ---------------- */
+  function buildCategoryPageBanner() {
+    const catalog = $('#urunler .container');
+    if (!catalog || $('#tmCatBanner')) return;
+
+    const banner = document.createElement('div');
+    banner.className = 'tm-cat-banner';
+    banner.id = 'tmCatBanner';
+    banner.innerHTML = `
+      <div class="tm-cat-banner__Info">
+        <div class="tm-cat-banner__left">
+          <button type="button" class="tm-back-btn" id="tmBackHomeBtn" aria-label="Ana Sayfaya Dön" title="Ana Sayfaya Dön">
+            <i class="fas fa-arrow-left" aria-hidden="true"></i>
+          </button>
+          <div class="tm-cat-banner__titles">
+            <h1 class="tm-cat-banner__title" id="tmCatTitle">Tüm Ürünler</h1>
+            <p class="tm-cat-banner__desc" id="tmCatDesc">Atlı Medikal merkez mağaza stoklarımızdaki tüm garantili medikal ürünler ve tıbbi cihazlar.</p>
+          </div>
+        </div>
+        <div class="tm-cat-banner__visual" id="tmCatVisual" aria-hidden="true">
+          ${getCategoryAnimationSVG('korse')}
+        </div>
+      </div>`;
+
+    catalog.insertBefore(banner, catalog.firstChild);
+
+    $('#tmBackHomeBtn', banner).addEventListener('click', () => {
+      exitCategoryPage(true);
+    });
+
+    const brandLink = $('.site-header__brand');
+    if (brandLink) {
+      brandLink.addEventListener('click', (e) => {
+        if (document.body.classList.contains('tm-category-mode')) {
+          e.preventDefault();
+          exitCategoryPage(true);
+        }
+      });
+    }
+
+    window.addEventListener('popstate', (e) => {
+      if (e.state && e.state.tmCat) {
+        enterCategoryPage(e.state.tmCat, false);
+      } else {
+        exitCategoryPage(false);
+      }
+    });
+  }
+
+  function enterCategoryPage(key, pushHistory = true) {
+    buildCategoryPageBanner();
+
+    const f = $(`.filter-btn[data-filter="${key}"]`);
+    if (f) f.click();
+
+    const catObj = CATEGORIES.find((c) => c.key === key);
+    const count = key === 'all' ? products().length : products().filter((p) => p.category === key).length;
+
+    const titleEl = $('#tmCatTitle');
+    const descEl = $('#tmCatDesc');
+    const visEl = $('#tmCatVisual');
+
+    if (titleEl) titleEl.textContent = catObj ? catObj.name : 'Tüm Ürün Grupları';
+    if (descEl) {
+      descEl.textContent = catObj
+        ? catObj.desc
+        : 'Atlı Medikal merkez mağaza stoklarımızdaki tüm garantili medikal ürünler ve tıbbi cihazlar.';
+    }
+    if (visEl) {
+      visEl.innerHTML = getCategoryAnimationSVG(key);
+    }
+
+    document.body.classList.add('tm-category-mode');
+    updateBestsellerVisibility();
+
+    if (pushHistory && window.history && window.history.pushState) {
+      try {
+        window.history.pushState({ tmCat: key }, '', `#kategori-${key}`);
+      } catch (_) {}
+    }
+  }
+
+  function exitCategoryPage(pushHistory = true) {
+    document.body.classList.remove('tm-category-mode');
+    const allBtn = $('.filter-btn[data-filter="all"]');
+    if (allBtn) allBtn.click();
+    updateBestsellerVisibility();
+
+    if (pushHistory && window.history && window.history.pushState) {
+      try {
+        window.history.pushState({ tmCat: null }, '', window.location.pathname);
+      } catch (_) {}
+    }
+  }
+
+  /* ---------------- 1. HEADER ALTINDA HAREKETLİ GÜVENCE ŞERİDİ ---------------- */
+  function buildHeaderMarquee() {
+    const header = $('.site-header');
+    if (!header || $('#tmHeaderMarquee')) return;
+
+    const items = [
+      { icon: 'fa-truck-fast', text: 'Ankara İçi Aynı Gün Adrese Teslimat & Kurulum' },
+      { icon: 'fa-certificate', text: '2 Yıl Resmi Garanti & Teknik Servis' },
+      { icon: 'fa-file-lines', text: 'SGK Medikal Malzeme Raporu Desteği' },
+      { icon: 'fa-phone-volume', text: '0536 352 74 16 • 7/24 Kesintisiz Danışma' },
+      { icon: 'fa-hospital', text: 'Aydınlıkevler Merkez Mağaza Stoktan Teslim' }
+    ];
+
+    const marquee = document.createElement('div');
+    marquee.className = 'tm-marquee';
+    marquee.id = 'tmHeaderMarquee';
+    marquee.setAttribute('aria-label', 'Atlı Medikal Hizmet Güvenceleri');
+
+    const htmlContent = items
+      .map(
+        (it) => `
+      <span class="tm-marquee__item">
+        <i class="fas ${it.icon}" aria-hidden="true"></i>
+        <span>${it.text}</span>
+      </span>`
+      )
+      .join('');
+
+    marquee.innerHTML = `
+      <div class="tm-marquee__track">
+        <div class="tm-marquee__group">
+          ${htmlContent}
+        </div>
+        <div class="tm-marquee__group" aria-hidden="true">
+          ${htmlContent}
+        </div>
+      </div>`;
+
+    header.insertAdjacentElement('afterend', marquee);
+  }
+
+  /* ---------------- 2. KAMPANYA VİTRİNİ (TENS & EMS Cihazı) ---------------- */
+  function buildDeals() {
+    const main = $('main');
+    if (!main || $('#kampanyalar')) return;
+
+    const sec = document.createElement('section');
+    sec.className = 'tm-deals tm-deals--fullbanner';
+    sec.id = 'kampanyalar';
+    sec.setAttribute('aria-label', 'Atlı Medikal Kampanya Vitrini');
+
+    const waLink = 'https://wa.me/905363527416?text=' + encodeURIComponent('Merhaba, TENS ve EMS Masaj Cihazı 4.000 TL Kampanyanız hakkında bilgi ve sipariş almak istiyorum.');
+
+    sec.innerHTML = `
+      <div class="container">
+        <div class="tm-full-banner-card" id="tmBannerCard">
+          <a href="${waLink}" target="_blank" rel="noopener noreferrer" class="tm-full-banner-link" id="tmBannerLink" aria-label="TENS ve EMS Cihazı Kampanyası - WhatsApp ile Sipariş Ver">
+            <img src="images/products/banner-tens-ems-kampanya.png" alt="Fizik Tedavi ve Masaj Evinizde - TENS ve EMS Cihazı 6.500 TL yerine 4.000 TL Kampanya" class="tm-full-banner-img" id="tmBannerImg">
+          </a>
+        </div>
+      </div>`;
+
+    main.insertBefore(sec, main.firstChild);
+  }
+
+      /* ---------------- 3. ÖNEMLİ KATEGORİLER YÖNLENDİRME KARTLARI (TIBBİ MEKANİZMA ANİMASYONLU) ---------------- */
+  function buildCategoryCardsSection() {
+    if ($('#tmImportantCategories')) return;
+    const catalogContainer = $('#urunler .container');
+    const grid = $('#productsGrid');
+    if (!catalogContainer) return;
+
+    const importantCats = [
+      {
+        key: 'korse',
+        title: 'Ortopedik Korse Grubu',
+        sub: 'Bel Fıtığı, Çelik Balenli & Omurga Destekleri',
+        svg: `
+          <svg class="tm-cat-pose-svg" viewBox="0 0 280 380" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <!-- Modern MedTech Koyu Zemin Gradiyenti -->
+            <rect width="280" height="380" fill="#2d3d4f"/>
+            <circle cx="140" cy="190" r="130" fill="#36495d" opacity="0.45"/>
+
+            <!-- Biyomekanik Çöp Adam (Stickman) Duruş ve Omurga Anatomisi -->
+            <circle cx="135" cy="52" r="16" stroke="#e2e8f0" stroke-width="3" fill="#1e293b"/>
+            <circle cx="135" cy="74" r="3.5" fill="#94a3b8"/>
+            <path d="M 135,74 Q 146,110 138,150 Q 130,190 136,230" stroke="#cbd5e1" stroke-width="3.5" stroke-linecap="round"/>
+            <path d="M 136,230 L 126,275 M 136,230 L 148,275" stroke="#94a3b8" stroke-width="3" stroke-linecap="round"/>
+            <path d="M 126,275 L 124,330 M 148,275 L 152,330" stroke="#64748b" stroke-width="2.5" stroke-dasharray="3 3"/>
+            <line x1="137" y1="92" x2="162" y2="108" stroke="#94a3b8" stroke-width="3" stroke-linecap="round"/>
+            <line x1="162" y1="108" x2="168" y2="165" stroke="#64748b" stroke-width="2.5" stroke-linecap="round"/>
+
+            <!-- L1-L5 Omurga Düğümleri -->
+            <circle cx="140" cy="118" r="3.5" fill="#10b981"/>
+            <circle cx="138" cy="138" r="4" fill="#10b981"/>
+            <circle cx="136" cy="158" r="4.5" fill="#34d399"/>
+            <circle cx="134" cy="178" r="4.5" fill="#34d399"/>
+            <circle cx="135" cy="198" r="4" fill="#10b981"/>
+
+            <!-- Çöp Adam Üzerine Giydirilmiş Çelik Balenli Korse -->
+            <path d="M 112,142 Q 135,136 160,142 L 158,198 Q 135,204 114,198 Z" fill="#0f172a" stroke="#10b981" stroke-width="2"/>
+            <line x1="126" y1="145" x2="126" y2="195" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+            <line x1="135" y1="142" x2="135" y2="198" stroke="#34d399" stroke-width="3.5" stroke-linecap="round"/>
+            <line x1="146" y1="145" x2="146" y2="195" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+            <line x1="116" y1="150" x2="156" y2="190" stroke="#10b981" stroke-width="1.8" opacity="0.8"/>
+            <line x1="116" y1="190" x2="156" y2="150" stroke="#10b981" stroke-width="1.8" opacity="0.8"/>
+
+            <!-- Canlı Biyomekanik Dekompresyon Animasyonları -->
+            <g class="tm-decomp-up">
+              <line x1="135" y1="130" x2="135" y2="78" stroke="#4ade80" stroke-width="3.5" stroke-linecap="round"/>
+              <polyline points="127,90 135,74 143,90" fill="none" stroke="#4ade80" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </g>
+            <g class="tm-decomp-down">
+              <line x1="135" y1="210" x2="135" y2="255" stroke="#4ade80" stroke-width="3.5" stroke-linecap="round"/>
+              <polyline points="127,243 135,258 143,243" fill="none" stroke="#4ade80" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </g>
+            <!-- Sırt Bölgesindeki Enerji Dalgaları -->
+            <circle cx="106" cy="170" r="28" fill="none" stroke="#22c55e" stroke-width="2" stroke-dasharray="6 4" opacity="0.75" class="tm-hud-target-pulse"/>
+            <circle cx="106" cy="170" r="44" fill="none" stroke="#4ade80" stroke-width="1.6" stroke-dasharray="8 6" opacity="0.5" class="tm-hud-target-pulse"/>
+            <!-- İçe Doğru Kompresyon Okları -->
+            <g class="tm-press-l">
+              <path d="M 88,170 L 106,170 M 98,164 L 107,170 L 98,176" stroke="#22c55e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            </g>
+            <g class="tm-press-r">
+              <path d="M 184,170 L 166,170 M 174,164 L 165,170 L 174,176" stroke="#22c55e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            </g>
+
+            <!-- HUD Kapsül Rozeti -->
+            <rect x="55" y="325" width="170" height="26" rx="13" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+            <circle cx="72" cy="338" r="4" fill="#22c55e"/>
+            <text x="145" y="342" font-size="10" font-weight="bold" fill="#ffffff" text-anchor="middle" letter-spacing="0.5">LOMBER DEKOMPRESYON</text>
+          </svg>`
+      },
+      {
+        key: 'dizlik',
+        title: 'Dizlik & Alt Ekstremite',
+        sub: 'Menisküs, Patella & Menteşeli Medikal Dizlikler',
+        svg: `
+          <svg class="tm-cat-pose-svg" viewBox="0 0 280 380" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <rect width="280" height="380" fill="#2d3d4f"/>
+            <circle cx="140" cy="190" r="130" fill="#36495d" opacity="0.45"/>
+
+            <!-- Çöp Adam Bacak Kemik Hatları -->
+            <line x1="110" y1="55" x2="148" y2="150" stroke="#e2e8f0" stroke-width="3.5" stroke-linecap="round"/>
+            <circle cx="110" cy="55" r="5" fill="#94a3b8"/>
+            <circle cx="148" cy="150" r="8" fill="#1e293b" stroke="#e2e8f0" stroke-width="3"/>
+            <line x1="148" y1="150" x2="136" y2="285" stroke="#e2e8f0" stroke-width="3.5" stroke-linecap="round"/>
+            <circle cx="136" cy="285" r="5" fill="#94a3b8"/>
+            <line x1="136" y1="285" x2="105" y2="305" stroke="#cbd5e1" stroke-width="3" stroke-linecap="round"/>
+
+            <!-- Medikal Dizlik Kumaş Gövdesi -->
+            <path d="M 122,110 L 168,122 L 162,195 L 118,180 Z" fill="#0f172a" stroke="#10b981" stroke-width="2"/>
+            
+            <!-- Silikon Patella Darbe Emici Halka -->
+            <circle cx="152" cy="152" r="13" fill="#ffffff" stroke="#22c55e" stroke-width="3"/>
+            <circle cx="152" cy="152" r="7" fill="#1e293b"/>
+
+            <!-- Yan Biyomekanik Menteşe -->
+            <circle cx="132" cy="150" r="7" fill="#0f172a" stroke="#34d399" stroke-width="2" class="tm-hud-target-pulse"/>
+            <line x1="132" y1="150" x2="118" y2="115" stroke="#10b981" stroke-width="3.5" stroke-linecap="round"/>
+            <line x1="132" y1="150" x2="124" y2="185" stroke="#10b981" stroke-width="3.5" stroke-linecap="round"/>
+
+            <!-- 37-45° Açılanma Yayı -->
+            <path d="M 174,142 A 26 26 0 0 1 162,176" stroke="#4ade80" stroke-width="2.5" stroke-linecap="round"/>
+            <text x="180" y="162" fill="#4ade80" font-size="11" font-weight="bold">37-45°</text>
+
+            <!-- 3D Yörünge Halkaları -->
+            <ellipse cx="132" cy="98" rx="42" ry="14" fill="none" stroke="#4ade80" stroke-width="2" stroke-dasharray="6 4" class="tm-blood-stream-line"/>
+            <ellipse cx="140" cy="215" rx="38" ry="12" fill="none" stroke="#4ade80" stroke-width="2" stroke-dasharray="6 4" class="tm-blood-stream-line"/>
+
+            <!-- HUD Kapsül Rozeti -->
+            <rect x="45" y="325" width="190" height="26" rx="13" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+            <circle cx="62" cy="338" r="4" fill="#22c55e"/>
+            <text x="145" y="342" font-size="10" font-weight="bold" fill="#ffffff" text-anchor="middle" letter-spacing="0.5">PATELLA & MENTEŞE DESTEĞİ</text>
+          </svg>`
+      },
+      {
+        key: 'el-kol-omuz',
+        title: 'El Bilek, Kol & Omuz',
+        sub: 'Karpal Tünel, Ateller & Kol Askıları',
+        svg: `
+          <svg class="tm-cat-pose-svg" viewBox="0 0 280 380" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <rect width="280" height="380" fill="#2d3d4f"/>
+            <circle cx="140" cy="190" r="130" fill="#36495d" opacity="0.45"/>
+
+            <!-- Çöp Adam Kol & El İskeleti -->
+            <line x1="65" y1="80" x2="135" y2="145" stroke="#e2e8f0" stroke-width="3.5" stroke-linecap="round"/>
+            <line x1="75" y1="70" x2="145" y2="135" stroke="#cbd5e1" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="70" cy="75" r="5" fill="#94a3b8"/>
+            <circle cx="140" cy="140" r="7" fill="#1e293b" stroke="#e2e8f0" stroke-width="2.5"/>
+
+            <!-- El ve Parmak Hatları -->
+            <line x1="140" y1="140" x2="180" y2="180" stroke="#e2e8f0" stroke-width="3.5" stroke-linecap="round"/>
+            <path d="M 152,148 L 175,135" stroke="#e2e8f0" stroke-width="3" stroke-linecap="round"/>
+            <path d="M 175,175 L 215,200 M 180,180 L 222,212 M 182,185 L 216,224 M 178,190 L 202,232" stroke="#cbd5e1" stroke-width="2.5" stroke-linecap="round"/>
+
+            <!-- Alüminyum Destekli El Bilek Ateli -->
+            <path d="M 118,118 L 155,152 L 140,168 L 102,134 Z" fill="#0f172a" stroke="#10b981" stroke-width="2"/>
+            <line x1="126" y1="118" x2="152" y2="146" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round"/>
+            <line x1="126" y1="118" x2="152" y2="146" stroke="#34d399" stroke-width="1.8" stroke-linecap="round" class="tm-patella-wave-ring"/>
+            <line x1="112" y1="126" x2="128" y2="142" stroke="#10b981" stroke-width="2"/>
+            <line x1="130" y1="142" x2="146" y2="158" stroke="#10b981" stroke-width="2"/>
+
+            <!-- Dönen HUD Radar Hedefleme Halkaları -->
+            <g class="tm-gear-spin-l" style="transform-origin: 140px 140px;">
+              <circle cx="140" cy="140" r="28" fill="none" stroke="#4ade80" stroke-width="1.8" stroke-dasharray="6 4" opacity="0.85"/>
+              <circle cx="140" cy="140" r="42" fill="none" stroke="#22c55e" stroke-width="1.5" stroke-dasharray="10 6" opacity="0.5"/>
+              <line x1="140" y1="105" x2="140" y2="175" stroke="#4ade80" stroke-width="1.2" stroke-dasharray="3 3"/>
+              <line x1="105" y1="140" x2="175" y2="140" stroke="#4ade80" stroke-width="1.2" stroke-dasharray="3 3"/>
+            </g>
+
+            <!-- HUD Kapsül Rozeti -->
+            <rect x="42" y="325" width="196" height="26" rx="13" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+            <circle cx="58" cy="338" r="4" fill="#22c55e"/>
+            <text x="145" y="342" font-size="9.5" font-weight="bold" fill="#ffffff" text-anchor="middle" letter-spacing="0.5">KARPAL TÜNEL & BİLEK DESTEĞİ</text>
+          </svg>`
+      },
+      {
+        key: 'corap',
+        title: 'Varis & Basınçlı Çorap',
+        sub: 'CCL1 & CCL2 Kademeli Kompresyon Tedavi Çorapları',
+        svg: `
+          <svg class="tm-cat-pose-svg" viewBox="0 0 280 380" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <rect width="280" height="380" fill="#2d3d4f"/>
+            <circle cx="140" cy="190" r="130" fill="#36495d" opacity="0.45"/>
+
+            <!-- Çöp Adam Alt Bacak & Ayak Kemik Hattı -->
+            <circle cx="138" cy="50" r="6" fill="#94a3b8"/>
+            <line x1="138" y1="50" x2="142" y2="245" stroke="#e2e8f0" stroke-width="3.5" stroke-linecap="round"/>
+            <path d="M 138,80 Q 172,140 142,220" stroke="#94a3b8" stroke-width="2" stroke-dasharray="4 3"/>
+            <circle cx="142" cy="245" r="6" fill="#1e293b" stroke="#e2e8f0" stroke-width="2.5"/>
+            <path d="M 142,245 L 140,285 L 95,290" stroke="#e2e8f0" stroke-width="3.5" stroke-linecap="round"/>
+
+            <!-- Kademeli Basınçlı Varis Çorabı Katmanı -->
+            <path d="M 125,95 Q 166,135 152,240 L 150,285 L 105,290 L 126,245 Q 120,180 125,95 Z" fill="#0f172a" fill-opacity="0.85" stroke="#10b981" stroke-width="2"/>
+
+            <!-- Venöz Kan Akışı Lazer Hattı -->
+            <line x1="138" y1="270" x2="138" y2="40" stroke="#ef4444" stroke-width="2" stroke-dasharray="4 4" opacity="0.4"/>
+            <line x1="138" y1="270" x2="138" y2="40" stroke="#4ade80" stroke-width="3" stroke-linecap="round" class="tm-blood-stream-line"/>
+
+            <!-- Yukarı Açılan Venöz Kapakçıklar -->
+            <g class="tm-decomp-up">
+              <polyline points="131,175 138,168 145,175" fill="none" stroke="#22c55e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              <polyline points="131,120 138,113 145,120" fill="none" stroke="#22c55e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            </g>
+
+            <!-- Kademeli Basınç ve Bilek Sıkıştırma Halkaları -->
+            <ellipse cx="140" cy="148" rx="44" ry="28" fill="none" stroke="#22c55e" stroke-width="2" stroke-dasharray="8 6" opacity="0.8" class="tm-hud-target-pulse"/>
+            <g class="tm-press-l">
+              <path d="M 98,252 L 115,252 M 109,247 L 115,252 L 109,257" stroke="#22c55e" stroke-width="2.8" stroke-linecap="round"/>
+            </g>
+            <g class="tm-press-r">
+              <path d="M 175,252 L 158,252 M 164,247 L 158,252 L 164,257" stroke="#22c55e" stroke-width="2.8" stroke-linecap="round"/>
+            </g>
+
+            <!-- HUD Kapsül Rozeti -->
+            <rect x="52" y="325" width="176" height="26" rx="13" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+            <circle cx="68" cy="338" r="4" fill="#22c55e"/>
+            <text x="145" y="342" font-size="10" font-weight="bold" fill="#ffffff" text-anchor="middle" letter-spacing="0.5">KADEMELİ VENÖZ POMPA</text>
+          </svg>`
+      }
+    ];
+
+    const wrap = document.createElement('div');
+    wrap.className = 'tm-important-categories';
+    wrap.id = 'tmImportantCategories';
+    wrap.setAttribute('aria-label', 'Öne Çıkan Medikal Kategoriler');
+    wrap.innerHTML = `
+      <div class="tm-important-categories__frame">
+        <div class="tm-important-categories__head">
+          <h2 class="tm-important-categories__title">Öne Çıkan Medikal Kategoriler</h2>
+          <a href="#urunler" class="tm-important-categories__all-btn" data-target-filter="all">
+            <span>Tüm Kataloğu Gör (178 Ürün)</span>
+            <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+
+        <div class="tm-important-categories__grid">
+          ${importantCats.map(c => `
+            <a href="#urunler" class="tm-cat-card tm-cat-card--full" data-target-filter="${c.key}">
+              <!-- İleri Düzey Anatomik Model Sahnesi (Hiçbir Parça Altta Kalmaz) -->
+              <div class="tm-cat-card__pose-stage" aria-hidden="true">
+                ${c.svg}
+              </div>
+
+              <!-- Alt Bilgi Paneli: Sadece Başlık ve İncele Butonu (Animasyon tüm kartı kaplar) -->
+              <div class="tm-cat-card__bottom">
+                <h3 class="tm-cat-card__title">${c.title}</h3>
+                <div class="tm-cat-card__action">
+                  <span>Kategori Ürünlerini İncele</span>
+                  <i class="fas fa-arrow-right"></i>
+                </div>
+              </div>
+            </a>
+          `).join('')}
+        </div>
+      </div>
+    `;
+
+    const catSection = document.getElementById('tmImportantCategories');
+    if (catSection && catSection.parentNode) {
+      catSection.parentNode.insertBefore(wrap, catSection);
+    } else if (grid) {
+      catalogContainer.insertBefore(wrap, grid);
+    } else {
+      catalogContainer.insertBefore(wrap, catalogContainer.firstChild);
+    }
+
+    wrap.addEventListener('click', (e) => {
+      const card = e.target.closest('[data-target-filter]');
+      if (card) {
+        e.preventDefault();
+        const fKey = card.dataset.targetFilter;
+        enterCategoryPage(fKey);
+        const uSec = $('#urunler');
+        if (uSec) uSec.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  }
+
+  /* ---------------- 4. MARKALARIMIZ BÖLÜMÜ (TEK SATIR AKAN ŞERİT / HOVER PAUSE) ---------------- */
+  function buildBrandsSection() {
+    if ($('#markalarimiz')) return;
+    const catalogContainer = $('#urunler .container');
+    const grid = $('#productsGrid');
+    if (!catalogContainer) return;
+
+    const brands = [
+      { name: 'BAGİTEN', logo: 'images/brands/bagiten.png' },
+      { name: 'HEAL POINT', logo: 'images/brands/healpoint.png' },
+      { name: 'Freshlife', logo: 'images/brands/freshlife.png' },
+      { name: 'OrthoBG', logo: 'images/brands/orthobg.svg' },
+      { name: 'medi', logo: 'images/brands/medi.svg' },
+      { name: 'HARTMANN', logo: 'images/brands/hartmann.svg' },
+      { name: 'Canped', logo: 'images/brands/canped.svg' },
+      { name: 'Joly', logo: 'images/brands/joly.svg' },
+      { name: 'TENA', logo: 'images/brands/tena.svg' },
+      { name: 'FREELY', logo: 'images/brands/freely.svg' },
+      { name: 'OMRON', logo: 'images/brands/omron.svg' },
+      { name: 'RESPIROX', logo: 'images/brands/respirox.svg' }
+    ];
+
+    const wrap = document.createElement('div');
+    wrap.className = 'tm-brands';
+    wrap.id = 'markalarimiz';
+    wrap.setAttribute('aria-label', 'Markalarımız');
+    wrap.innerHTML = `
+      <div class="tm-brands__frame">
+        <div class="tm-brands__ticker-wrap">
+          <div class="tm-brands__ticker-track">
+            ${[...brands, ...brands].map(b => `
+              <div class="tm-brand-item" title="${b.name}">
+                <img src="${b.logo}" alt="${b.name}" class="tm-brand-item__img" loading="lazy">
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      </div>
+    `;
+
+    const catSection = document.getElementById('tmImportantCategories');
+    if (catSection && catSection.parentNode) {
+      catSection.parentNode.insertBefore(wrap, catSection);
+    } else if (grid) {
+      catalogContainer.insertBefore(wrap, grid);
+    } else {
+      catalogContainer.insertBefore(wrap, catalogContainer.firstChild);
+    }
+  }
+
+  /* ---------------- 5. KATALOG VE ÜRÜNLER GÖRÜNÜRLÜĞÜ ---------------- */
+  function updateBestsellerVisibility() {
+    const grid = $('#productsGrid');
+    const filterSec = $('.product-filters') || $('.filter-buttons');
+    if (!grid) return;
+
+    // Ürün kataloğu ve filtre butonları her zaman görünürdür!
+    grid.style.display = '';
+    if (filterSec) filterSec.style.display = '';
+
+    $$('.product-card', grid).forEach((card) => {
+      card.classList.remove('tm-hidden-on-home', 'tm-home-popular');
+      card.style.order = '';
+    });
+  }
+
+  /* ---------------- 6. HAKKIMIZDA BÖLÜMÜ ---------------- */
+  function buildAboutSection() {
+    if ($('#hakkimizda')) return;
+    const catalog = $('#urunler');
+    const targetParent = catalog ? catalog.parentNode : $('main');
+    if (!targetParent) return;
+
+    const about = document.createElement('section');
+    about.className = 'tm-about';
+    about.id = 'hakkimizda';
+    about.setAttribute('aria-label', 'Hakkımızda');
+    about.innerHTML = `
+      <div class="container">
+        <div class="tm-about__grid">
+          <div class="tm-about__text">
+            <span class="tm-about__eyebrow">KURUMSAL HİKAYEMİZ • 1999'DAN BUGÜNE</span>
+            <h2 class="tm-about__title">Hakkımızda • 25 Yıllık Medikal Cihaz ve Hasta Bakım Uzmanlığı</h2>
+            <p class="tm-about__lead">
+              <strong>Atlı Medikal</strong> olarak 1999 yılından bu yana Ankara Aydınlıkevler'deki merkez mağazamızda, evde hasta bakımından solunum tedavisine, ortopediden mobilite çözümlerine kadar binlerce aileye güvenilir tıbbi cihaz tedariği sağlıyoruz.
+            </p>
+            <p class="tm-about__para">
+              Hastaneden eve taburcu süreçlerinde doğru cihaz seçimi, SGK rapor ve geri ödeme danışmanlığı, Ankara içi aynı gün kendi teknik ekibimizle adrese teslimat ve yatak başında uygulamalı kullanım eğitimi ile yalnızca ürün satışı değil, uçtan uca medikal destek sunuyoruz.
+            </p>
+          </div>
+
+          <div class="tm-about__stats">
+            <div class="tm-stat-card">
+              <strong class="tm-stat-card__num">25<span>+</span></strong>
+              <span class="tm-stat-card__label">Yıllık Kesintisiz Hizmet</span>
+              <p class="tm-stat-card__sub">1999'dan bu yana Ankara'nın güvenilir medikal adresi</p>
+            </div>
+            <div class="tm-stat-card">
+              <strong class="tm-stat-card__num">15.000<span>+</span></strong>
+              <span class="tm-stat-card__label">Hizmet Verilen Hasta</span>
+              <p class="tm-stat-card__sub">Ankara ve çevre illerde memnuniyet garantili hasta desteği</p>
+            </div>
+            <div class="tm-stat-card">
+              <strong class="tm-stat-card__num">500<span>+</span></strong>
+              <span class="tm-stat-card__label">Geniş Ürün Çeşidi</span>
+              <p class="tm-stat-card__sub">Hasta yatağından oksijen cihazına, ortopediden sarf malzemelerine</p>
+            </div>
+            <div class="tm-stat-card tm-stat-card--accent">
+              <strong class="tm-stat-card__num">%100</strong>
+              <span class="tm-stat-card__label">Orijinal &amp; Belgeli</span>
+              <p class="tm-stat-card__sub">Sağlık Bakanlığı onaylı, CE belgeli, garantili tıbbi cihazlar</p>
+            </div>
+          </div>
+        </div>
+      </div>`;
+
+    if (catalog && catalog.nextSibling) {
+      targetParent.insertBefore(about, catalog.nextSibling);
+    } else {
+      targetParent.appendChild(about);
+    }
+  }
+
+  /* ---------------- 7. SOL ÜST ÇERÇEVESİZ MENÜ İKONU & SADE YAN MENÜ ---------------- */
+  function buildDrawer() {
+    const top = $('.site-header__top');
+    if (!top || $('#tmMenuBtn')) return;
+
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'tm-menu-btn';
+    btn.id = 'tmMenuBtn';
+    btn.setAttribute('aria-label', 'Menüyü aç');
+    btn.setAttribute('aria-controls', 'tmDrawer');
+    btn.setAttribute('aria-expanded', 'false');
+    btn.setAttribute('title', 'Ürün Grupları Menüsü');
+    btn.innerHTML = '<span class="tm-menu-btn__bars" aria-hidden="true"><span></span><span></span><span></span></span>';
+
+    top.insertBefore(btn, top.firstChild);
+
+    const counts = {};
+    products().forEach((p) => { counts[p.category] = (counts[p.category] || 0) + 1; });
+
+    const backdrop = document.createElement('div');
+    backdrop.className = 'tm-backdrop';
+    backdrop.id = 'tmBackdrop';
+
+    const drawer = document.createElement('aside');
+    drawer.className = 'tm-drawer';
+    drawer.id = 'tmDrawer';
+    drawer.setAttribute('aria-label', 'Ana Menü');
+    drawer.setAttribute('aria-hidden', 'true');
+
+    drawer.innerHTML = `
+      <div class="tm-drawer__head">
+        <div class="tm-drawer__brand">ATLI <span>MEDİKAL</span></div>
+        <button type="button" class="tm-close" id="tmDrawerClose" aria-label="Kapat">
+          <i class="fas fa-times" aria-hidden="true"></i>
+        </button>
+      </div>
+
+      <div class="tm-drawer__body">
+        <div class="tm-label">ÜRÜN GRUPLARI</div>
+        <ul class="tm-links">
+          <li>
+            <button type="button" data-tm-cat="all">
+              <span><i class="fas fa-th-large" style="margin-right:8px; opacity:0.7;" aria-hidden="true"></i> Tüm Ürünler</span>
+              <small>${products().length}</small>
+            </button>
+          </li>
+          ${CATEGORIES.map(
+            (c) => `
+            <li>
+              <button type="button" data-tm-cat="${c.key}">
+                <span>${c.name}</span>
+                <small>${counts[c.key] || 0}</small>
+              </button>
+            </li>`
+          ).join('')}
+        </ul>
+
+        <div class="tm-label" style="margin-top: 24px;">HIZLI İLETİŞİM</div>
+        <div style="padding: 10px 0;">
+          <a href="tel:+905363527416" style="display: inline-flex; align-items: center; gap: 8px; font-weight: 700; color: #16A34A; text-decoration: none; font-size: 14px;">
+            <i class="fas fa-phone-alt" aria-hidden="true"></i> 0536 352 74 16
+          </a>
+        </div>
+      </div>`;
+
+    document.body.appendChild(backdrop);
+    document.body.appendChild(drawer);
+
+    const open = () => {
+      drawer.classList.add('is-open');
+      backdrop.classList.add('is-open');
+      document.body.classList.add('tm-lock');
+      drawer.setAttribute('aria-hidden', 'false');
+      btn.setAttribute('aria-expanded', 'true');
+    };
+
+    const close = () => {
+      drawer.classList.remove('is-open');
+      backdrop.classList.remove('is-open');
+      document.body.classList.remove('tm-lock');
+      drawer.setAttribute('aria-hidden', 'true');
+      btn.setAttribute('aria-expanded', 'false');
+    };
+
+    btn.addEventListener('click', open);
+    $('#tmDrawerClose').addEventListener('click', close);
+    backdrop.addEventListener('click', close);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+
+    drawer.addEventListener('click', (e) => {
+      const cbtn = e.target.closest('[data-tm-cat]');
+      if (cbtn) {
+        const catKey = cbtn.dataset.tmCat;
+        close();
+        enterCategoryPage(catKey, true);
+        const uSec = $('#urunler');
+        if (uSec) uSec.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  }
+
+
+  /* ---------------- AKILLI ARAMA, ÜRÜN ADI & KATEGORİ TANIMA MOTORU ---------------- */
+  const CATEGORY_INTENT_MAP = [
+    {
+      key: 'korse',
+      patterns: ['korse', 'korseler', 'korsesi', 'bel korsesi', 'lumbosakral', 'balenli', 'omurga', 'karin korsesi', 'karin', 'torakolomber', 'postur', 'durus', 'celik balen', 'korse falan']
+    },
+    {
+      key: 'dizlik',
+      patterns: ['dizlik', 'dizlikler', 'dizligi', 'meniskus', 'patella', 'ligament', 'menteseli', 'diz destegi', 'aci ayarli', 'diz']
+    },
+    {
+      key: 'el-kol-omuz',
+      patterns: ['kol askisi', 'kol aski', 'velpo', 'omuz', 'atel', 'ateli', 'splint', 'splinti', 'el bilek', 'karpal tunel', 'mallet finger', 'de quervain', 'basparmak']
+    },
+    {
+      key: 'boyunluk',
+      patterns: ['boyunluk', 'boyunluklar', 'nelson', 'servikal', 'boyun fitigi', 'cenelikli', 'boyun']
+    },
+    {
+      key: 'ayak-bilek',
+      patterns: ['ayak', 'ayak bilek', 'bileklik', 'topuk dikeni', 'halluks', 'hallux', 'valgus', 'silikon tabanlik', 'malleol', 'ayak destegi']
+    },
+    {
+      key: 'corap',
+      patterns: ['varis', 'corap', 'corabi', 'varis corabi', 'basincli corap', 'ccl1', 'ccl2', 'ccl3', 'kulotlu varis', 'dizustu varis', 'dizalti varis']
+    },
+    {
+      key: 'lenfodem-bandaj',
+      patterns: ['bandaj', 'kompresyon bandaji', 'kisa cekisli', 'lenfodem bandaj', 'lenfodem set', 'kopuk bandaj']
+    },
+    {
+      key: 'lenfodem-giysi',
+      patterns: ['basi giysisi', 'basi eldiveni', 'lenfodem', 'lipodem', 'eldiven', 'kolluk', 'basi kollugu']
+    }
+  ];
+
+  function detectCategoryIntent(query) {
+    const q = norm(query).trim();
+    if (!q || q.length < 2) return null;
+
+    // 1. Doğrudan kelime ve kategori anahtarı eşleşmesi
+    for (const item of CATEGORY_INTENT_MAP) {
+      for (const pat of item.patterns) {
+        if (q === pat || q.includes(pat) || pat.includes(q)) {
+          return item.key;
+        }
+      }
+    }
+
+    // 2. Kategori isimleriyle doğrudan eşleşme
+    for (const c of CATEGORIES) {
+      const cNorm = norm(c.name);
+      if (cNorm.includes(q) || q.includes(norm(c.key))) {
+        return c.key;
+      }
+    }
+
+    // 3. Ürün isimlerinden kategori tespiti
+    const matchedProduct = products().find((p) => {
+      const pTitle = norm(p.title);
+      return pTitle.includes(q);
+    });
+    if (matchedProduct && matchedProduct.category) {
+      return matchedProduct.category;
+    }
+
+    return null;
+  }
+
+  function initSmartHeaderSearch() {
+    const searchInput = $('#productSearchInput');
+    const searchBtn = $('#productSearchBtn');
+    if (!searchInput) return;
+
+    // Arama kutusunun altına şık, modern açılır öneri menüsü yerleştir
+    const searchWrap = searchInput.closest('.site-header__search') || searchInput.parentElement;
+    let dropdown = $('#tmSearchSuggestions');
+    if (!dropdown) {
+      dropdown = document.createElement('div');
+      dropdown.id = 'tmSearchSuggestions';
+      dropdown.className = 'tm-search-dropdown';
+      dropdown.hidden = true;
+      searchWrap.appendChild(dropdown);
+    }
+
+    function executeSearch(rawQuery) {
+      dropdown.hidden = true;
+      const q = (rawQuery || '').trim();
+      if (!q) return;
+
+      const intentCategory = detectCategoryIntent(q);
+      if (intentCategory) {
+        // "Korse" veya ürün adı yazıldığında doğrudan o kategoriye yönlendir!
+        enterCategoryPage(intentCategory, true);
+        return;
+      }
+
+      // Genel arama
+      document.body.classList.add('tm-searching');
+      const catalog = $('#urunler');
+      if (catalog) {
+        catalog.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    function renderSuggestions(query) {
+      const q = query.trim();
+      if (q.length < 2) {
+        dropdown.hidden = true;
+        dropdown.innerHTML = '';
+        return;
+      }
+
+      const intentCatKey = detectCategoryIntent(q);
+      const intentCat = intentCatKey ? CATEGORIES.find((c) => c.key === intentCatKey) : null;
+
+      // Eşleşen ürünleri bul
+      const terms = norm(q).split(/\\s+/).filter(Boolean);
+      const matchedProducts = products().filter((p) => {
+        const hay = norm(`${p.title} ${p.categoryName} ${p.shortDescription} ${p.sku}`);
+        return terms.every((t) => hay.includes(t));
+      }).slice(0, 4);
+
+      if (!intentCat && matchedProducts.length === 0) {
+        dropdown.hidden = true;
+        dropdown.innerHTML = '';
+        return;
+      }
+
+      let html = '';
+
+      // Kategoriye Yönlendirme Kartı (Öncelikli)
+      if (intentCat) {
+        html += `
+          <div class="tm-suggest-category" data-suggest-cat="${intentCat.key}">
+            <div class="tm-suggest-category__icon">
+              <i class="fas fa-layer-group" aria-hidden="true"></i>
+            </div>
+            <div class="tm-suggest-category__info">
+              <span class="tm-suggest-category__label">Kategoriye Git</span>
+              <strong class="tm-suggest-category__title">${esc(intentCat.name)}</strong>
+              <small class="tm-suggest-category__desc">${esc(intentCat.desc)}</small>
+            </div>
+            <div class="tm-suggest-category__arrow">
+              <i class="fas fa-arrow-right" aria-hidden="true"></i>
+            </div>
+          </div>`;
+      }
+
+      // Eşleşen Ürünler Listesi
+      if (matchedProducts.length > 0) {
+        html += `<div class="tm-suggest-section-title">Eşleşen Ürünler</div>`;
+        matchedProducts.forEach((p) => {
+          html += `
+            <div class="tm-suggest-product" data-suggest-id="${esc(p.id)}">
+              <img src="${esc(p.image)}" alt="${esc(p.title)}" class="tm-suggest-product__img" onerror="this.onerror=null;this.src='images/logo.png';">
+              <div class="tm-suggest-product__body">
+                <div class="tm-suggest-product__title">${esc(p.title)}</div>
+                <div class="tm-suggest-product__meta">${esc(p.categoryName || '')} • Kod: ${esc(p.sku || '')}</div>
+              </div>
+              <div class="tm-suggest-product__price">${tl(p.price)}</div>
+            </div>`;
+        });
+      }
+
+      dropdown.innerHTML = html;
+      dropdown.hidden = false;
+    }
+
+    let t = null;
+    searchInput.addEventListener('input', () => {
+      document.body.classList.toggle('tm-searching', searchInput.value.trim().length > 0);
+      clearTimeout(t);
+      t = setTimeout(() => {
+        renderSuggestions(searchInput.value);
+      }, 120);
+    });
+
+    searchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        executeSearch(searchInput.value);
+      } else if (e.key === 'Escape') {
+        dropdown.hidden = true;
+      }
+    });
+
+    if (searchBtn) {
+      searchBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        executeSearch(searchInput.value);
+      });
+    }
+
+    dropdown.addEventListener('click', (e) => {
+      const catRow = e.target.closest('[data-suggest-cat]');
+      if (catRow) {
+        const catKey = catRow.dataset.suggestCat;
+        dropdown.hidden = true;
+        enterCategoryPage(catKey, true);
+        return;
+      }
+
+      const prodRow = e.target.closest('[data-suggest-id]');
+      if (prodRow) {
+        const id = prodRow.dataset.suggestId;
+        dropdown.hidden = true;
+        openQuickView(id);
+        return;
+      }
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!dropdown.contains(e.target) && e.target !== searchInput && e.target !== searchBtn) {
+        dropdown.hidden = true;
+      }
+    });
+  }
+
+
+  /* ---------------- 8. KART İNDİRİM ETİKETİ VE EMOJİ TEMİZLİĞİ ---------------- */
+  function decorateCards() {
+    $$('#productsGrid .product-card').forEach((card) => {
+      const p = byId(card.dataset.id);
+      const box = $('.product-card__price', card);
+      if (!p || !box || $('.tm-off', box)) return;
+      const pct = offPct(p);
+      if (pct) {
+        const s = document.createElement('span');
+        s.className = 'tm-off';
+        s.textContent = `-%${pct}`;
+        box.appendChild(s);
+      }
+    });
+  }
+
+  function stripEmoji() {
+    const re = /[\u{1F300}-\u{1FAFF}\u{1F000}-\u{1F2FF}\u{2600}-\u{27BF}\u{FE0F}\u{200D}]/gu;
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+      acceptNode: (n) => (n.parentElement && /^(SCRIPT|STYLE|NOSCRIPT)$/.test(n.parentElement.tagName) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT)
+    });
+    const nodes = [];
+    while (walker.nextNode()) nodes.push(walker.currentNode);
+    nodes.forEach((n) => { if (re.test(n.nodeValue)) { re.lastIndex = 0; n.nodeValue = n.nodeValue.replace(re, '').replace(/\s{2,}/g, ' '); } re.lastIndex = 0; });
+  }
+
+  function init() {
+    try { buildHeaderMarquee(); } catch (e) { console.error('[tema] marquee', e); }
+    try { buildDrawer(); } catch (e) { console.error('[tema] menü', e); }
+    try { initSmartHeaderSearch(); } catch (e) { console.error('[tema] arama', e); }
+    try { buildDeals(); } catch (e) { console.error('[tema] kampanya', e); }
+    try { buildCategoryCardsSection(); } catch (e) { console.error('[tema] kategoriler', e); }
+    try { buildBrandsSection(); updateBestsellerVisibility(); } catch (e) { console.error('[tema] markalar', e); }
+    try { buildAboutSection(); } catch (e) { console.error('[tema] hakkımızda', e); }
+    try { buildCategoryPageBanner(); } catch (e) { console.error('[tema] kategori sayfası', e); }
+    try { decorateCards(); } catch (e) { console.error('[tema] kart', e); }
+    try { stripEmoji(); } catch (e) { console.error('[tema] emoji', e); }
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+
+
+
+

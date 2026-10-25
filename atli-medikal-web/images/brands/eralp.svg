@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 84" fill="none">
+  <!-- Official Eralp Medikal Ecza Logo Vector -->
+  <!-- Left Blue Triangle -->
+  <polygon points="6,42 78,2 52,82" fill="#0072BC"/>
+  <!-- ERALP (Green) -->
+  <text x="96" y="66" font-family="'Plus Jakarta Sans', 'Segoe UI', Arial, sans-serif" font-size="70" font-weight="800" fill="#2E9E44" letter-spacing="-1">ERALP</text>
+  <!-- MEDİKAL ECZA (Green) -->
+  <text x="264" y="63" font-family="'Plus Jakarta Sans', 'Segoe UI', Arial, sans-serif" font-size="28" font-weight="700" fill="#2E9E44" letter-spacing="0.5">MEDİKAL ECZA</text>
+</svg>

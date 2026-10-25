@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 140" width="360" height="140" role="img" aria-label="Poylin Medikal">
+  <rect width="360" height="140" rx="12" fill="#FFFFFF"/>
+  <g transform="translate(52, 38)">
+    <rect x="0" y="6" width="38" height="38" rx="8" fill="#0B0B0C"/>
+    <path d="M12,33 L12,15 L23,15 C27,15 29,17 29,20.5 C29,24 27,26 23,26 L16,26" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="52" y="39" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-size="44" font-weight="800" fill="#0B0B0C" letter-spacing="0.02em">POYLİN</text>
+  </g>
+  <text x="180" y="112" text-anchor="middle" font-family="'Inter', Arial, sans-serif" font-size="11.5" font-weight="700" fill="#64748B" letter-spacing="0.18em">MOBİLİTE &amp; TEKERLEKLİ SANDALYE</text>
+</svg>
