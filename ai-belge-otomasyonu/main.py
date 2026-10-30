@@ -220,9 +220,10 @@ OUTPUT (Markdown):
 
 class KoopAutomationSystem:
     def __init__(self):
-        # 1. ADIM: GEMINI API KEY BURAYA EKLENECEK
+        # 1. ADIM: GEMINI API KEY (.env veya ortam değişkeninden okunur)
         api_key = os.environ.get("GEMINI_API_KEY", "")
-        genai.configure(api_key=api_key)
+        if api_key:
+            genai.configure(api_key=api_key)
         
         self.step_results = {}
 

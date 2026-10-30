@@ -35,8 +35,9 @@ OUTPUT_DIR  = BASE_DIR / "cikti"
 UPLOAD_DIR.mkdir(exist_ok=True)
 OUTPUT_DIR.mkdir(exist_ok=True)
 
-API_KEY = ""
-genai.configure(api_key=API_KEY)
+API_KEY = os.environ.get("GEMINI_API_KEY", "")
+if API_KEY:
+    genai.configure(api_key=API_KEY)
 
 # Global ilerleme kuyruğu (SSE için)
 progress_queue = queue.Queue()

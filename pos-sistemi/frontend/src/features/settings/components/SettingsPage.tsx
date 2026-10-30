@@ -425,7 +425,7 @@ export function SettingsPage() {
                               </span>
                             </div>
                             <p className="text-xs font-mono font-bold text-slate-800 mt-1 leading-none">
-                              {maskKey('AIzaSy••••••••••••')}
+                              {'AIzaSy••••••••••••'}
                             </p>
                           </div>
                         </div>
